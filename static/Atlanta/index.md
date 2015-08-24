@@ -1,4 +1,11 @@
 # Atlanta
+[TheWolf]: /images/wolf.jpg "Optional title attribute"
+
+<div class="wolf">
+![Flowers][TheWolf] 
+</div>
+
+
 ### Get Started
 
 For the "A tutorial is all I need crowd": **[Enough chit chat, Lets do this thing!](docs/tutorial/jump-start/)**.  
