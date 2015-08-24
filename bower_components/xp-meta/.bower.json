@@ -1,0 +1,36 @@
+{
+  "name": "xp-meta",
+  "license": "BSD-3-Clause",
+  "version": "0.9.7",
+  "main": "xp-meta.html",
+  "description": "A custom element used to create data structures on the fly",
+  "homepage": "http://expandjs.com/elements/xp-meta",
+  "authors": [
+    "Giuliano Rullo <g.rullo@expandjs.com>",
+    "Maurizio Stefàno <m.stefano@expandjs.com>",
+    "Robert Manolea <r.manolea@expandjs.com>"
+  ],
+  "keywords": [
+    "web app",
+    "html5",
+    "expandjs",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "expandjs": "ExpandJS/expandjs#0.9.7",
+    "xp-array-behavior": "ExpandJS/xp-array-behavior#0.9.7",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "_release": "0.9.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.7",
+    "commit": "47f935979ccb06c14fba98ed2c89ee66ee6cbe0c"
+  },
+  "_source": "git://github.com/ExpandJS/xp-meta.git",
+  "_target": "0.9.7",
+  "_originalSource": "ExpandJS/xp-meta"
+}

@@ -1,0 +1,11 @@
+require('./tasks/browser-sync');
+require('./tasks/build');
+require('./tasks/changelog');
+require('./tasks/clean');
+require('./tasks/default');
+require('./tasks/enforce');
+require('./tasks/javascript');
+require('./tasks/release');
+require('./tasks/replace');
+require('./tasks/styles');
+require('./tasks/watch');

@@ -1,0 +1,36 @@
+<link rel="import" href="../content-loader/content-md-loader.html">
+
+<dom-module id="my-markdown">
+    <style>
+
+    </style>
+    <template>
+
+        <content-md-loader id="mdContent"></content-md-loader>
+    </template>
+    <script>
+        (function () {
+            Polymer({
+                is: 'my-markdown',
+                properties: {
+                    route_record: {
+                        type: Object,
+                        value: null,
+                        observer: '_locationChanged'
+                    }
+                },
+                _locationChanged: function (newValue, oldValue) {
+                    if (newValue != null) {
+                        console.log("_locationChanged:" + newValue);
+                        this.$.mdContent.filePath = this.route_record.href + "/index.md";
+                    }
+                },
+                ready: function () {
+
+                    console.log("my-markdown ready");
+                }
+            });
+        })();
+    </script>
+
+</dom-module>

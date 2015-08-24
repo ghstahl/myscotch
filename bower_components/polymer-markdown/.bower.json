@@ -1,0 +1,39 @@
+{
+  "name": "polymer-markdown",
+  "version": "2.0.0",
+  "authors": [
+    "will@intandem.io"
+  ],
+  "description": "Polymer markdown",
+  "main": "dist/polymer-markdown.html",
+  "keywords": [
+    "polymer",
+    "markdown"
+  ],
+  "license": "MIT",
+  "homepage": "paradox41/polymer-markdown",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests",
+    "gulpfile.js",
+    "validate-commit-msg.js"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~1.0.2",
+    "markdown": "~0.5.0"
+  },
+  "_release": "2.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.0",
+    "commit": "394c800de28a0ee0e11762245d78cb88b058c405"
+  },
+  "_source": "git://github.com/paradox41/polymer-markdown.git",
+  "_target": "~2.0.0",
+  "_originalSource": "paradox41/polymer-markdown",
+  "_direct": true
+}

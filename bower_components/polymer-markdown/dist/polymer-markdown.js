@@ -1,0 +1,1 @@
+Polymer("polymer-markdown",{publish:{markdown:""},created:function(){},ready:function(){},markdownChanged:function(n,o){var r=markdown.toHTML(o);this.injectBoundHTML(r,this.$.rendered)}});

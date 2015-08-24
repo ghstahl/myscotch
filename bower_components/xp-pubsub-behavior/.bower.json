@@ -1,0 +1,36 @@
+{
+  "name": "xp-pubsub-behavior",
+  "license": "BSD-3-Clause",
+  "version": "0.9.7",
+  "main": "xp-pubsub-behavior.html",
+  "description": "A behavior used to add pub/sub capabilities on the context element",
+  "homepage": "http://expandjs.com/elements/xp-pubsub-behavior",
+  "authors": [
+    "Giuliano Rullo <g.rullo@expandjs.com>",
+    "Maurizio Stefàno <m.stefano@expandjs.com>",
+    "Robert Manolea <r.manolea@expandjs.com>"
+  ],
+  "keywords": [
+    "web app",
+    "html5",
+    "expandjs",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "expandjs": "ExpandJS/expandjs#0.9.7",
+    "xp-array-behavior": "ExpandJS/xp-array-behavior#0.9.7",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "_release": "0.9.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.7",
+    "commit": "5c155e64c684e6a712a58afffc2995a7f0879358"
+  },
+  "_source": "git://github.com/ExpandJS/xp-pubsub-behavior.git",
+  "_target": "0.9.7",
+  "_originalSource": "ExpandJS/xp-pubsub-behavior"
+}

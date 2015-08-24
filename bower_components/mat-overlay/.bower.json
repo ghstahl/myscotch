@@ -1,0 +1,40 @@
+{
+  "name": "mat-overlay",
+  "license": "BSD-3-Clause",
+  "version": "0.9.7",
+  "main": "mat-overlay.html",
+  "description": "A custom element used to display a Material Design overlay",
+  "homepage": "http://expandjs.com/elements/mat-overlay",
+  "authors": [
+    "Giuliano Rullo <g.rullo@expandjs.com>",
+    "Maurizio Stefàno <m.stefano@expandjs.com>",
+    "Robert Manolea <r.manolea@expandjs.com>"
+  ],
+  "keywords": [
+    "material design",
+    "web app",
+    "html5",
+    "expandjs",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "expandjs": "ExpandJS/expandjs#0.9.7",
+    "mat-paper": "ExpandJS/mat-paper#0.9.7",
+    "xp-adapter-behavior": "ExpandJS/xp-adapter-behavior#0.9.7",
+    "xp-overlay": "ExpandJS/xp-overlay#0.9.7",
+    "xp-targeter-behavior": "ExpandJS/xp-targeter-behavior#0.9.7",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "_release": "0.9.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.7",
+    "commit": "ddd31c8c9b257c72a6e35ea7ed9ab661d5682251"
+  },
+  "_source": "git://github.com/ExpandJS/mat-overlay.git",
+  "_target": "0.9.7",
+  "_originalSource": "ExpandJS/mat-overlay"
+}

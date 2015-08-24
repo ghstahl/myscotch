@@ -1,0 +1,38 @@
+{
+  "name": "mat-settings",
+  "license": "BSD-3-Clause",
+  "version": "0.9.7",
+  "main": "mat-settings.html",
+  "description": "A custom element used to set the `default` values for Material Design styling",
+  "homepage": "http://expandjs.com/elements/mat-settings",
+  "authors": [
+    "Giuliano Rullo <g.rullo@expandjs.com>",
+    "Maurizio Stefàno <m.stefano@expandjs.com>",
+    "Robert Manolea <r.manolea@expandjs.com>"
+  ],
+  "keywords": [
+    "material design",
+    "material app",
+    "web app",
+    "html5",
+    "expandjs",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "expandjs": "ExpandJS/expandjs#0.9.7",
+    "xp-shared-behavior": "ExpandJS/xp-shared-behavior#0.9.7",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "_release": "0.9.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.7",
+    "commit": "ab2698086ababd1c88460d34abc4635e39f85b48"
+  },
+  "_source": "git://github.com/ExpandJS/mat-settings.git",
+  "_target": "0.9.7",
+  "_originalSource": "ExpandJS/mat-settings"
+}

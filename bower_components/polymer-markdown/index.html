@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;polymer-markdown&gt;</title>
+
+    <!-- Web Component's Polyfill -->
+    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="src/polymer-markdown.html">
+
+    <link rel="stylesheet" type="text/css" href="example.css">
+</head>
+<body>
+
+    <div class="example-container">
+        <textarea id="markdown-editor" class="markdown-editor" name="markdown-editor" rows="6" cols="60" placeholder="Type **Markdown** here."></textarea>
+
+        <polymer-markdown id="markdown-preview" class="markdown-preview" markdown="This is **markdown**"></polymer-markdown>
+    </div>
+
+    <script src="example.js"></script>
+</body>
+</html>

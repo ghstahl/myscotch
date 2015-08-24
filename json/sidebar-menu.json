@@ -1,0 +1,53 @@
+{
+    "page_routes": [
+        {
+            "route": "/markdown/*",
+            "dataRoute": "markdown_section"
+        }
+    ],
+    "sidebar": [
+        {
+            "menuItems": [
+                {
+                    "label": "Home",
+                    "href": "/",
+                    "icon": "home",
+                    "dataRoute": "home",
+                    "customData": {
+                        "name": "herb"
+                    }
+                },
+                {
+                    "label": "Users",
+                    "href": "/users",
+                    "icon": "info",
+                    "dataRoute": "users",
+                    "customData": {
+                        "name": "susan"
+                    }
+                },
+                {
+                    "label": "Contact",
+                    "href": "/contact",
+                    "icon": "mail",
+                    "dataRoute": "contact",
+                    "customData": {
+                        "name": "dagny"
+                    }
+                }
+            ]
+        },
+        {
+            "secondary": true,
+            "title": "Secondary",
+            "menuItems": [
+                {
+                    "label": "Atlanta",
+                    "href": "/static/atlanta",
+                    "icon": "home",
+                    "dataRoute": "markdown-section"
+                }
+            ]
+        }
+    ]
+}

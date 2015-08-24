@@ -1,0 +1,26 @@
+.example-container {
+    display: flex;
+}
+
+%column {
+    width: 50%;
+    height: 100vh;
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
+.markdown-editor {
+    @extend %column;
+    border: 0;
+    resize: none;
+
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+.markdown-preview {
+    @extend %column;
+    border-left: 1px solid #EEE;
+}

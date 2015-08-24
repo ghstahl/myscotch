@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="../../bower_components/polymer/polymer.html" rel="import">
+    <!-- Element Imports -->
+</head>
+
+<dom-module id="the-app">
+    <style>
+        .sidebar {
+            height: 100%;
+            background: var(--paper-menu-background-color);
+        }
+        
+        #footer {
+            background: var(--paper-menu-background-color);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+        }
+        
+        #mainToolbar .middle-container {
+            height: 100%;
+            margin-left: 48px;
+        }
+        
+        #mainToolbar:not(.tall) .middle {
+            font-size: 18px;
+            padding-bottom: 0;
+        }
+        
+        #mainToolbar .bottom {
+            margin-left: 48px;
+            /* Required for main area's paper-scroll-header-panel custom condensing transformation */
+            -webkit-transform-origin: left center;
+            transform-origin: left center;
+        }
+        
+        @media (max-width: 40em) {
+            #mainToolbar .bottom {
+                visibility: hidden;
+            }
+        }
+    </style>
+    <template>
+        <iron-ajax id="routeAjax" params="{{routeParams}}" on-response="handleRouteAjaxResponse" handle-as="json" last-response="{{routeAjaxResponse}}">
+        </iron-ajax>
+
+        <paper-drawer-panel id="paperDrawerPanel">
+            <!-- Drawer Scroll Header Panel -->
+            <paper-scroll-header-panel drawer fixed class="sidebar">
+
+                <!-- Drawer Toolbar -->
+                <paper-toolbar id="drawerToolbar">
+                    <div class="app-name">Menu</div>
+                    </div>
+                </paper-toolbar>
+                <my-sidebar-local menu_data={{sidebarMenuData}} route_selected={{route_selected}}></my-sidebar-local>
+
+            </paper-scroll-header-panel>
+            <!-- Main Area -->
+            <paper-scroll-header-panel main condenses keep-condensed-header>
+
+                <!-- Main Toolbar -->
+                <paper-toolbar id="mainToolbar" class="tall">
+                    <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+                    <span class="flex"></span>
+
+                    <!-- Toolbar icons -->
+                    <paper-icon-button icon="refresh"></paper-icon-button>
+                    <paper-icon-button icon="search"></paper-icon-button>
+
+                    <!-- Application name -->
+                    <div class="middle middle-container center horizontal layout">
+
+                        <div class="app-name">Polymer Starter Kit</div>
+                    </div>
+
+                    <!-- Application sub title -->
+                    <div class="bottom bottom-container center horizontal layout">
+                        <div class="bottom-title paper-font-subhead">The future of the web today</div>
+                    </div>
+
+                </paper-toolbar>
+                <div class="content">
+                    <iron-pages attr-for-selected="data-route" selected="{{route_selected}}">
+
+                        <section data-route="home">
+                            <paper-material elevation="1">
+                                <my-greeting></my-greeting>
+
+                                <p class="paper-font-subhead">You now have:</p>
+                                <my-list></my-list>
+
+                                <p class="paper-font-body2">Looking for more Web App layouts? Check out our <a href="https://github.com/PolymerElements/app-layout-templates">layouts</a> collection. You can also <a href="http://polymerelements.github.io/app-layout-templates/">preview</a> them live.</p>
+                            </paper-material>
+                            <paper-material elevation="1">
+                                <p class="paper-font-body2">This is another card.</p>
+                            </paper-material>
+                        </section>
+
+                        <section data-route="users">
+                            <paper-material elevation="1">
+                                <h2 class="paper-font-display2">Users</h2>
+                                <p>This is the users section</p>
+                                <a href="/users/Rob">Rob</a>
+                            </paper-material>
+                        </section>
+
+                        <section data-route="user-info">
+                            <paper-material elevation="1">
+                                <h2 class="paper-font-display2">
+                User:<span>{{params.name}}</span>
+                </h2>
+                                <div>This is <span>{{params.name}}</span>'s section</div>
+                            </paper-material>
+                        </section>
+
+                        <section data-route="markdown-section">
+                            <paper-material elevation="1">
+                                <my-markdown route_record={{route_record}}></my-markdown>
+                            </paper-material>
+                        </section>
+
+                        <section data-route="contact">
+                            <paper-material elevation="1">
+                                <h2 class="paper-font-display2">Contact</h2>
+                                <p>This is the contact section</p>
+                            </paper-material>
+                        </section>
+
+                    </iron-pages>
+                </div>
+            </paper-scroll-header-panel>
+        </paper-drawer-panel>
+    </template>
+</dom-module>
+<script src="../../bower_components/page/page.js"></script>
+
+<script>
+    addEventListener('paper-header-transform', function (e) {
+        var appName = document.querySelector('.app-name');
+        var middleContainer = document.querySelector('.middle-container');
+        var bottomContainer = document.querySelector('.bottom-container');
+        var detail = e.detail;
+        var heightDiff = detail.height - detail.condensedHeight;
+        var yRatio = Math.min(1, detail.y / heightDiff);
+        var maxMiddleScale = 0.50; // appName max size when condensed. The smaller the number the smaller the condensed size.
+        var scaleMiddle = Math.max(maxMiddleScale, (heightDiff - detail.y) / (heightDiff / (1 - maxMiddleScale)) + maxMiddleScale);
+        var scaleBottom = 1 - yRatio;
+
+        // Move/translate middleContainer
+        Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
+
+        // Scale bottomContainer and bottom sub title to nothing and back
+        Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
+
+        // Scale middleContainer appName
+        Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
+    });
+
+    Polymer({
+        is: "the-app",
+        properties: {
+            routeAjaxResponse: {
+                type: Object,
+                observer: 'onRouteAjaxResonse'
+            },
+
+            routeAjaxUrl: {
+                type: String
+            },
+            routeParams: {},
+            sidebarMenuData: {
+                type: Object,
+                notify: true
+            }
+        },
+        /*---------------------------------------------------------------*/
+        _selectedIndexChanged: function (newIndex, oldIndex) {
+            if (typeof newIndex === 'number') {
+                this.selectedMessage = 'You selected item #' + newIndex + '.';
+            }
+            if (typeof oldIndex === 'number') {
+                this.oldSelectedMessage = 'Before, you had item #' + oldIndex + ' selected.';
+            }
+        },
+        /*---------------------------------------------------------------*/
+        handleRouteAjaxResponse: function (request) {
+            console.log("handleRouteAjaxResponse recieved");
+        },
+        /*---------------------------------------------------------------*/
+        onRouteAjaxResonse: function (path) {
+            var thisElement = this;
+            path.page_routes.forEach(function (record) {
+                page(record.route, function (data) {
+                    thisElement.route = record.dataRoute;
+                    thisElement.route_params = data.params;
+                    thisElement.route_record = record;
+                });
+            });
+
+            path.sidebar.forEach(function (item) {
+
+                item.menuItems.forEach(function (record) {
+                    page(record.href, function () {
+                        thisElement.route = record.dataRoute;
+                        thisElement.route_selected = record.dataRoute;
+                        thisElement.route_record = record;
+                    });
+
+                    console.log(record.label);
+                });
+            });
+            // add #! before urls
+            page({
+                hashbang: true
+            });
+
+            this.sidebarMenuData = path.sidebar;
+            console.log("onRouteAjaxResonse received");
+        },
+        /*---------------------------------------------------------------*/
+        ready: function (e) {
+            this.routeAjaxUrl = "/json/sidebar-menu.json";
+            this.$.routeAjax.url = this.routeAjaxUrl;
+            this.$.routeAjax.auto = true;
+
+
+
+            console.log("the-app is ready");
+        }
+    });
+</script>

@@ -1,0 +1,50 @@
+{
+  "name": "mat-breadcrumb",
+  "license": "BSD-3-Clause",
+  "version": "0.9.7",
+  "main": "mat-breadcrumb.html",
+  "description": "A custom element used to display a Material Design breadcrumb",
+  "homepage": "http://expandjs.com/elements/mat-breadcrumb",
+  "authors": [
+    "Giuliano Rullo <g.rullo@expandjs.com>",
+    "Maurizio Stefàno <m.stefano@expandjs.com>",
+    "Robert Manolea <r.manolea@expandjs.com>"
+  ],
+  "keywords": [
+    "material design",
+    "material breadcrumb",
+    "web app",
+    "html5",
+    "expandjs",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "expandjs": "ExpandJS/expandjs#0.9.7",
+    "mat-icon": "ExpandJS/mat-icon#0.9.7",
+    "mat-icons": "ExpandJS/mat-icons#0.9.7",
+    "mat-ink": "ExpandJS/mat-ink#0.9.7",
+    "xp-anchor-behavior": "ExpandJS/xp-anchor-behavior#0.9.7",
+    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.7",
+    "xp-media-query": "ExpandJS/xp-media-query#0.9.7",
+    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.7",
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
+  },
+  "devDependencies": {
+    "mat-demo": "ExpandJS/mat-demo#0.9.7",
+    "mat-fab": "ExpandJS/mat-fab#0.9.7",
+    "mat-header-panel": "ExpandJS/mat-header-panel#0.9.7"
+  },
+  "_release": "0.9.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.7",
+    "commit": "7260de5c991e5e0604ac5fdd6cdb9f0d528ecc51"
+  },
+  "_source": "git://github.com/ExpandJS/mat-breadcrumb.git",
+  "_target": "0.9.7",
+  "_originalSource": "ExpandJS/mat-breadcrumb"
+}
