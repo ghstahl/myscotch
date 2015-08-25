@@ -120,7 +120,7 @@
 
                         <section data-route="markdown-section">
                             <paper-material elevation="1">
-                                <my-markdown route_record={{route_record}}></my-markdown>
+                                <my-markdown route_record={{markdown_record}}></my-markdown>
                             </paper-material>
                         </section>
 
@@ -196,9 +196,13 @@
             var thisElement = this;
             path.page_routes.forEach(function (record) {
                 page(record.route, function (data) {
+                    if (record.dataRoute == "markdown-section")
+                        thisElement.markdown_record = record;
+                    else
+                        thisElement.route_record = record;
+
                     thisElement.route = record.dataRoute;
                     thisElement.route_params = data.params;
-                    thisElement.route_record = record;
                 });
             });
 
@@ -206,9 +210,13 @@
 
                 item.menuItems.forEach(function (record) {
                     page(record.href, function () {
+                        if (record.dataRoute == "markdown-section")
+                            thisElement.markdown_record = record;
+                        else
+                            thisElement.route_record = record;
+
                         thisElement.route = record.dataRoute;
                         thisElement.route_selected = record.dataRoute;
-                        thisElement.route_record = record;
                     });
 
                     console.log(record.label);
