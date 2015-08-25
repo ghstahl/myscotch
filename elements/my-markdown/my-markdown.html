@@ -22,7 +22,7 @@
                 _locationChanged: function (newValue, oldValue) {
                     if (newValue != null) {
                         console.log("_locationChanged:" + newValue);
-                        this.$.mdContent.filePath = this.route_record.href + "/index.md";
+                        this.$.mdContent.filePath = this.route_record.customData.mdPath;
                     }
                 },
                 ready: function () {

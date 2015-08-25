@@ -58,7 +58,9 @@
                     </div>
                 </paper-toolbar>
                 <my-sidebar-local menu_data={{sidebarMenuData}} route_selected={{route_selected}}></my-sidebar-local>
-
+                <template is="dom-repeat" items="{{route_record_array}}">
+                    <span>{{item.label}}</span>
+                </template>
             </paper-scroll-header-panel>
             <!-- Main Area -->
             <paper-scroll-header-panel main condenses keep-condensed-header>
@@ -85,9 +87,11 @@
 
                 </paper-toolbar>
                 <div class="content">
-                    <iron-pages attr-for-selected="data-route" selected="{{route_selected}}">
 
-                        <section data-route="home">
+
+                    <iron-pages attr-for-selected="selected-attribute" selected="{{section_selected}}">
+
+                        <section selected-attribute="home">
                             <paper-material elevation="1">
                                 <my-greeting></my-greeting>
 
@@ -101,7 +105,7 @@
                             </paper-material>
                         </section>
 
-                        <section data-route="users">
+                        <section selected-attribute="users">
                             <paper-material elevation="1">
                                 <h2 class="paper-font-display2">Users</h2>
                                 <p>This is the users section</p>
@@ -109,7 +113,7 @@
                             </paper-material>
                         </section>
 
-                        <section data-route="user-info">
+                        <section selected-attribute="user-info">
                             <paper-material elevation="1">
                                 <h2 class="paper-font-display2">
                 User:<span>{{params.name}}</span>
@@ -118,9 +122,9 @@
                             </paper-material>
                         </section>
 
-                        <section data-route="markdown-section">
+                        <section selected-attribute="markdown-section">
                             <paper-material elevation="1">
-                                <my-markdown route_record={{markdown_record}}></my-markdown>
+                                <my-markdown id="markdown_section_id"></my-markdown>
                             </paper-material>
                         </section>
 
@@ -176,7 +180,20 @@
             sidebarMenuData: {
                 type: Object,
                 notify: true
+            },
+            route_record_array: {
+                type: Array,
+                value: function () {
+                    return [{
+                        label: "hi"
+                    }];
+                }
+            },
+            section_element_map: {
+                type: Array,
+                value: []
             }
+
         },
         /*---------------------------------------------------------------*/
         _selectedIndexChanged: function (newIndex, oldIndex) {
@@ -191,17 +208,33 @@
         handleRouteAjaxResponse: function (request) {
             console.log("handleRouteAjaxResponse recieved");
         },
+        // first argument is the change record for the array change,
+        // change.base is the array specified in the binding
+        arrayItem: function (change, index, path) {
+            // this.get(path, root) returns a value for a path
+            // relative to a root object.
+            if (change.base[index] == null) {
+                change.base[index] = {};
+            }
+            var res = change.base[index];
+            return res;
+            //            return this.get(path, change.base[index]);
+        },
         /*---------------------------------------------------------------*/
         onRouteAjaxResonse: function (path) {
+            this.section_element_map["markdown-section"] = this.$.markdown_section_id;
             var thisElement = this;
             path.page_routes.forEach(function (record) {
                 page(record.route, function (data) {
-                    if (record.dataRoute == "markdown-section")
+                    thisElement.route_record_array[record.dataRoute] = record;
+                    if (record.section == "markdown-section") {
                         thisElement.markdown_record = record;
-                    else
+                        thisElement.section_element_map[record.dataRoute].route_record = record;
+                    } else
                         thisElement.route_record = record;
 
                     thisElement.route = record.dataRoute;
+                    thisElement.sectionRoute = record.sectionRoute;
                     thisElement.route_params = data.params;
                 });
             });
@@ -210,13 +243,17 @@
 
                 item.menuItems.forEach(function (record) {
                     page(record.href, function () {
-                        if (record.dataRoute == "markdown-section")
+                        thisElement.route_record_array[record.dataRoute] = record;
+                        if (record.section == "markdown-section") {
                             thisElement.markdown_record = record;
-                        else
+                            thisElement.section_element_map[record.section].route_record = record;
+                        } else
                             thisElement.route_record = record;
 
                         thisElement.route = record.dataRoute;
+                        thisElement.sectionRoute = record.sectionRoute;
                         thisElement.route_selected = record.dataRoute;
+                        thisElement.section_selected = record.section;
                     });
 
                     console.log(record.label);

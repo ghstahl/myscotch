@@ -13,6 +13,7 @@
                     "href": "/",
                     "icon": "home",
                     "dataRoute": "home",
+                    "section": "home",
                     "customData": {
                         "name": "herb"
                     }
@@ -22,6 +23,7 @@
                     "href": "/users",
                     "icon": "info",
                     "dataRoute": "users",
+                    "section": "users",
                     "customData": {
                         "name": "susan"
                     }
@@ -31,8 +33,19 @@
                     "href": "/contact",
                     "icon": "mail",
                     "dataRoute": "contact",
+                    "section": "markdown-section",
                     "customData": {
-                        "name": "dagny"
+                        "mdPath": "/static/contact/index.md"
+                    }
+                },
+                {
+                    "label": "About",
+                    "href": "/about",
+                    "icon": "mail",
+                    "dataRoute": "about",
+                    "section": "markdown-section",
+                    "customData": {
+                        "mdPath": "/static/about/index.md"
                     }
                 }
             ]
@@ -45,7 +58,12 @@
                     "label": "Atlanta",
                     "href": "/static/atlanta",
                     "icon": "home",
-                    "dataRoute": "markdown-section"
+                    "dataRoute": "markdown-section",
+                    "section": "markdown-section",
+                    "customData": {
+                        "mdPath": "/static/atlanta/index.md"
+                    }
+
                 }
             ]
         }
