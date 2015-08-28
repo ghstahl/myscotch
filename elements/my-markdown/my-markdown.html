@@ -7,6 +7,10 @@
     <template>
 
         <content-md-loader id="mdContent"></content-md-loader>
+        <paper-material elevation="1">
+            <disqus-comments shortname="myscotch" identifier={{route_record.label}}></disqus-comments>
+        </paper-material>
+
     </template>
     <script>
         (function () {

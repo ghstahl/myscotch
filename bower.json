@@ -13,19 +13,20 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#1.0",
+    "disqus-comments": "divshot/disqus-comments#~0.1.2",
+    "disqus-thread": "~0.0.1",
+    "expandjs": "expandjs/expandjs#~0.9.7",
+    "iron-ajax": "polymerelements/iron-ajax#~1.0.4",
     "iron-pages": "polymerelements/iron-pages#~1.0.3",
+    "mark-down": "robdodson/mark-down#~1.0.0",
+    "marked-element": "polymerelements/marked-element#~1.0.2",
+    "mat-divider": "expandjs/mat-divider#~0.9.7",
+    "mat-elements": "expandjs/mat-elements#~0.9.7",
+    "page": "~1.6.3",
     "paper-scroll-header-panel": "polymerelements/paper-scroll-header-panel#~1.0.7",
     "paper-toast": "polymerelements/paper-toast#~1.0.0",
-    "page": "~1.6.3",
-    "iron-ajax": "polymerelements/iron-ajax#~1.0.4",
-    "mat-divider": "expandjs/mat-divider#~0.9.7",
-    "expandjs": "expandjs/expandjs#~0.9.7",
-    "mat-elements": "expandjs/mat-elements#~0.9.7",
-    "xp-elements": "expandjs/xp-elements#~0.9.7",
-    "marked-element": "polymerelements/marked-element#~1.0.2",
-    "mark-down": "robdodson/mark-down#~1.0.0",
+    "polymer": "Polymer/polymer#1.0",
     "polymer-markdown": "paradox41/polymer-markdown#~2.0.0",
-    "disqus-comments": "divshot/disqus-comments#master"
+    "xp-elements": "expandjs/xp-elements#~0.9.7"
   }
 }
