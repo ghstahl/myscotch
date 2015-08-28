@@ -144,17 +144,11 @@
                         </section>
 
                         <section selected-attribute="markdown-section">
-                            <paper-material elevation="1">
-                                <my-markdown id="markdown_section_id"></my-markdown>
-                            </paper-material>
+
+                            <my-markdown id="markdown_section_id"></my-markdown>
+
                         </section>
 
-                        <section data-route="contact">
-                            <paper-material elevation="1">
-                                <h2 class="paper-font-display2">Contact</h2>
-                                <p>This is the contact section</p>
-                            </paper-material>
-                        </section>
                     </iron-pages>
                 </div>
             </paper-header-panel>
@@ -191,6 +185,10 @@
             section_element_map: {
                 type: Array,
                 value: []
+            },
+            hashbang: {
+                type: Boolean,
+                value: true
             }
 
         },
@@ -231,7 +229,7 @@
                 page(record.route, function (data) {
                     thisElement.route_record_array[record.dataRoute] = record;
                     if (record.section == "markdown-section") {
-                        thisElement.markdown_record = record;
+
                         thisElement.section_element_map[record.dataRoute].route_record = record;
                     } else
                         thisElement.route_record = record;
@@ -245,10 +243,17 @@
             path.sidebar.forEach(function (item) {
 
                 item.menuItems.forEach(function (record) {
+                    var fullPath = window.location.origin + "/";
+                    if (thisElement.hashbang) {
+                        fullPath = fullPath + "#!";
+                    }
+                    fullPath = fullPath + record.href;
+                    record.identifier = fullPath;
+
                     page(record.href, function () {
                         thisElement.route_record_array[record.dataRoute] = record;
                         if (record.section == "markdown-section") {
-                            thisElement.markdown_record = record;
+
                             thisElement.section_element_map[record.section].route_record = record;
                         } else
                             thisElement.route_record = record;
@@ -264,7 +269,7 @@
             });
             // add #! before urls
             page({
-                hashbang: true
+                hashbang: this.hashbang
             });
 
             this.sidebarMenuData = path.sidebar;
