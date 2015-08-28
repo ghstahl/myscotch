@@ -4,23 +4,23 @@
 
 <dom-module id="mat-paper-demo">
 
-    <style>
-        :host .demo-container {
-            @apply(--layout-horizontal);
-            @apply(--layout-wrap);
-            @apply(--layout-around-justified);
-        }
-
-        :host .demo-container > mat-paper {
-            @apply(--layout-horizontal);
-            @apply(--layout-center-center);
-            height: 80px;
-            margin: 40px;
-            width: 80px;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host .demo-container {
+                @apply(--layout-horizontal);
+                @apply(--layout-wrap);
+                @apply(--layout-around-justified);
+            }
+
+            :host .demo-container > mat-paper {
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
+                height: 80px;
+                margin: 40px;
+                width: 80px;
+            }
+        </style>
 
         <mat-demo name="mat-paper" type="element" url="http://expandjs.com/elements/mat-paper">
 

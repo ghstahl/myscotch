@@ -52,12 +52,12 @@ you can use either `cap` or `baseline`.
 @repository https://github.com/ExpandJS/mat-divider
 @demo http://expandjs.com/demo/mat-divider
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency mat-ink ExpandJS/mat-ink#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency mat-ink ExpandJS/mat-ink#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
-@devDependency mat-option ExpandJS/mat-option#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
+@devDependency mat-option ExpandJS/mat-option#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -66,42 +66,44 @@ you can use either `cap` or `baseline`.
 
 <dom-module id="mat-divider">
 
-    <style>
-        :host {
-            display: block;
-            margin: 7px 0 8px 0;
-            overflow: hidden;
-            transition: margin 0.33s cubic-bezier(0.55, 0, 0.01, 1);
-            will-change: margin;
-        }
-
-        :host([baseline]),
-        :host([cap]) {
-            left: 0;
-            margin: 0;
-            position: absolute;
-            right: 0;
-        }
-
-        :host([baseline]) {
-            bottom: 0;
-        }
-
-        :host([cap]) {
-            top: 0;
-        }
-
-        :host #matDividerWrapper {
-            border-top: 1px solid currentColor;
-        }
-
-        :host([inset]) #matDividerWrapper {
-            margin-left: 72px;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                margin: 7px 0 8px 0;
+                overflow: hidden;
+                transition: margin 0.33s cubic-bezier(0.55, 0, 0.01, 1);
+                will-change: margin;
+            }
+
+            :host([baseline]),
+            :host([cap]) {
+                left: 0;
+                margin: 0;
+                position: absolute;
+                right: 0;
+            }
+
+            :host([baseline]) {
+                bottom: 0;
+            }
+
+            :host([cap]) {
+                top: 0;
+            }
+
+            :host #matDividerWrapper {
+                border-top: 1px solid currentColor;
+            }
+
+            :host([inset]) #matDividerWrapper {
+                margin-left: 72px;
+            }
+        </style>
+
         <mat-ink id="matDividerWrapper" opacity="divider"></mat-ink>
+
     </template>
 
     <script>

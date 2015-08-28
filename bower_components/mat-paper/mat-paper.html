@@ -49,17 +49,17 @@ The paper's background color can be changed accordingly to the [Material Design 
 @behavior xp-shared-behavior /bower_components/xp-shared-behavior/xp-shared-behavior.html
 @behavior xp-slave-behavior /bower_components/xp-slave-behavior/xp-slave-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-palette ExpandJS/mat-palette#0.9.7
-@dependency mat-shadow ExpandJS/mat-shadow#0.9.7
-@dependency mat-typography ExpandJS/mat-typography#0.9.7
-@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.7
-@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.7
-@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.7
+@dependency mat-palette ExpandJS/mat-palette#0.9.8
+@dependency mat-shadow ExpandJS/mat-shadow#0.9.8
+@dependency mat-typography ExpandJS/mat-typography#0.9.8
+@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.8
+@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.8
+@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -74,104 +74,106 @@ The paper's background color can be changed accordingly to the [Material Design 
 
 <dom-module id="mat-paper">
 
-    <style>
-        :host {
-            border: 0 solid transparent;
-            display: block;
-            overflow: hidden;
-            position: relative;
-            -webkit-transition: border 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                box-shadow 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                opacity 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                visibility 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                border-radius 0.8s cubic-bezier(0.55, 0, 0.01, 1),
-                                height 0.8s cubic-bezier(0.55, 0, 0.01, 1),
-                                -webkit-transform 0.8s cubic-bezier(0.55, 0, 0.01, 1),
-                                width 0.8s cubic-bezier(0.55, 0, 0.01, 1);
-            transition: border 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        box-shadow 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        opacity 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        visibility 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        border-radius 0.8s cubic-bezier(0.55, 0, 0.01, 1),
-                        height 0.8s cubic-bezier(0.55, 0, 0.01, 1),
-                        transform 0.8s cubic-bezier(0.55, 0, 0.01, 1),
-                        width 0.8s cubic-bezier(0.55, 0, 0.01, 1);
-        }
-
-        /* FOREGROUND */
-
-        :host([foreground="dark"]) {
-            background: hsla(0, 0%, 98%, 1);
-            border-color: hsla(0, 0%, 0%, 0.12);
-            color: hsla(0, 0%, 0%, 0.87);
-        }
-
-        :host([foreground="light"]) {
-            background: hsla(0, 0%, 26%, 1);
-            border-color: hsla(0, 0%, 100%, 0.12);
-            color: hsla(0, 0%, 100%, 1);
-        }
-
-        /* BRIGHTNESS */
-
-        :host([brightness="header"][foreground="dark"]) { background: hsla(0, 0%, 88%, 1); }
-        :host([brightness="header"][foreground="light"]) { background: hsla(0, 0%, 13%, 1); }
-        :host([brightness="placeholder"][foreground="dark"]) { background: hsla(0, 0%, 88%, 1); }
-        :host([brightness="placeholder"][foreground="light"]) { background: hsla(0, 0%, 46%, 1); }
-        :host([brightness="shell"][foreground="dark"]) { background: hsla(0, 0%, 93%, 1); }
-        :host([brightness="shell"][foreground="light"]) { background: hsla(0, 0%, 19%, 1); }
-        :host([brightness="toolbar"][foreground="dark"]) { background: hsla(0, 0%, 96%, 1); }
-        :host([brightness="toolbar"][foreground="light"]) { background: hsla(0, 0%, 38%, 1); }
-
-        /* SHADOW */
-
-        :host([z="1"]) { @apply(--mat-shadow-z1); }
-        :host([z="2"]) { @apply(--mat-shadow-z2); }
-        :host([z="3"]) { @apply(--mat-shadow-z3); }
-        :host([z="4"]) { @apply(--mat-shadow-z4); }
-        :host([z="5"]) { @apply(--mat-shadow-z5); }
-        :host([z="6"]) { @apply(--mat-shadow-z6); }
-        :host([z="7"]) { @apply(--mat-shadow-z7); }
-        :host([z="8"]) { @apply(--mat-shadow-z8); }
-        :host([z="9"]) { @apply(--mat-shadow-z9); }
-        :host([z="10"]) { @apply(--mat-shadow-z10); }
-        :host([z="11"]) { @apply(--mat-shadow-z11); }
-        :host([z="12"]) { @apply(--mat-shadow-z12); }
-        :host([z="13"]) { @apply(--mat-shadow-z13); }
-        :host([z="14"]) { @apply(--mat-shadow-z14); }
-        :host([z="15"]) { @apply(--mat-shadow-z15); }
-        :host([z="16"]) { @apply(--mat-shadow-z16); }
-        :host([z="17"]) { @apply(--mat-shadow-z17); }
-        :host([z="18"]) { @apply(--mat-shadow-z18); }
-        :host([z="19"]) { @apply(--mat-shadow-z19); }
-        :host([z="20"]) { @apply(--mat-shadow-z20); }
-        :host([z="21"]) { @apply(--mat-shadow-z21); }
-        :host([z="22"]) { @apply(--mat-shadow-z22); }
-        :host([z="23"]) { @apply(--mat-shadow-z23); }
-        :host([z="24"]) { @apply(--mat-shadow-z24); }
-
-        /* DISABLED */
-        :host([disabled]) {
-            box-shadow: none !important;
-            filter: gray;
-            filter: grayscale(100%);
-            -webkit-filter: grayscale(100%);
-            pointer-events: none !important;
-        }
-
-        :host([disabled][foreground="dark"]) {
-            background: hsla(0, 0%, 0%, 0.12) !important;
-            color: hsla(0, 0%, 0%, 0.26);
-        }
-
-        :host([disabled][foreground="light"]) {
-            background: hsla(0, 0%, 100%, 0.12) !important;
-            color: hsla(0, 0%, 100%, 0.30);
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                border: 0 solid transparent;
+                display: block;
+                overflow: hidden;
+                position: relative;
+                -webkit-transition: border 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                box-shadow 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                opacity 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                visibility 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                border-radius 0.8s cubic-bezier(0.55, 0, 0.01, 1),
+                height 0.8s cubic-bezier(0.55, 0, 0.01, 1),
+                -webkit-transform 0.8s cubic-bezier(0.55, 0, 0.01, 1),
+                width 0.8s cubic-bezier(0.55, 0, 0.01, 1);
+                transition: border 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                box-shadow 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                opacity 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                visibility 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                border-radius 0.8s cubic-bezier(0.55, 0, 0.01, 1),
+                height 0.8s cubic-bezier(0.55, 0, 0.01, 1),
+                transform 0.8s cubic-bezier(0.55, 0, 0.01, 1),
+                width 0.8s cubic-bezier(0.55, 0, 0.01, 1);
+            }
+
+            /* FOREGROUND */
+
+            :host([foreground="dark"]) {
+                background: hsla(0, 0%, 98%, 1);
+                border-color: hsla(0, 0%, 0%, 0.12);
+                color: hsla(0, 0%, 0%, 0.87);
+            }
+
+            :host([foreground="light"]) {
+                background: hsla(0, 0%, 26%, 1);
+                border-color: hsla(0, 0%, 100%, 0.12);
+                color: hsla(0, 0%, 100%, 1);
+            }
+
+            /* BRIGHTNESS */
+
+            :host([brightness="header"][foreground="dark"]) { background: hsla(0, 0%, 88%, 1); }
+            :host([brightness="header"][foreground="light"]) { background: hsla(0, 0%, 13%, 1); }
+            :host([brightness="placeholder"][foreground="dark"]) { background: hsla(0, 0%, 88%, 1); }
+            :host([brightness="placeholder"][foreground="light"]) { background: hsla(0, 0%, 46%, 1); }
+            :host([brightness="shell"][foreground="dark"]) { background: hsla(0, 0%, 93%, 1); }
+            :host([brightness="shell"][foreground="light"]) { background: hsla(0, 0%, 19%, 1); }
+            :host([brightness="toolbar"][foreground="dark"]) { background: hsla(0, 0%, 96%, 1); }
+            :host([brightness="toolbar"][foreground="light"]) { background: hsla(0, 0%, 38%, 1); }
+
+            /* SHADOW */
+
+            :host([z="1"]) { @apply(--mat-shadow-z1); }
+            :host([z="2"]) { @apply(--mat-shadow-z2); }
+            :host([z="3"]) { @apply(--mat-shadow-z3); }
+            :host([z="4"]) { @apply(--mat-shadow-z4); }
+            :host([z="5"]) { @apply(--mat-shadow-z5); }
+            :host([z="6"]) { @apply(--mat-shadow-z6); }
+            :host([z="7"]) { @apply(--mat-shadow-z7); }
+            :host([z="8"]) { @apply(--mat-shadow-z8); }
+            :host([z="9"]) { @apply(--mat-shadow-z9); }
+            :host([z="10"]) { @apply(--mat-shadow-z10); }
+            :host([z="11"]) { @apply(--mat-shadow-z11); }
+            :host([z="12"]) { @apply(--mat-shadow-z12); }
+            :host([z="13"]) { @apply(--mat-shadow-z13); }
+            :host([z="14"]) { @apply(--mat-shadow-z14); }
+            :host([z="15"]) { @apply(--mat-shadow-z15); }
+            :host([z="16"]) { @apply(--mat-shadow-z16); }
+            :host([z="17"]) { @apply(--mat-shadow-z17); }
+            :host([z="18"]) { @apply(--mat-shadow-z18); }
+            :host([z="19"]) { @apply(--mat-shadow-z19); }
+            :host([z="20"]) { @apply(--mat-shadow-z20); }
+            :host([z="21"]) { @apply(--mat-shadow-z21); }
+            :host([z="22"]) { @apply(--mat-shadow-z22); }
+            :host([z="23"]) { @apply(--mat-shadow-z23); }
+            :host([z="24"]) { @apply(--mat-shadow-z24); }
+
+            /* DISABLED */
+            :host([disabled]) {
+                box-shadow: none !important;
+                filter: gray;
+                filter: grayscale(100%);
+                -webkit-filter: grayscale(100%);
+                pointer-events: none !important;
+            }
+
+            :host([disabled][foreground="dark"]) {
+                background: hsla(0, 0%, 0%, 0.12) !important;
+                color: hsla(0, 0%, 0%, 0.26);
+            }
+
+            :host([disabled][foreground="light"]) {
+                background: hsla(0, 0%, 100%, 0.12) !important;
+                color: hsla(0, 0%, 100%, 0.30);
+            }
+        </style>
+
         <content id="content"></content>
+
     </template>
 
     <script>

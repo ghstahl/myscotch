@@ -20,10 +20,10 @@ If can be used in conjunction with xp-sublist.
 @behavior xp-master-behavior /bower_components/xp-master-behavior/xp-master-behavior.html
 @behavior xp-multi-select-behavior /bower_components/xp-multi-select-behavior/xp-multi-select-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.7
-@dependency xp-multi-select-behavior ExpandJS/xp-multi-select-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.8
+@dependency xp-multi-select-behavior ExpandJS/xp-multi-select-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -33,15 +33,17 @@ If can be used in conjunction with xp-sublist.
 
 <dom-module id="xp-list">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+            }
+        </style>
+
         <content id="content"></content>
+
     </template>
 
     <script>
@@ -143,7 +145,7 @@ If can be used in conjunction with xp-sublist.
 
                 // Vars
                 var self      = this,
-                    superlist = self.selection && !self.multi && XP.findParentElement(Polymer.dom(self.selection), 'xp-sublist', self);
+                    superlist = self.selection && !self.multi && XP.findParentElement(Polymer.dom(self.selection), 'xp-sublist[collapsible]', self);
 
                 // Expanding
                 if (superlist) { superlist.expand(); }

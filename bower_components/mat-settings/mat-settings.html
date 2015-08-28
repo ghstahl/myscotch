@@ -7,25 +7,25 @@ The complete set of contributors may be found at https://expandjs.github.io/CONT
 -->
 
 <!--
-An element used to set the `default` values for Material Design styling.
+An element used to overwrite the `default` values of Material Design elements.
 
 ```html
-<mat-paper>Default theme (light)</mat-paper>
-<mat-paper theme="dark">Dark theme</mat-paper>
+<mat-paper>Light themed paper</mat-paper>
+<mat-paper theme="dark">Dark themed paper</mat-paper>
 ```
 
-With the `theme` attribute, you can change the default theme from `light` to `dark`,
-removing the need to explicitly write it every time.
+Using `<mat-settings>` you can set `dark` `theme` as default, removing the need
+to explicitly write it every time.
 
 ```html
 <mat-settings theme="dark"></mat-settings>
 
-<mat-paper>Default theme (dark)</mat-paper>
-<mat-paper theme="light">Light theme</mat-paper>
+<mat-paper>Dark themed paper</mat-paper>
+<mat-paper theme="light">White themed paper</mat-paper>
 ```
 
 @element mat-settings
-@description A custom element used to set the `default` values for Material Design styling
+@description A custom element used to overwrite the default material design settings, for example `theme`.
 @keywords material design, material app, web app, html5, expandjs, web-components
 @group functionality
 @homepage http://expandjs.com/elements/mat-settings
@@ -33,14 +33,14 @@ removing the need to explicitly write it every time.
 
 @behavior xp-shared-behavior /bower_components/xp-shared-behavior/xp-shared-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.8
 -->
 
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../expandjs/expandjs.html">
-<link rel="import" href="../xp-shared-behavior/xp-shared-behavior.html">
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/expandjs/expandjs.html">
+<link rel="import" href="/bower_components/xp-shared-behavior/xp-shared-behavior.html">
 
 <script>
     Polymer({
@@ -55,9 +55,24 @@ removing the need to explicitly write it every time.
 
         /*********************************************************************/
 
+        /**
+         * Refreshes the element.
+         *
+         * @method _refresh
+         * @returns {Element}
+         * @private
+         */
+        _refresh: function () {
+            var self = this;
+            XP.forOwn(self.properties, function (options, key) { self[key] = (self.shared && self.shared[key]) || self[key]; });
+            return self;
+        },
+
+        /*********************************************************************/
+
         // LISTENERS
         listeners: {
-            'shared-changed': '_handleShared'
+            'shared-changed': '_refresh'
         },
 
         // PROPERTIES
@@ -73,29 +88,32 @@ removing the need to explicitly write it every time.
              */
             theme: {
                 notify: true,
-                observer: '_themeChanged',
+                reflectToAttribute: true,
                 type: String,
                 value: 'light'
+            },
+
+            /**
+             * The default value for toast's timeout.
+             *
+             * @attribute timeout-toast
+             * @type number
+             * @default 3000
+             * @notifies
+             */
+            timeoutToast: {
+                notify: true,
+                reflectToAttribute: true,
+                type: Number,
+                value: 3000
             }
         },
 
         /*********************************************************************/
 
-        // OBSERVER
-        _themeChanged: function (post) {
-            this.set('shared.theme', post);
-        },
-
-        /*********************************************************************/
-
-        // HANDLER
-        _handleShared: function () {
-
-            // Vars
-            var self = this;
-
-            // Setting
-            self.theme = (self.shared && self.shared.theme) || self.theme;
+        // LISTENER
+        attributeChanged: function (name) {
+            if (XP.has(this.shared, name)) { this.share(name, this[name]); }
         }
     });
 </script>

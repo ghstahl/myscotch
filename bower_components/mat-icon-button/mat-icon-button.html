@@ -85,17 +85,17 @@ If you want the button to be semi-transparent whenever it's inactive, you can ad
 @behavior xp-pressed-behavior /bower_components/xp-pressed-behavior/xp-pressed-behavior.html
 @behavior xp-referral-behavior /bower_components/xp-referral-behavior/xp-referral-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-icon ExpandJS/mat-icon#0.9.7
-@dependency mat-ripple ExpandJS/mat-ripple#0.9.7
-@dependency xp-anchor-behavior ExpandJS/xp-anchor-behavior#0.9.7
-@dependency xp-pressed-behavior ExpandJS/xp-pressed-behavior#0.9.7
-@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.7
+@dependency mat-icon ExpandJS/mat-icon#0.9.8
+@dependency mat-ripple ExpandJS/mat-ripple#0.9.8
+@dependency xp-anchor-behavior ExpandJS/xp-anchor-behavior#0.9.8
+@dependency xp-pressed-behavior ExpandJS/xp-pressed-behavior#0.9.8
+@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
-@devDependency mat-icons ExpandJS/mat-icons#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
+@devDependency mat-icons ExpandJS/mat-icons#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -109,94 +109,95 @@ If you want the button to be semi-transparent whenever it's inactive, you can ad
 
 <dom-module id="mat-icon-button">
 
-    <link rel="import" type="css" href="../xp-pressed-behavior/xp-pressed-behavior.css">
-
-    <style>
-        :host {
-            border-radius: 50%;
-            height: 40px;
-            margin: 4px;
-            width: 40px;
-        }
-
-        :host([empty]) {
-            display: none !important;
-        }
-
-        :host #matIconButtonWrapper,
-        :host #matIconButtonMain {
-            border-radius: inherit;
-            height: 100%;
-        }
-
-        :host #matIconButtonMain {
-            @apply(--layout-horizontal);
-            @apply(--layout-center-center);
-        }
-
-        :host #matIconButtonAnchor {
-            border-radius: inherit;
-            display: block;
-            height: 100%;
-            outline: 0;
-            overflow: hidden;
-            text-decoration: none;
-        }
-
-        :host #matIconButtonAnchor:after {
-            bottom: -4px;
-            content: "";
-            left: -4px;
-            position: absolute;
-            right: -4px;
-            top: -4px;
-        }
-
-        :host #matIconButtonIcons,
-        :host #matIconButtonIcon,
-        :host #matIconButtonActiveIcon {
-            display: block;
-            position: relative;
-        }
-
-        :host #matIconButtonRipple {
-            margin: -4px;
-            padding: 4px;
-        }
-
-        /* ANIMATION */
-
-        :host #matIconButtonIcon,
-        :host #matIconButtonActiveIcon {
-            -webkit-transition: opacity 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                -webkit-transform 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                visibility 0.4s cubic-bezier(0.55, 0, 0.01, 1);
-            transition: opacity 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        transform 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        visibility 0.4s cubic-bezier(0.55, 0, 0.01, 1);
-        }
-
-        :host([animated]) #matIconButtonIcon {
-            position: absolute;
-        }
-
-        :host #matIconButtonIcon,
-        :host([active]) #matIconButtonActiveIcon {
-            -webkit-transform: scale(1);
-            transform: scale(1);
-            visibility: visible;
-        }
-
-        :host([active][animated]) #matIconButtonIcon,
-        :host(:not([active])) #matIconButtonActiveIcon {
-            opacity: 0;
-            -webkit-transform: scale(0);
-            transform: scale(0);
-            visibility: hidden;
-        }
-    </style>
-
     <template>
+
+        <style include="xp-pressed-styles"></style>
+
+        <style>
+            :host {
+                border-radius: 50%;
+                height: 40px;
+                margin: 4px;
+                width: 40px;
+            }
+
+            :host([empty]) {
+                display: none !important;
+            }
+
+            :host #matIconButtonWrapper,
+            :host #matIconButtonMain {
+                border-radius: inherit;
+                height: 100%;
+            }
+
+            :host #matIconButtonMain {
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
+            }
+
+            :host #matIconButtonAnchor {
+                border-radius: inherit;
+                display: block;
+                height: 100%;
+                outline: 0;
+                overflow: hidden;
+                text-decoration: none;
+            }
+
+            :host #matIconButtonAnchor:after {
+                bottom: -4px;
+                content: "";
+                left: -4px;
+                position: absolute;
+                right: -4px;
+                top: -4px;
+            }
+
+            :host #matIconButtonIcons,
+            :host #matIconButtonIcon,
+            :host #matIconButtonActiveIcon {
+                display: block;
+                position: relative;
+            }
+
+            :host #matIconButtonRipple {
+                margin: -4px;
+                padding: 4px;
+            }
+
+            /* ANIMATION */
+
+            :host #matIconButtonIcon,
+            :host #matIconButtonActiveIcon {
+                -webkit-transition: opacity 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                -webkit-transform 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                visibility 0.4s cubic-bezier(0.55, 0, 0.01, 1);
+                transition: opacity 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                transform 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                visibility 0.4s cubic-bezier(0.55, 0, 0.01, 1);
+            }
+
+            :host([animated]) #matIconButtonIcon {
+                position: absolute;
+            }
+
+            :host #matIconButtonIcon,
+            :host([active]) #matIconButtonActiveIcon {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                visibility: visible;
+            }
+
+            :host([active][animated]) #matIconButtonIcon,
+            :host(:not([active])) #matIconButtonActiveIcon {
+                opacity: 0;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+                visibility: hidden;
+            }
+        </style>
+
         <div id="matIconButtonWrapper">
             <a id="matIconButtonAnchor" tabindex="-1">
                 <div id="matIconButtonMain">
@@ -208,6 +209,7 @@ If you want the button to be semi-transparent whenever it's inactive, you can ad
             </a>
             <mat-ripple context="[[self]]" id="matIconButtonRipple" color="[[_computeColor(active, activeColor, color)]]" auto-center></mat-ripple>
         </div>
+
     </template>
 
     <script>

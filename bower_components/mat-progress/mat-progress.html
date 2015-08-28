@@ -54,12 +54,12 @@ All the styling API is done using [Material Design palette](http://www.google.co
 
 @behavior mat-palette /bower_components/mat-palette/mat-palette.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-ripple ExpandJS/mat-ripple#0.9.7
+@dependency mat-ripple ExpandJS/mat-ripple#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -69,191 +69,193 @@ All the styling API is done using [Material Design palette](http://www.google.co
 
 <dom-module name="mat-progress">
 
-    <style>
-        :host {
-            display: block;
-            height: 4px;
-            overflow: hidden;
-            pointer-events: none;
-            position: relative;
-            -webkit-transform-origin: left;
-            transform-origin: left;
-            -webkit-transform: scale(1, 0);
-            transform: scale(1, 0);
-            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 100%;
-        }
-
-        :host([showed]) {
-            transform: scale(1);
-        }
-
-        :host .bar {
-            @apply(--layout-fit);
-            display: block;
-            -webkit-transform-origin: left;
-            transform-origin: left;
-        }
-
-        :host #matProgressBuffer {
-            background: hsla(207, 89%, 86%, 1);
-            -webkit-transform: scale(1, 1);
-            transform: scale(1, 1);
-        }
-
-        :host #matProgressAux,
-        :host #matProgressPrimary {
-            background: hsla(207, 90%, 54%, 1);
-        }
-
-        :host #matProgressAux,
-        :host #matProgressStream {
-            display: none;
-        }
-
-        :host #matProgressStream {
-            color: hsla(207, 89%, 86%, 1);
-        }
-
-        /* BUFFER MODE */
-
-        :host([mode="buffer"]) .bar {
-            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        :host([mode="buffer"]) #matProgressStream {
-            display: block;
-        }
-
-        :host([mode="buffer"]) #matProgressStream::before {
-            -webkit-animation: buffer-stream 6s linear 0s infinite;
-            animation: buffer-stream 6s linear 0s infinite;
-            background-size: 10px 10px !important;
-            background: radial-gradient(currentColor 0%, currentColor 16%, hsla(0, 0%, 0%, 0) 42%) 0 -23px;
-            content: "";
-            display: block;
-            height: 4px;
-            margin-top: 0;
-            position: absolute;
-            width: 100%;
-        }
-
-        @-webkit-keyframes buffer-stream {
-            0%   { background-position: 0 -23px;      }
-            100% { background-position: -230px -23px; }
-        }
-
-        @keyframes buffer-stream {
-            0%   { background-position: 0 -23px;      }
-            100% { background-position: -230px -23px; }
-        }
-
-        /* INDETERMINATE MODE */
-
-        :host([mode="indeterminate"]) .bar {
-            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        :host([mode="indeterminate"]) #matProgressAux {
-            animation: indeterminate-aux 2s linear 0s infinite;
-            display: block;
-        }
-
-        :host([mode="indeterminate"]) #matProgressPrimary {
-            animation: indeterminate-primary 2s linear 0s infinite;
-        }
-
-        @-webkit-keyframes indeterminate-aux {
-            0%   { -webkit-transform: translateX(0%) scale(0, 1);     }
-            50%  { -webkit-transform: translateX(0%) scale(0, 1);     }
-            75%  { -webkit-transform: translateX(0%) scale(0.6, 1);   }
-            100% { -webkit-transform: translateX(100%) scale(0.2, 1); }
-        }
-
-        @keyframes indeterminate-aux {
-            0%   { transform: translateX(0%) scale(0, 1);     }
-            50%  { transform: translateX(0%) scale(0, 1);     }
-            75%  { transform: translateX(0%) scale(0.6, 1);   }
-            100% { transform: translateX(100%) scale(0.2, 1); }
-        }
-
-        @-webkit-keyframes indeterminate-primary {
-            0%   { -webkit-transform: translateX(0%) scale(0, 1);     }
-            20%  { -webkit-transform: translateX(0%) scale(0.5, 1);   }
-            33%  { -webkit-transform: translateX(20%) scale(0.7, 1);  }
-            66%  { -webkit-transform: translateX(100%) scale(0.7, 1); }
-            100% { -webkit-transform: translateX(100%) scale(0.7, 1); }
-        }
-
-        @keyframes indeterminate-primary {
-            0%   { transform: translateX(0%) scale(0, 1);     }
-            20%  { transform: translateX(0%) scale(0.5, 1);   }
-            33%  { transform: translateX(20%) scale(0.7, 1);  }
-            66%  { transform: translateX(100%) scale(0.7, 1); }
-            100% { transform: translateX(100%) scale(0.7, 1); }
-        }
-
-        /* QUERY MODE */
-
-        :host([mode="query"]) .bar {
-            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        :host([mode="query"]) #matProgressAux {
-            -webkit-animation: query-aux 2s linear 0s infinite;
-            animation: query-aux 2s linear 0s infinite;
-            display: block;
-            -webkit-transform-origin: right;
-            transform-origin: right;
-        }
-
-        :host([mode="query"]) #matProgressPrimary {
-            -webkit-animation: query-primary 2s linear 0s infinite;
-            animation: query-primary 2s linear 0s infinite;
-            -webkit-transform-origin: right;
-            transform-origin: right;
-        }
-
-        @-webkit-keyframes query-aux {
-            0%   { -webkit-transform: translateX(0%) scale(0, 1);      }
-            50%  { -webkit-transform: translateX(0%) scale(0, 1);      }
-            75%  { -webkit-transform: translateX(0%) scale(0.6, 1);    }
-            100% { -webkit-transform: translateX(-100%) scale(0.2, 1); }
-        }
-
-        @keyframes query-aux {
-            0%   { transform: translateX(0%) scale(0, 1);      }
-            50%  { transform: translateX(0%) scale(0, 1);      }
-            75%  { transform: translateX(0%) scale(0.6, 1);    }
-            100% { transform: translateX(-100%) scale(0.2, 1); }
-        }
-
-        @-webkit-keyframes query-primary {
-            0%   { -webkit-transform: translateX(0%) scale(0, 1);      }
-            20%  { -webkit-transform: translateX(0%) scale(0.5, 1);    }
-            33%  { -webkit-transform: translateX(-20%) scale(0.7, 1);  }
-            66%  { -webkit-transform: translateX(-100%) scale(0.7, 1); }
-            100% { -webkit-transform: translateX(-100%) scale(0.7, 1); }
-        }
-
-        @keyframes query-primary {
-            0%   { transform: translateX(0%) scale(0, 1);      }
-            20%  { transform: translateX(0%) scale(0.5, 1);    }
-            33%  { transform: translateX(-20%) scale(0.7, 1);  }
-            66%  { transform: translateX(-100%) scale(0.7, 1); }
-            100% { transform: translateX(-100%) scale(0.7, 1); }
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                height: 4px;
+                overflow: hidden;
+                pointer-events: none;
+                position: relative;
+                -webkit-transform-origin: left;
+                transform-origin: left;
+                -webkit-transform: scale(1, 0);
+                transform: scale(1, 0);
+                -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                width: 100%;
+            }
+
+            :host([showed]) {
+                transform: scale(1);
+            }
+
+            :host .bar {
+                @apply(--layout-fit);
+                display: block;
+                -webkit-transform-origin: left;
+                transform-origin: left;
+            }
+
+            :host #matProgressBuffer {
+                background: hsla(207, 89%, 86%, 1);
+                -webkit-transform: scale(1, 1);
+                transform: scale(1, 1);
+            }
+
+            :host #matProgressAux,
+            :host #matProgressPrimary {
+                background: hsla(207, 90%, 54%, 1);
+            }
+
+            :host #matProgressAux,
+            :host #matProgressStream {
+                display: none;
+            }
+
+            :host #matProgressStream {
+                color: hsla(207, 89%, 86%, 1);
+            }
+
+            /* BUFFER MODE */
+
+            :host([mode="buffer"]) .bar {
+                -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            :host([mode="buffer"]) #matProgressStream {
+                display: block;
+            }
+
+            :host([mode="buffer"]) #matProgressStream::before {
+                -webkit-animation: buffer-stream 6s linear 0s infinite;
+                animation: buffer-stream 6s linear 0s infinite;
+                background-size: 10px 10px !important;
+                background: radial-gradient(currentColor 0%, currentColor 16%, hsla(0, 0%, 0%, 0) 42%) 0 -23px;
+                content: "";
+                display: block;
+                height: 4px;
+                margin-top: 0;
+                position: absolute;
+                width: 100%;
+            }
+
+            @-webkit-keyframes buffer-stream {
+                0%   { background-position: 0 -23px;      }
+                100% { background-position: -230px -23px; }
+            }
+
+            @keyframes buffer-stream {
+                0%   { background-position: 0 -23px;      }
+                100% { background-position: -230px -23px; }
+            }
+
+            /* INDETERMINATE MODE */
+
+            :host([mode="indeterminate"]) .bar {
+                -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            :host([mode="indeterminate"]) #matProgressAux {
+                animation: indeterminate-aux 2s linear 0s infinite;
+                display: block;
+            }
+
+            :host([mode="indeterminate"]) #matProgressPrimary {
+                animation: indeterminate-primary 2s linear 0s infinite;
+            }
+
+            @-webkit-keyframes indeterminate-aux {
+                0%   { -webkit-transform: translateX(0%) scale(0, 1);     }
+                50%  { -webkit-transform: translateX(0%) scale(0, 1);     }
+                75%  { -webkit-transform: translateX(0%) scale(0.6, 1);   }
+                100% { -webkit-transform: translateX(100%) scale(0.2, 1); }
+            }
+
+            @keyframes indeterminate-aux {
+                0%   { transform: translateX(0%) scale(0, 1);     }
+                50%  { transform: translateX(0%) scale(0, 1);     }
+                75%  { transform: translateX(0%) scale(0.6, 1);   }
+                100% { transform: translateX(100%) scale(0.2, 1); }
+            }
+
+            @-webkit-keyframes indeterminate-primary {
+                0%   { -webkit-transform: translateX(0%) scale(0, 1);     }
+                20%  { -webkit-transform: translateX(0%) scale(0.5, 1);   }
+                33%  { -webkit-transform: translateX(20%) scale(0.7, 1);  }
+                66%  { -webkit-transform: translateX(100%) scale(0.7, 1); }
+                100% { -webkit-transform: translateX(100%) scale(0.7, 1); }
+            }
+
+            @keyframes indeterminate-primary {
+                0%   { transform: translateX(0%) scale(0, 1);     }
+                20%  { transform: translateX(0%) scale(0.5, 1);   }
+                33%  { transform: translateX(20%) scale(0.7, 1);  }
+                66%  { transform: translateX(100%) scale(0.7, 1); }
+                100% { transform: translateX(100%) scale(0.7, 1); }
+            }
+
+            /* QUERY MODE */
+
+            :host([mode="query"]) .bar {
+                -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            :host([mode="query"]) #matProgressAux {
+                -webkit-animation: query-aux 2s linear 0s infinite;
+                animation: query-aux 2s linear 0s infinite;
+                display: block;
+                -webkit-transform-origin: right;
+                transform-origin: right;
+            }
+
+            :host([mode="query"]) #matProgressPrimary {
+                -webkit-animation: query-primary 2s linear 0s infinite;
+                animation: query-primary 2s linear 0s infinite;
+                -webkit-transform-origin: right;
+                transform-origin: right;
+            }
+
+            @-webkit-keyframes query-aux {
+                0%   { -webkit-transform: translateX(0%) scale(0, 1);      }
+                50%  { -webkit-transform: translateX(0%) scale(0, 1);      }
+                75%  { -webkit-transform: translateX(0%) scale(0.6, 1);    }
+                100% { -webkit-transform: translateX(-100%) scale(0.2, 1); }
+            }
+
+            @keyframes query-aux {
+                0%   { transform: translateX(0%) scale(0, 1);      }
+                50%  { transform: translateX(0%) scale(0, 1);      }
+                75%  { transform: translateX(0%) scale(0.6, 1);    }
+                100% { transform: translateX(-100%) scale(0.2, 1); }
+            }
+
+            @-webkit-keyframes query-primary {
+                0%   { -webkit-transform: translateX(0%) scale(0, 1);      }
+                20%  { -webkit-transform: translateX(0%) scale(0.5, 1);    }
+                33%  { -webkit-transform: translateX(-20%) scale(0.7, 1);  }
+                66%  { -webkit-transform: translateX(-100%) scale(0.7, 1); }
+                100% { -webkit-transform: translateX(-100%) scale(0.7, 1); }
+            }
+
+            @keyframes query-primary {
+                0%   { transform: translateX(0%) scale(0, 1);      }
+                20%  { transform: translateX(0%) scale(0.5, 1);    }
+                33%  { transform: translateX(-20%) scale(0.7, 1);  }
+                66%  { transform: translateX(-100%) scale(0.7, 1); }
+                100% { transform: translateX(-100%) scale(0.7, 1); }
+            }
+        </style>
+
         <div class="bar" id="matProgressStream"></div>
         <div class="bar" id="matProgressBuffer"></div>
         <div class="bar" id="matProgressAux"></div>
         <div class="bar" id="matProgressPrimary"></div>
+
     </template>
 
     <script>

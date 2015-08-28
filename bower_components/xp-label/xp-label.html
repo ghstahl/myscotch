@@ -7,7 +7,23 @@ The complete set of contributors may be found at https://expandjs.github.io/CONT
 -->
 
 <!--
-This element is used to add shadow traverse capabilities on an HTML label.
+An element used to add shadowDOM traverseing capabilities on an HTML label.
+
+It behaves the same way as the standard `<label>` tag.
+```html
+<label is="xp-label">
+    Click me to focus the input
+    <input type="text" />
+</label>
+```
+
+It also finds nested tags inside shadowDOM
+```html
+<label is="xp-label">
+    Click me to focus the input
+    <element-with-input-inside></element-with-input-inside>
+</label>
+```
 
 @element xp-label
 @description A custom element used to add shadow traverse capabilities on an HTML label
@@ -18,8 +34,8 @@ This element is used to add shadow traverse capabilities on an HTML label.
 
 @extends label
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -27,15 +43,17 @@ This element is used to add shadow traverse capabilities on an HTML label.
 
 <dom-module id="xp-label">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+            }
+        </style>
+
         <content id="content"></content>
+
     </template>
 
     <script>

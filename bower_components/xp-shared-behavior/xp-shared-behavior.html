@@ -16,8 +16,8 @@ This behavior is used to add sharing capabilities on the context element.
 @homepage http://expandjs.com/elements/xp-shared-behavior
 @repository https://github.com/ExpandJS/xp-shared-behavior
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -35,16 +35,8 @@ This behavior is used to add sharing capabilities on the context element.
          * @returns {Element}
          */
         share: function (key, value) {
-
-            // Asserting
-            XP.assertArgument(XP.isString(key, true), 1, 'string');
-
-            // Vars
             var self = this;
-
-            // Sharing
-            self.sharers.forEach(function (sharer) { sharer.set('shared.' + key, value); });
-
+            if (XP.isString(key, true)) { self.sharers.forEach(function (sharer) { sharer.set('shared.' + key, value); }); }
             return self;
         },
 
@@ -65,7 +57,7 @@ This behavior is used to add sharing capabilities on the context element.
                 notify: true,
                 readOnly: true,
                 type: Object,
-                value: function () { return (this.sharers[0] && this.sharers[0].shared) || {}; }
+                value: function () { return this.sharers[0] ? XP.clone(this.sharers[0].shared) : {}; }
             }
         },
 

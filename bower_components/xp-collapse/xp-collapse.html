@@ -16,8 +16,8 @@ This element is used to display a collapsible element.
 @homepage http://expandjs.com/elements/xp-collapse
 @repository https://github.com/ExpandJS/xp-collapse
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -25,26 +25,28 @@ This element is used to display a collapsible element.
 
 <dom-module id="xp-collapse">
 
-    <style>
-        :host {
-            display: block;
-            overflow: hidden;
-        }
-
-        :host #xpCollapseWrapper {
-            position: relative;
-        }
-
-        :host([empty]) #xpCollapseWrapper,
-        :host([collapsed]:not([animated])) #xpCollapseWrapper {
-            display: none !important;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: hidden;
+            }
+
+            :host #xpCollapseWrapper {
+                position: relative;
+            }
+
+            :host([empty]) #xpCollapseWrapper,
+            :host([collapsed]:not([animated])) #xpCollapseWrapper {
+                display: none !important;
+            }
+        </style>
+
         <div id="xpCollapseWrapper">
             <content id="content"></content>
         </div>
+
     </template>
 
     <script>

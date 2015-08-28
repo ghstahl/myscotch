@@ -18,9 +18,9 @@ It can be used in conjunction with xp-iconset.
 @homepage http://expandjs.com/elements/xp-icon
 @repository https://github.com/ExpandJS/xp-icon
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-iconset ExpandJS/xp-iconset#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-iconset ExpandJS/xp-iconset#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -29,33 +29,35 @@ It can be used in conjunction with xp-iconset.
 
 <dom-module id="xp-icon">
 
-    <style>
-        :host {
-            display: inline-block;
-            height: 24px;
-            overflow: visible;
-            width: 24px;
-        }
-
-        :host([empty]) {
-            display: none !important;
-        }
-
-        :host #xpIconWrapper,
-        :host #xpIconWrapper * {
-            border-radius: inherit;
-            height: 100%;
-            width: 100%;
-        }
-
-        :host svg {
-            display: block;
-            fill: currentcolor;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: inline-block;
+                height: 24px;
+                overflow: visible;
+                width: 24px;
+            }
+
+            :host([empty]) {
+                display: none !important;
+            }
+
+            :host #xpIconWrapper,
+            :host #xpIconWrapper * {
+                border-radius: inherit;
+                height: 100%;
+                width: 100%;
+            }
+
+            :host svg {
+                display: block;
+                fill: currentcolor;
+            }
+        </style>
+
         <div id="xpIconWrapper"></div>
+
     </template>
 
     <script>

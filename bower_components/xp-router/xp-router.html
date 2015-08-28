@@ -23,9 +23,9 @@ It can be used in conjunction with xp-pages.
 @behavior xp-selected-behavior /bower_components/xp-selected-behavior/xp-selected-behavior.html
 
 @dependency director Flatiron/director#^1.0.0
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-selected-behavior ExpandJS/xp-selected-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-selected-behavior ExpandJS/xp-selected-behavior#0.9.8
 -->
 
 <script src="../director/build/director.min.js"></script>
@@ -36,14 +36,16 @@ It can be used in conjunction with xp-pages.
 
 <dom-module id="xp-router">
 
-    <style>
-        :host {
-            display: none !important;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: none !important;
+            }
+        </style>
+
         <content id="content"></content>
+
     </template>
 
     <script>

@@ -66,20 +66,20 @@ The FAB's background color can be changed accordingly to the
 @behavior xp-pressed-behavior /bower_components/xp-pressed-behavior/xp-pressed-behavior.html
 @behavior xp-referral-behavior /bower_components/xp-referral-behavior/xp-referral-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-icon ExpandJS/mat-icon#0.9.7
-@dependency mat-paper ExpandJS/mat-paper#0.9.7
-@dependency mat-ripple ExpandJS/mat-ripple#0.9.7
-@dependency xp-anchor-behavior ExpandJS/xp-anchor-behavior#0.9.7
-@dependency xp-pressed-behavior ExpandJS/xp-pressed-behavior#0.9.7
-@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.7
+@dependency mat-icon ExpandJS/mat-icon#0.9.8
+@dependency mat-paper ExpandJS/mat-paper#0.9.8
+@dependency mat-ripple ExpandJS/mat-ripple#0.9.8
+@dependency xp-anchor-behavior ExpandJS/xp-anchor-behavior#0.9.8
+@dependency xp-pressed-behavior ExpandJS/xp-pressed-behavior#0.9.8
+@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.8
 
-@devDependency mat-content ExpandJS/mat-content#0.9.7
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
-@devDependency mat-header-panel ExpandJS/mat-header-panel#0.9.7
-@devDependency mat-icons ExpandJS/mat-icons#0.9.7
+@devDependency mat-content ExpandJS/mat-content#0.9.8
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
+@devDependency mat-header-panel ExpandJS/mat-header-panel#0.9.8
+@devDependency mat-icons ExpandJS/mat-icons#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -94,111 +94,112 @@ The FAB's background color can be changed accordingly to the
 
 <dom-module id="mat-fab">
 
-    <link rel="import" type="css" href="../xp-pressed-behavior/xp-pressed-behavior.css">
+    <template>
 
-    <style>
-        :host {
-            border-radius: 50%;
-            height: 56px;
-            position: absolute;
-            width: 56px;
-        }
+        <style include="xp-pressed-styles"></style>
 
-        :host([empty]) {
-            display: none !important;
-        }
+        <style>
+            :host {
+                border-radius: 50%;
+                height: 56px;
+                position: absolute;
+                width: 56px;
+            }
 
-        :host([mini]) {
-            height: 40px;
-            width: 40px;
-        }
+            :host([empty]) {
+                display: none !important;
+            }
 
-        :host([left]) {
-            left: 16px;
-        }
-
-        :host(:not([left])) {
-            right: 16px;
-        }
-
-        :host([top][across]) {
-            top: 0;
-            -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-        }
-
-        :host([top]:not([across])) {
-            top: 16px;
-        }
-
-        :host(:not([top])[across]) {
-            bottom: 0;
-            -webkit-transform: translateY(50%);
-            transform: translateY(50%);
-        }
-
-        :host(:not([top]):not([across])) {
-            bottom: 16px;
-        }
-
-        :host #matFabWrapper,
-        :host #matFabMain {
-            border-radius: inherit;
-            height: 100%;
-            overflow: visible;
-        }
-
-        :host #matFabMain {
-            @apply(--layout-horizontal);
-            @apply(--layout-center-center);
-        }
-
-        :host #matFabAnchor {
-            border-radius: inherit;
-            box-shadow: 0 1px 0 0 hsla(0, 100%, 100%, 0.1) inset, 0 -1px 0 0 hsla(0, 0%, 0%, 0.2) inset;
-            display: block;
-            height: 100%;
-            outline: 0;
-            overflow: hidden;
-            text-decoration: none;
-        }
-
-        :host([mini]) #matFabAnchor:after {
-            bottom: -4px;
-            content: "";
-            left: -4px;
-            position: absolute;
-            right: -4px;
-            top: -4px;
-        }
-
-        :host #matFabIcon {
-            display: block;
-        }
-
-        /* TABLET */
-
-        @media (min-width: 960px) {
+            :host([mini]) {
+                height: 40px;
+                width: 40px;
+            }
 
             :host([left]) {
-                left: 24px;
+                left: 16px;
             }
 
             :host(:not([left])) {
-                right: 24px;
+                right: 16px;
+            }
+
+            :host([top][across]) {
+                top: 0;
+                -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
             }
 
             :host([top]:not([across])) {
-                top: 24px;
+                top: 16px;
+            }
+
+            :host(:not([top])[across]) {
+                bottom: 0;
+                -webkit-transform: translateY(50%);
+                transform: translateY(50%);
             }
 
             :host(:not([top]):not([across])) {
-                bottom: 24px;
+                bottom: 16px;
             }
-        }
-    </style>
 
-    <template>
+            :host #matFabWrapper,
+            :host #matFabMain {
+                border-radius: inherit;
+                height: 100%;
+                overflow: visible;
+            }
+
+            :host #matFabMain {
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
+            }
+
+            :host #matFabAnchor {
+                border-radius: inherit;
+                box-shadow: 0 1px 0 0 hsla(0, 100%, 100%, 0.1) inset, 0 -1px 0 0 hsla(0, 0%, 0%, 0.2) inset;
+                display: block;
+                height: 100%;
+                outline: 0;
+                overflow: hidden;
+                text-decoration: none;
+            }
+
+            :host([mini]) #matFabAnchor:after {
+                bottom: -4px;
+                content: "";
+                left: -4px;
+                position: absolute;
+                right: -4px;
+                top: -4px;
+            }
+
+            :host #matFabIcon {
+                display: block;
+            }
+
+            /* TABLET */
+
+            @media (min-width: 960px) {
+
+                :host([left]) {
+                    left: 24px;
+                }
+
+                :host(:not([left])) {
+                    right: 24px;
+                }
+
+                :host([top]:not([across])) {
+                    top: 24px;
+                }
+
+                :host(:not([top]):not([across])) {
+                    bottom: 24px;
+                }
+            }
+        </style>
+
         <mat-paper id="matFabWrapper" background="[[background]]" disabled="[[disabled]]" z="6" pressable>
             <a id="matFabAnchor" tabindex="-1">
                 <div id="matFabMain">
@@ -207,6 +208,7 @@ The FAB's background color can be changed accordingly to the
             </a>
             <mat-ripple context="[[self]]" id="matFabRipple" auto-center></mat-ripple>
         </mat-paper>
+
     </template>
 
     <script>

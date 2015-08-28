@@ -18,9 +18,9 @@ This element is used to add XHR capabilities to the standard HTML form.
 
 @extends form
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-request ExpandJS/xp-request#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-request ExpandJS/xp-request#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -29,14 +29,15 @@ This element is used to add XHR capabilities to the standard HTML form.
 
 <dom-module id="xp-form">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+            }
+        </style>
+
         <xp-request id="xpFormRequest" data="{{data}}" error="{{error}}" headers="[[headers]]"
                     keep-alive="[[keepAlive]]" path="[[path]]" port="[[port]]" response="{{response}}"
                     state="{{state}}" url="[[url]]" on-xp-request-chunk="_handleEvent"
@@ -44,6 +45,7 @@ This element is used to add XHR capabilities to the standard HTML form.
                     on-xp-request-response="_handleEvent" on-xp-request-state="_handleEvent"
                     on-xp-request-submit="_handleEvent"></xp-request>
         <content id="content"></content>
+
     </template>
 
     <script>
@@ -217,6 +219,20 @@ This element is used to add XHR capabilities to the standard HTML form.
                 },
 
                 /**
+                 * Content type to be used when sending data.
+                 *
+                 * @attribute content-type
+                 * @type string
+                 * @notifies
+                 */
+                contentType: {
+                    notify: true,
+                    reflectToAttribute: true,
+                    type: String,
+                    value: 'application/x-www-form-urlencoded'
+                },
+
+                /**
                  * The request received data.
                  *
                  * @attribute data
@@ -332,10 +348,10 @@ This element is used to add XHR capabilities to the standard HTML form.
                 var self = this;
 
                 // Setting
-                XP.assign(self.$.xpFormRequest, {enctype: self.enctype, method: self.method, url: self.action});
+                XP.assign(self.$.xpFormRequest, {contentType: self.contentType, method: self.method, url: self.action});
 
                 // Observing
-                XP.onMutation(self, self.mutatedAttributes.bind(self), {attributes: true, attributeFilter: ['action', 'enctype', 'method']});
+                XP.onMutation(self, self.mutatedAttributes.bind(self), {attributes: true, attributeFilter: ['action', 'content-type', 'method']});
             },
 
             // LISTENER

@@ -51,12 +51,12 @@ The panel's background color can be changed accordingly to the
 
 @behavior xp-slave-behavior /bower_components/xp-slave-behavior/xp-slave-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency mat-paper ExpandJS/mat-paper#0.9.7
-@dependency mat-toolbar ExpandJS/mat-toolbar#0.9.7
-@dependency xp-collapse ExpandJS/xp-collapse#0.9.7
-@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency mat-paper ExpandJS/mat-paper#0.9.8
+@dependency mat-toolbar ExpandJS/mat-toolbar#0.9.8
+@dependency xp-collapse ExpandJS/xp-collapse#0.9.8
+@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -68,41 +68,42 @@ The panel's background color can be changed accordingly to the
 
 <dom-module id="mat-panel">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-            text-align: left;
-        }
-
-        :host #matPanelWrapper {
-            @apply(--layout-vertical);
-        }
-
-        :host #matPanelHeader,
-        :host #matPanelBody,
-        :host #matPanelScroller {
-            position: relative;
-        }
-
-        :host #matPanelHeader {
-            -ms-flex-order: 1;
-            -webkit-order: 1;
-            order: 1;
-        }
-
-        :host #matPanelBody {
-            -ms-flex-order: 2;
-            -webkit-order: 2;
-            order: 2;
-        }
-
-        :host [scroller] {
-            overflow-y: auto;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+                text-align: left;
+            }
+
+            :host #matPanelWrapper {
+                @apply(--layout-vertical);
+            }
+
+            :host #matPanelHeader,
+            :host #matPanelBody,
+            :host #matPanelScroller {
+                position: relative;
+            }
+
+            :host #matPanelHeader {
+                -ms-flex-order: 1;
+                -webkit-order: 1;
+                order: 1;
+            }
+
+            :host #matPanelBody {
+                -ms-flex-order: 2;
+                -webkit-order: 2;
+                order: 2;
+            }
+
+            :host [scroller] {
+                overflow-y: auto;
+            }
+        </style>
+
         <mat-paper id="matPanelWrapper" background="[[background]]" z="[[_computeZ(raised)]]">
             <div id="matPanelBody">
                 <xp-collapse id="matPanelScroller" animatable="{{animatable}}" backward collapsed="{{collapsed}}" easing="cubic-bezier(0.55, 0, 0.01, 1)" on-scroll="_handleScroll">
@@ -113,6 +114,7 @@ The panel's background color can be changed accordingly to the
                 <content id="headerContent" select='[header=""]'></content>
             </div>
         </mat-paper>
+
     </template>
 
     <script>

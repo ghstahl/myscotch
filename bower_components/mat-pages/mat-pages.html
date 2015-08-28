@@ -50,16 +50,16 @@ by binding the `selected` attribute.
 @behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 @behavior xp-master-behavior /bower_components/xp-master-behavior/xp-master-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-paper ExpandJS/mat-paper#0.9.7
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.7
-@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.7
-@dependency xp-pages ExpandJS/xp-pages#0.9.7
+@dependency mat-paper ExpandJS/mat-paper#0.9.8
+@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.8
+@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.8
+@dependency xp-pages ExpandJS/xp-pages#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
-@devDependency mat-tabs ExpandJS/mat-tabs#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
+@devDependency mat-tabs ExpandJS/mat-tabs#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -73,34 +73,36 @@ by binding the `selected` attribute.
 
 <dom-module id="mat-pages">
 
-    <style>
-        :host {
-            @apply(--layout-fit);
-            display: block;
-            overflow: hidden;
-        }
-
-        :host #matPagesAdaptee {
-            @apply(--layout-horizontal);
-            right: auto;
-            -webkit-transition: -webkit-transform 0.33s;
-            transition: transform 0.33s;
-            width: 100%;
-            will-change: transform;
-        }
-
-        :host:not([animated]) > #matPagesAdaptee ::content > mat-page > #matPageWrapper > #matPageAdaptee:not([active]) {
-            display: none !important;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                @apply(--layout-fit);
+                display: block;
+                overflow: hidden;
+            }
+
+            :host #matPagesAdaptee {
+                @apply(--layout-horizontal);
+                right: auto;
+                -webkit-transition: -webkit-transform 0.33s;
+                transition: transform 0.33s;
+                width: 100%;
+                will-change: -webkit-transform, transform;
+            }
+
+            :host:not([animated]) > #matPagesAdaptee ::content > mat-page > #matPageWrapper > #matPageAdaptee:not([active]) {
+                display: none !important;
+            }
+        </style>
+
         <xp-pages context="[[self]]" id="matPagesAdaptee" default-selected="[[defaultSelected]]"
                   empty-items="{{emptyItems}}" index-attribute="[[indexAttribute]]" initialized="{{initialized}}"
                   is-mutated="{{isMutated}}" mutating="{{mutating}}" selected="{{selected}}" selecting="{{selecting}}"
                   single-item="{{singleItem}}" on-items-changed="_handleItems" on-selection-changed="_handleSelection">
             <content id="content"></content>
         </xp-pages>
+
     </template>
 
     <script>
@@ -247,8 +249,8 @@ by binding the `selected` attribute.
                 // Vars
                 var self    = this,
                     adaptee = self.$.matPagesAdaptee,
-                    index   = self.findIndex(self.selection) || 0,
-                    items   = self.items || [];
+                    items   = self.items || [],
+                    index   = XP.indexOf(items, self.selection) || 0;
 
                 // Setting
                 self._setAnimated(true);

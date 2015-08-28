@@ -21,11 +21,11 @@ It must be used in conjunction with xp-list.
 @behavior xp-master-behavior /bower_components/xp-master-behavior/xp-master-behavior.html
 @behavior xp-slave-behavior /bower_components/xp-slave-behavior/xp-slave-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-collapse ExpandJS/xp-collapse#0.9.7
-@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.7
-@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-collapse ExpandJS/xp-collapse#0.9.8
+@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.8
+@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -37,17 +37,19 @@ It must be used in conjunction with xp-list.
 
 <dom-module id="xp-sublist">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+            }
+        </style>
+
         <xp-collapse id="xpSublistWrapper" animatable="{{animatable}}" backward="[[backward]]" collapsed="{{collapsed}}" duration="[[duration]]" easing="[[easing]]">
             <content id="content"></content>
         </xp-collapse>
+
     </template>
 
     <script>

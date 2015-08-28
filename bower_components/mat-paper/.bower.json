@@ -1,7 +1,7 @@
 {
   "name": "mat-paper",
   "license": "BSD-3-Clause",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "main": "mat-paper.html",
   "description": "A custom element used to display a Material Design paper",
   "homepage": "http://expandjs.com/elements/mat-paper",
@@ -22,26 +22,26 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.7",
-    "mat-palette": "ExpandJS/mat-palette#0.9.7",
-    "mat-shadow": "ExpandJS/mat-shadow#0.9.7",
-    "mat-typography": "ExpandJS/mat-typography#0.9.7",
-    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.7",
-    "xp-shared-behavior": "ExpandJS/xp-shared-behavior#0.9.7",
-    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.7",
-    "polymer": "Polymer/polymer#^1.0.0",
+    "expandjs": "ExpandJS/expandjs#0.9.8",
+    "mat-palette": "ExpandJS/mat-palette#0.9.8",
+    "mat-shadow": "ExpandJS/mat-shadow#0.9.8",
+    "mat-typography": "ExpandJS/mat-typography#0.9.8",
+    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.8",
+    "xp-shared-behavior": "ExpandJS/xp-shared-behavior#0.9.8",
+    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.8",
+    "polymer": "Polymer/polymer#^1.1.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   },
   "devDependencies": {
-    "mat-demo": "ExpandJS/mat-demo#0.9.7"
+    "mat-demo": "ExpandJS/mat-demo#0.9.8"
   },
-  "_release": "0.9.7",
+  "_release": "0.9.8",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.7",
-    "commit": "821cc4ba98d97811c74b63bd1c4eb37bf91407cf"
+    "tag": "v0.9.8",
+    "commit": "2bf90214415d1755eb691b029810879ca0d867ac"
   },
   "_source": "git://github.com/ExpandJS/mat-paper.git",
-  "_target": "0.9.7",
+  "_target": "0.9.8",
   "_originalSource": "ExpandJS/mat-paper"
 }

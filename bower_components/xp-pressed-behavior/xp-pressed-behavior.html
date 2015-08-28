@@ -19,16 +19,17 @@ This behavior is used to add press capabilities on the context element.
 @behavior xp-focused-behavior /bower_components/xp-focused-behavior/xp-focused-behavior.html
 @behavior xp-targeter-behavior /bower_components/xp-targeter-behavior/xp-targeter-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-focused-behavior ExpandJS/xp-focused-behavior#0.9.7
-@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-focused-behavior ExpandJS/xp-focused-behavior#0.9.8
+@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
 <link rel="import" href="../xp-focused-behavior/xp-focused-behavior.html">
 <link rel="import" href="../xp-targeter-behavior/xp-targeter-behavior.html">
+<link rel="import" href="xp-pressed-styles.html">
 
 <script>
     Polymer.XPPressedBehaviorImp = {
@@ -48,6 +49,7 @@ This behavior is used to add press capabilities on the context element.
          * @event xp-activate
          * @param {Element} firer
          * @param {Element} target
+         * @param {*} data
          * @param {boolean} isActive
          * @bubbles
          * @cancelable
@@ -68,7 +70,7 @@ This behavior is used to add press capabilities on the context element.
                 target = self.findTarget();
 
             // Firing
-            if (self.fire('xp-activate', {firer: self, target: target, isActive: self.active}, {cancelable: true}).defaultPrevented) { return self; }
+            if (self.fire('xp-activate', {firer: self, target: target, data: self.data, isActive: self.active}, {cancelable: true}).defaultPrevented) { return self; }
 
             // Setting
             if (self.toggleable) { self.active = !self.active; }

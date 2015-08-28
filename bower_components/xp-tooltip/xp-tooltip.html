@@ -7,7 +7,15 @@ The complete set of contributors may be found at https://expandjs.github.io/CONT
 -->
 
 <!--
-This element is used to display an overlay on hover or focus.
+An element used to display a generic tooltip, centered underneath the content it contains.
+
+It will reveal itself either on hovering or on tap.
+
+```html
+<xp-tooltip tip="Further detail...">
+    Hover over or tap for more details.
+</xp-tooltip>
+```
 
 @element xp-tooltip
 @description A custom element used to create a tooltip
@@ -18,10 +26,10 @@ This element is used to display an overlay on hover or focus.
 
 @behavior xp-referral-behavior /bower_components/xp-referral-behavior/xp-referral-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-overlay ExpandJS/xp-overlay#0.9.7
-@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-overlay ExpandJS/xp-overlay#0.9.8
+@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -31,43 +39,45 @@ This element is used to display an overlay on hover or focus.
 
 <dom-module id="xp-tooltip">
 
-    <style>
-        :host {
-            display: inline-block;
-            overflow: visible;
-        }
-
-        :host([empty]) #xpTooltipOverlay {
-            display: none !important;
-        }
-
-        :host #xpTooltipOverlay::shadow #xpOverlayWrapper {
-            overflow: visible;
-        }
-
-        :host #xpTooltipTip {
-            background-color: hsla(0, 0%, 0%, 0.9);
-            border-radius: 2px;
-            color: hsla(0, 0%, 100%, 1);
-            margin: 4px;
-            overflow: hidden;
-            padding: 4px 8px;
-            text-align: center;
-            text-overflow: ellipsis;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none;
-            user-select: none;
-            white-space: nowrap;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: inline-block;
+                overflow: visible;
+            }
+
+            :host([empty]) #xpTooltipOverlay {
+                display: none !important;
+            }
+
+            :host #xpTooltipOverlay::shadow #xpOverlayWrapper {
+                overflow: visible;
+            }
+
+            :host #xpTooltipTip {
+                background-color: hsla(0, 0%, 0%, 0.9);
+                border-radius: 2px;
+                color: hsla(0, 0%, 100%, 1);
+                margin: 4px;
+                overflow: hidden;
+                padding: 4px 8px;
+                text-align: center;
+                text-overflow: ellipsis;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-tap-highlight-color: transparent;
+                -webkit-user-select: none;
+                user-select: none;
+                white-space: nowrap;
+            }
+        </style>
+
         <content id="content"></content>
         <xp-overlay id="xpTooltipOverlay" auto-center auto-hide-disabled position="baseline" showed="{{showed}}" target="[[self]]">
             <div id="xpTooltipTip">{{tip}}</div>
         </xp-overlay>
+
     </template>
 
     <script>

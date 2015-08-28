@@ -20,9 +20,9 @@ This element is used to parse and display a markdown formatted text.
 
 @dependency prism PrismJS/prism#^1.0.0
 @dependency markdown-it Markdown-it/markdown-it#^4.0.0
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.8
 -->
 
 <script src="../prism/prism.js"></script>
@@ -34,36 +34,38 @@ This element is used to parse and display a markdown formatted text.
 
 <dom-module id="xp-markdown">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-        }
-
-        :host([empty-source]) {
-            display: none !important;
-        }
-
-        :host #xpMarkdownWrapper ::content p > code {
-            background: hsla(24, 20%, 95%, 1);
-            padding: 0 4px;
-        }
-
-        :host #xpMarkdownWrapper ::content pre {
-            background: hsla(24, 20%, 95%, 1);
-            box-sizing: border-box;
-            font-size: 14px;
-            font-weight: 400;
-            letter-spacing: 0.01em;
-            line-height: 20px;
-            overflow-x: scroll;
-            overflow-y: auto;
-            padding: 16px 24px;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+            }
+
+            :host([empty-source]) {
+                display: none !important;
+            }
+
+            :host #xpMarkdownWrapper ::content p > code {
+                background: hsla(24, 20%, 95%, 1);
+                padding: 0 4px;
+            }
+
+            :host #xpMarkdownWrapper ::content pre {
+                background: hsla(24, 20%, 95%, 1);
+                box-sizing: border-box;
+                font-size: 14px;
+                font-weight: 400;
+                letter-spacing: 0.01em;
+                line-height: 20px;
+                overflow-x: scroll;
+                overflow-y: auto;
+                padding: 16px 24px;
+            }
+        </style>
+
         <div id="xpMarkdownWrapper"></div>
+
     </template>
 
     <script>

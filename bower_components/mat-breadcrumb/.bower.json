@@ -1,7 +1,7 @@
 {
   "name": "mat-breadcrumb",
   "license": "BSD-3-Clause",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "main": "mat-breadcrumb.html",
   "description": "A custom element used to display a Material Design breadcrumb",
   "homepage": "http://expandjs.com/elements/mat-breadcrumb",
@@ -22,29 +22,29 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.7",
-    "mat-icon": "ExpandJS/mat-icon#0.9.7",
-    "mat-icons": "ExpandJS/mat-icons#0.9.7",
-    "mat-ink": "ExpandJS/mat-ink#0.9.7",
-    "xp-anchor-behavior": "ExpandJS/xp-anchor-behavior#0.9.7",
-    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.7",
-    "xp-media-query": "ExpandJS/xp-media-query#0.9.7",
-    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.7",
-    "polymer": "Polymer/polymer#^1.0.0",
+    "expandjs": "ExpandJS/expandjs#0.9.8",
+    "mat-icon": "ExpandJS/mat-icon#0.9.8",
+    "mat-icons": "ExpandJS/mat-icons#0.9.8",
+    "mat-ink": "ExpandJS/mat-ink#0.9.8",
+    "xp-anchor-behavior": "ExpandJS/xp-anchor-behavior#0.9.8",
+    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.8",
+    "xp-media-query": "ExpandJS/xp-media-query#0.9.8",
+    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.8",
+    "polymer": "Polymer/polymer#^1.1.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   },
   "devDependencies": {
-    "mat-demo": "ExpandJS/mat-demo#0.9.7",
-    "mat-fab": "ExpandJS/mat-fab#0.9.7",
-    "mat-header-panel": "ExpandJS/mat-header-panel#0.9.7"
+    "mat-demo": "ExpandJS/mat-demo#0.9.8",
+    "mat-fab": "ExpandJS/mat-fab#0.9.8",
+    "mat-header-panel": "ExpandJS/mat-header-panel#0.9.8"
   },
-  "_release": "0.9.7",
+  "_release": "0.9.8",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.7",
-    "commit": "7260de5c991e5e0604ac5fdd6cdb9f0d528ecc51"
+    "tag": "v0.9.8",
+    "commit": "5bd6fe22281636075750e66d605ae4dea8a6c89f"
   },
   "_source": "git://github.com/ExpandJS/mat-breadcrumb.git",
-  "_target": "0.9.7",
+  "_target": "0.9.8",
   "_originalSource": "ExpandJS/mat-breadcrumb"
 }

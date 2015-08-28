@@ -37,8 +37,8 @@ Using `inset` will indent on the left side, to align the content to a possible [
 @homepage http://expandjs.com/elements/mat-content
 @repository https://github.com/ExpandJS/mat-content
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -46,34 +46,36 @@ Using `inset` will indent on the left side, to align the content to a possible [
 
 <dom-module id="mat-content">
 
-    <style>
-        :host {
-            box-sizing: border-box;
-            display: block;
-            overflow: visible;
-            padding: 16px;
-        }
+    <template>
 
-        :host([inset]) {
-            padding-left: 72px;
-        }
-
-        /* TABLET */
-
-        @media (min-width: 960px) {
-
+        <style>
             :host {
-                padding: 24px;
+                box-sizing: border-box;
+                display: block;
+                overflow: visible;
+                padding: 16px;
             }
 
             :host([inset]) {
-                padding-left: 80px;
+                padding-left: 72px;
             }
-        }
-    </style>
 
-    <template>
+            /* TABLET */
+
+            @media (min-width: 960px) {
+
+                :host {
+                    padding: 24px;
+                }
+
+                :host([inset]) {
+                    padding-left: 80px;
+                }
+            }
+        </style>
+
         <content id="content"></content>
+
     </template>
 
     <script>

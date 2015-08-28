@@ -43,12 +43,12 @@ The following snippet will horizontally center the overlay underneath the target
 @behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 @behavior xp-targeter-behavior /bower_components/xp-targeter-behavior/xp-targeter-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency mat-paper ExpandJS/mat-paper#0.9.7
-@dependency xp-overlay ExpandJS/xp-overlay#0.9.7
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.7
-@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency mat-paper ExpandJS/mat-paper#0.9.8
+@dependency xp-overlay ExpandJS/xp-overlay#0.9.8
+@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.8
+@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -60,35 +60,37 @@ The following snippet will horizontally center the overlay underneath the target
 
 <dom-module id="mat-overlay">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-            position: absolute;
-        }
-
-        :host #matOverlayAdaptee {
-            margin: 16px;
-        }
-
-        :host #matOverlayAdaptee::shadow > #xpOverlayWrapper {
-            overflow: visible;
-        }
-
-        :host #matOverlayWrapper {
-            border-radius: inherit;
-            height: 100%;
-            overflow: auto;
-            padding: 8px 0;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+                position: absolute;
+            }
+
+            :host #matOverlayAdaptee {
+                margin: 16px;
+            }
+
+            :host #matOverlayAdaptee::shadow > #xpOverlayWrapper {
+                overflow: visible;
+            }
+
+            :host #matOverlayWrapper {
+                border-radius: inherit;
+                height: 100%;
+                overflow: auto;
+                padding: 8px 0;
+            }
+        </style>
+
         <xp-overlay id="matOverlayAdaptee" auto-center="[[autoCenter]]" auto-hide-disabled="[[autoHideDisabled]]" context="[[_computeContext(context)]]" data="{{data}}" position="[[position]]" showed="{{showed}}" target="{{target}}">
             <mat-paper id="matOverlayWrapper" background="[[background]]" brightness="overlay" z="[[z]]">
                 <content id="content"></content>
             </mat-paper>
         </xp-overlay>
+
     </template>
 
     <script>

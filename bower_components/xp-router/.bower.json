@@ -1,7 +1,7 @@
 {
   "name": "xp-router",
   "license": "BSD-3-Clause",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "main": "xp-router.html",
   "description": "A custom element used to perform client side routing",
   "homepage": "http://expandjs.com/elements/xp-router",
@@ -20,18 +20,18 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.7",
-    "xp-selected-behavior": "ExpandJS/xp-selected-behavior#0.9.7",
+    "expandjs": "ExpandJS/expandjs#0.9.8",
+    "xp-selected-behavior": "ExpandJS/xp-selected-behavior#0.9.8",
     "director": "Flatiron/director#^1.0.0",
-    "polymer": "Polymer/polymer#^1.0.0"
+    "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.7",
+  "_release": "0.9.8",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.7",
-    "commit": "8ecf361c6061ab0666dcf37ae47f8daa69e371c5"
+    "tag": "v0.9.8",
+    "commit": "c6d2f9e19c97932e43f3c9d0cc39cb576f40bc3a"
   },
   "_source": "git://github.com/ExpandJS/xp-router.git",
-  "_target": "0.9.7",
+  "_target": "0.9.8",
   "_originalSource": "ExpandJS/xp-router"
 }

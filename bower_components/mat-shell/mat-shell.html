@@ -31,10 +31,10 @@ An element used to wrap a [Material Design application](http://www.google.com/de
 @homepage http://expandjs.com/elements/mat-shell
 @repository https://github.com/ExpandJS/mat-shell
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-paper ExpandJS/mat-paper#0.9.7
+@dependency mat-paper ExpandJS/mat-paper#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -44,34 +44,36 @@ An element used to wrap a [Material Design application](http://www.google.com/de
 
 <dom-module id="mat-shell">
 
-    <style>
-        :host {
-            @apply(--layout-fit);
-            display: block;
-            overflow: visible;
-            text-align: left;
-        }
-
-        :host #matShellWrapper {
-            @apply(--layout-horizontal);
-            @apply(--layout-horizontal-reverse);
-            height: 100%;
-            position: relative;
-        }
-
-        :host #matShellMain {
-            @apply(--layout-flex);
-            height: 100%;
-            position: relative;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                @apply(--layout-fit);
+                display: block;
+                overflow: visible;
+                text-align: left;
+            }
+
+            :host #matShellWrapper {
+                @apply(--layout-horizontal);
+                @apply(--layout-horizontal-reverse);
+                height: 100%;
+                position: relative;
+            }
+
+            :host #matShellMain {
+                @apply(--layout-flex);
+                height: 100%;
+                position: relative;
+            }
+        </style>
+
         <mat-paper id="matShellWrapper" background="[[background]]" brightness="shell">
             <content id="rightContent" select='[drawer=""][right=""]'></content>
             <div id="matShellMain"><content id="content" select=':not([drawer=""])'></content></div>
             <content id="leftContent" select='[drawer=""]'></content>
         </mat-paper>
+
     </template>
 
     <script>

@@ -38,15 +38,15 @@ on a mobile device.
 
 @behavior xp-master-behavior /bower_components/xp-master-behavior/xp-master-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.7
-@dependency xp-media-query ExpandJS/xp-media-query#0.9.7
+@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.8
+@dependency xp-media-query ExpandJS/xp-media-query#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
-@devDependency mat-fab ExpandJS/mat-fab#0.9.7
-@devDependency mat-header-panel ExpandJS/mat-header-panel#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
+@devDependency mat-fab ExpandJS/mat-fab#0.9.8
+@devDependency mat-header-panel ExpandJS/mat-header-panel#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -58,19 +58,21 @@ on a mobile device.
 
 <dom-module name="mat-breadcrumb">
 
-    <style>
-        :host {
-            @apply(--layout-horizontal);
-            @apply(--layout-center);
-            display: block;
-            overflow: hidden;
-            position: relative;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                display: block;
+                overflow: hidden;
+                position: relative;
+            }
+        </style>
+
         <xp-media-query query="[[query]]" matched="{{mobile}}"></xp-media-query>
         <content id="content"></content>
+
     </template>
 
     <script>

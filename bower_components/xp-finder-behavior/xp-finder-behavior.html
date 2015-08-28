@@ -18,9 +18,9 @@ This behavior is used to add find capabilities on the context element.
 
 @behavior xp-array-behavior /bower_components/xp-array-behavior/xp-array-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-array-behavior ExpandJS/xp-array-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-array-behavior ExpandJS/xp-array-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -110,7 +110,7 @@ This behavior is used to add find capabilities on the context element.
             // Vars
             var self      = this,
                 attribute = self.indexAttribute,
-                index     = !attribute ? XP.toNumber(target) : null;
+                index     = attribute ? target : XP.toNumber(target);
 
             // Casting
             if (XP.isIndex(index)) { return index; }

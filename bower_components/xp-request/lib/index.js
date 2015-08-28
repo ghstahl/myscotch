@@ -32,7 +32,9 @@
 
         // OPTIONS
         options: {
-            dataType: 'text',
+            contentType: null,
+            dataType: null,
+            encoding: null,
             headers: null,
             keepAlive: 0,
             method: 'GET',
@@ -88,7 +90,8 @@
         /**
          * @constructs
          * @param {Object | string} opt The request url or options.
-         *   @param {string} [opt.dataType = "text"] The type of data expected back from the server.
+         *   @param {string} [opt.contentType] A shortcut for the "Content-Type" header.
+         *   @param {string} [opt.dataType] The type of data expected back from the server.
          *   @param {Object} [opt.headers] An object containing request headers.
          *   @param {number} [opt.keepAlive = 0] How often to submit TCP KeepAlive packets over sockets being kept alive.
          *   @param {string} [opt.method = "GET"] A string specifying the HTTP request method.
@@ -111,25 +114,27 @@
                 XPEmitter.call(self);
 
                 // Setting
-                self.chunks    = [];
-                self.options   = XP.isString(opt) ? {} : opt;
-                self.dataType  = self.options.dataType;
-                self.headers   = self.options.headers || {};
-                self.keepAlive = self.options.keepAlive;
-                self.method    = self.options.method;
-                self.url       = self.options.url;
-                self.path      = self.options.path;
-                self.port      = self.options.port;
-                self.secure    = (self.parsed.protocol || location.protocol) === 'https:';
-                self.resolver  = resolver;
-                self.state     = 'idle';
+                self.options     = XP.isString(opt) ? {} : opt;
+                self.contentType = self.options.contentType;
+                self.dataType    = self.options.dataType;
+                self.encoding    = self.options.encoding;
+                self.headers     = self.options.headers || {};
+                self.keepAlive   = self.options.keepAlive;
+                self.method      = self.options.method;
+                self.url         = self.options.url;
+                self.path        = self.options.path;
+                self.port        = self.options.port;
+                self.secure      = (self.parsed.protocol || (global.location && global.location.protocol)) === 'https:';
+                self.resolver    = resolver;
+                self.state       = 'idle';
+                self._chunks     = [];
 
                 // Adapting
-                self.adapt();
+                self._adapt();
 
                 // Listening
-                self.adaptee.on('error', self.handleError.bind(self));
-                self.adaptee.on('response', self.handleResponse.bind(self));
+                self._adaptee.on('error', self._handleError.bind(self));
+                self._adaptee.on('response', self._handleResponse.bind(self));
             }
         },
 
@@ -147,14 +152,14 @@
             var self = this;
 
             // Checking
-            if (self.timeAbort) { return self; }
+            if (self.tsAbort) { return self; }
 
             // Aborting
-            self.adaptee.abort();
+            self._adaptee.abort();
 
             // Setting
-            self.state     = 'aborted';
-            self.timeAbort = Date.now();
+            self.state   = 'aborted';
+            self.tsAbort = Date.now();
 
             return self;
         },
@@ -175,17 +180,17 @@
             var self = this;
 
             // Checking
-            if (self.timeSubmit) { return self; }
+            if (self.tsSubmit) { return self; }
 
             // Serializing
             if (self.method !== 'GET' && !XP.isString(data) && !Buffer.isBuffer(data)) { data = JSON.stringify(data); }
 
             // Ending
-            self.adaptee.end(self.method !== 'GET' ? data : undefined);
+            self._adaptee.end(self.method !== 'GET' ? data : undefined);
 
             // Setting
-            self.state      = 'pending';
-            self.timeSubmit = Date.now();
+            self.state    = 'pending';
+            self.tsSubmit = Date.now();
 
             return self;
         },
@@ -195,11 +200,11 @@
         /**
          * Creates the adpatee
          *
-         * @method adapt
+         * @method _adapt
          * @returns {Object}
          * @private
          */
-        adapt: {
+        _adapt: {
             enumerable: false,
             value: function () {
 
@@ -210,7 +215,7 @@
                     protocol = self.secure ? https : http;
 
                 // Adapting
-                self.adaptee = protocol.request({
+                self._adaptee = protocol.request({
                     auth: self.parsed.auth,
                     headers: self.headers,
                     hostname: self.parsed.hostname || location.hostname,
@@ -218,6 +223,7 @@
                     keepAliveMsecs: Math.max(self.keepAlive, 0),
                     method: self.method,
                     path: self.path || self.parsed.path + (self.parsed.hash || ''),
+                    protocol: self.secure ? 'https:' : 'http:',
                     port: self.port || self.parsed.port || (self.parsed.hostname && port) || location.port,
                     withCredentials: false
                 });
@@ -229,12 +235,12 @@
         /**
          * Parses the data
          *
-         * @method parse
+         * @method _parse
          * @param {Buffer | string} data
          * @returns {*}
          * @private
          */
-        parse: {
+        _parse: {
             enumerable: true,
             value: function (data) {
                 var self = this;
@@ -248,27 +254,12 @@
         /**
          * TODO DOC
          *
-         * @property adaptee
-         * @type Object
-         * @private
+         * @property contentType
+         * @type string
          */
-        adaptee: {
-            enumerable: false,
-            set: function (val) { return this.request || val; },
-            validate: function (val) { return XP.isObject(val); }
-        },
-
-        /**
-         * TODO DOC
-         *
-         * @property chunks
-         * @type Array
-         * @readonly
-         * @private
-         */
-        chunks: {
-            set: function (val) { return this.chunks || val; },
-            validate: function (val) { return XP.isArray(val); }
+        contentType: {
+            set: function (val) { return this.contentType || val || 'auto'; },
+            validate: function (val) { return XP.isString(val, true); }
         },
 
         /**
@@ -287,11 +278,10 @@
          *
          * @property dataType
          * @type string
-         * @default "text"
          */
         dataType: {
-            set: function (val) { return this.dataType || val; },
-            validate: function (val) { return XP.includes(this.dataTypes, val); }
+            set: function (val) { return this.dataType || val || 'auto'; },
+            validate: function (val) { return val === 'auto' || XP.includes(this.dataTypes, val); }
         },
 
         /**
@@ -299,13 +289,24 @@
          *
          * @property dataTypes
          * @type Array
-         * @default ["json", "text"]
+         * @default ["json"]
          * @readonly
          */
         dataTypes: {
             frozen: true,
             writable: false,
-            value: ['json', 'text']
+            value: ['json']
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property encoding
+         * @type string
+         */
+        encoding: {
+            set: function (val) { return XP.isDefined(this.encoding) ? this.encoding : val; },
+            validate: function (val) { return XP.isVoid(val) || XP.isString(val, true); }
         },
 
         /**
@@ -315,7 +316,8 @@
          * @type Object
          */
         headers: {
-            set: function (val) { return this.headers || val; },
+            set: function (val) { return this.headers || (XP.isObject(val) && XP.cloneDeep(val)); },
+            then: function (post) { if (post !== 'auto') { this.headers['Content-Type'] = post; } },
             validate: function (val) { return XP.isObject(val); }
         },
 
@@ -327,7 +329,7 @@
          * @default 0
          */
         keepAlive: {
-            set: function (val) { return this.keepAlive >= 0 ? this.keepAlive : val; },
+            set: function (val) { return this.keepAlive >= 0 ? this.keepAlive : val || 0; },
             validate: function (val) { return XP.isInt(val, true); }
         },
 
@@ -339,7 +341,7 @@
          * @default "GET"
          */
         method: {
-            set: function (val) { return this.method || XP.upperCase(val); },
+            set: function (val) { return this.method || XP.upperCase(val) || 'GET'; },
             validate: function (val) { return XP.isString(val, true); }
         },
 
@@ -427,48 +429,48 @@
         /**
          * TODO DOC
          *
-         * @property timeAbort
+         * @property tsAbort
          * @type number
          * @readonly
          */
-        timeAbort: {
-            set: function (val) { return this.timeAbort || val; },
+        tsAbort: {
+            set: function (val) { return this.tsAbort || val; },
             validate: function (val) { return XP.isFinite(val, true); }
         },
 
         /**
          * TODO DOC
          *
-         * @property timeData
+         * @property tsData
          * @type number
          * @readonly
          */
-        timeData: {
-            set: function (val) { return this.timeData || val; },
+        tsData: {
+            set: function (val) { return this.tsData || val; },
             validate: function (val) { return XP.isFinite(val, true); }
         },
 
         /**
          * TODO DOC
          *
-         * @property timeResponse
+         * @property tsResponse
          * @type number
          * @readonly
          */
-        timeResponse: {
-            set: function (val) { return this.timeResponse || val; },
+        tsResponse: {
+            set: function (val) { return this.tsResponse || val; },
             validate: function (val) { return XP.isFinite(val, true); }
         },
 
         /**
          * TODO DOC
          *
-         * @property timeSubmit
+         * @property tsSubmit
          * @type number
          * @readonly
          */
-        timeSubmit: {
-            set: function (val) { return this.timeSubmit || val; },
+        tsSubmit: {
+            set: function (val) { return this.tsSubmit || val; },
             validate: function (val) { return XP.isFinite(val, true); }
         },
 
@@ -486,21 +488,49 @@
 
         /*********************************************************************/
 
+        /**
+         * TODO DOC
+         *
+         * @property _adaptee
+         * @type Object
+         * @private
+         */
+        _adaptee: {
+            enumerable: false,
+            set: function (val) { return this.request || val; },
+            validate: function (val) { return XP.isObject(val); }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property _chunks
+         * @type Array
+         * @readonly
+         * @private
+         */
+        _chunks: {
+            set: function (val) { return this._chunks || val; },
+            validate: function (val) { return XP.isArray(val); }
+        },
+
+        /*********************************************************************/
+
         // HANDLER
-        handleData: function (chunk) {
+        _handleData: function (chunk) {
 
             // Vars
             var self = this;
 
             // Setting
-            self.chunks.push(chunk);
+            self._chunks.push(chunk);
 
             // Emitting
             self.emit('chunk', chunk, self);
         },
 
         // HANDLER
-        handleEnd: function () {
+        _handleEnd: function () {
 
             // Vars
             var self = this;
@@ -509,14 +539,14 @@
             try {
 
                 // Setting
-                self.data     = self.parse(Buffer.isBuffer(self.chunks[0]) ? Buffer.concat(self.chunks) : self.chunks.join(''));
-                self.state    = 'received';
-                self.timeData = Date.now();
+                self.data   = self._parse(Buffer.isBuffer(self._chunks[0]) ? Buffer.concat(self._chunks) : self._chunks.join(''));
+                self.state  = 'received';
+                self.tsData = Date.now();
 
             } catch (exc) {
 
                 // Handling
-                return self.handleError(exc.message);
+                return self._handleError(exc.message);
             }
 
             // Resolving
@@ -527,15 +557,15 @@
         },
 
         // HANDLER
-        handleError: function (error) {
+        _handleError: function (error) {
 
             // Vars
             var self = this;
 
             // Setting
-            self.state        = 'failed';
-            self.timeResponse = Date.now();
-            self.timeData     = self.timeResponse;
+            self.state      = 'failed';
+            self.tsResponse = Date.now();
+            self.tsData     = self.tsResponse;
 
             // Rejecting
             self.resolver(error);
@@ -546,19 +576,22 @@
         },
 
         // HANDLER
-        handleResponse: function (response) {
+        _handleResponse: function (response) {
 
             // Vars
             var self = this;
 
             // Setting
-            self.response     = response;
-            self.state        = 'receiving';
-            self.timeResponse = Date.now();
+            self.response   = response;
+            self.state      = 'receiving';
+            self.tsResponse = Date.now();
+
+            // Setting
+            if (self.encoding) { response.setEncoding(self.encoding); }
 
             // Listening
-            response.on('data', self.handleData.bind(self));
-            response.on('end', self.handleEnd.bind(self));
+            response.on('data', self._handleData.bind(self));
+            response.on('end', self._handleEnd.bind(self));
 
             // Emitting
             self.emit('response', response, self);

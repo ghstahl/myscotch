@@ -17,10 +17,10 @@ This element is used to display a documentation page.
 @repository https://github.com/ExpandJS/xp-doc-page
 @repository
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency xp-markdown ExpandJS/xp-markdown#0.9.7
+@dependency xp-markdown ExpandJS/xp-markdown#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -30,217 +30,217 @@ This element is used to display a documentation page.
 
 <dom-module id="xp-doc-page">
 
-    <style>
-        :host {
-            display: block;
-            font-size: 16px;
-            font-weight: 400;
-            letter-spacing: 0.01em;
-            line-height: 24px;
-            overflow: visible;
-            text-overflow: clip;
-            text-rendering: optimizeLegibility;
-            white-space: normal;
-        }
-
-        /* RESET */
-
-        :host a {
-            text-decoration: none;
-        }
-
-        :host button {
-            background: transparent;
-            border: none;
-            color: inherit;
-            cursor: pointer;
-            font: inherit;
-            outline: 0;
-        }
-
-        :host a[href]:hover,
-        :host button:hover {
-            text-decoration: underline;
-        }
-
-        :host h1, :host h2,
-        :host ol, :host ul {
-            margin: 0;
-        }
-
-        :host hr {
-            background: hsla(0, 0%, 0%, 0.12);
-            border: none;
-            height: 1px;
-            margin: 16px 0 15px 0;
-        }
-
-        /* FONT */
-
-        :host .font-caption {
-            font-size: 12px;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            line-height: 14px;
-            text-overflow: ellipsis;
-            text-rendering: optimizeLegibility;
-            white-space: nowrap;
-        }
-
-        :host .font-button {
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 0.01em;
-            line-height: 20px;
-            text-overflow: ellipsis;
-            text-rendering: optimizeLegibility;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        :host .font-subhead {
-            font-size: 16px;
-            font-weight: 400;
-            letter-spacing: 0.01em;
-            line-height: 24px;
-            text-overflow: clip;
-            text-rendering: optimizeLegibility;
-            white-space: normal;
-        }
-
-        :host .font-title {
-            font-size: 20px;
-            font-weight: 500;
-            letter-spacing: 0.005em;
-            line-height: 24px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-rendering: optimizeLegibility;
-            white-space: nowrap;
-        }
-
-        :host .font-display2 {
-            font-size: 44px;
-            font-weight: 400;
-            letter-spacing: 0;
-            line-height: 48px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-rendering: optimizeLegibility;
-            white-space: nowrap;
-        }
-
-        /* HEADER */
-
-        :host header .demo,
-        :host header .repository {
-            float: right;
-            margin-left: 16px;
-        }
-
-        :host header .demo > *,
-        :host header .repository > * {
-            display: block;
-        }
-
-        :host header .type {
-            float: left;
-            opacity: 0.30;
-            text-transform: capitalize;
-        }
-
-        /* SECTION */
-
-        :host section {
-            margin-top: 16px;
-        }
-
-        :host section .extends,
-        :host section .adapts,
-        :host section .behaviors {
-            @apply(--layout-horizontal);
-            @apply(--layout-wrap);
-        }
-
-        :host section .title {
-            @apply(--layout-horizontal);
-            @apply(--layout-center);
-            @apply(--layout-justified);
-            margin-bottom: 16px;
-            text-transform: capitalize;
-        }
-
-        :host section .summary::shadow #xpMarkdownWrapper > *:last-child {
-            margin-bottom: 0;
-        }
-
-        :host section[data-private] .features-private::after {
-            content: "Hide private";
-        }
-
-        :host section:not([data-private]) .features-private::after {
-            content: "Show private";
-        }
-
-        :host section .feature {
-            @apply(--layout-vertical);
-        }
-
-        :host section:not([data-private]) .feature[data-private] {
-            display: none !important;
-        }
-
-        :host section .feature-name,
-        :host section .param-name {
-            font-weight: 600;
-            margin-right: 6px;
-            opacity: 0.80;
-        }
-
-        :host section .feature-type,
-        :host section .param-type,
-        :host section .returns-type {
-            margin-right: 6px;
-            opacity: 0.50;
-        }
-
-        :host section .feature-type:not(:last-of-type)::after {
-            content: ",";
-            margin: 0;
-        }
-
-        :host section .feature-tag {
-            @apply(--layout-self-start);
-            background: hsla(0, 0%, 13%, 0.80);
-            border-radius: 2px;
-            box-sizing: border-box;
-            color: hsla(0, 0%, 100%, 1);
-            margin-right: 6px;
-            padding: 4px 8px;
-        }
-
-        :host section .feature-default,
-        :host section .param-name.optional,
-        :host section .subtitle {
-            font-style: italic;
-        }
-
-        :host section .feature-summary::shadow ol,
-        :host section .feature-summary::shadow p,
-        :host section .feature-summary::shadow ul {
-            margin: 0;
-        }
-
-        :host section .param-name.optional:after {
-            content: ']';
-        }
-
-        :host section .param-name.optional:before {
-            content: '[';
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                font-size: 16px;
+                font-weight: 400;
+                letter-spacing: 0.01em;
+                line-height: 24px;
+                overflow: visible;
+                text-overflow: clip;
+                text-rendering: optimizeLegibility;
+                white-space: normal;
+            }
+
+            /* RESET */
+
+            :host a {
+                text-decoration: none;
+            }
+
+            :host button {
+                background: transparent;
+                border: none;
+                color: inherit;
+                cursor: pointer;
+                font: inherit;
+                outline: 0;
+            }
+
+            :host a[href]:hover,
+            :host button:hover {
+                text-decoration: underline;
+            }
+
+            :host h1, :host h2,
+            :host ol, :host ul {
+                margin: 0;
+            }
+
+            :host hr {
+                background: hsla(0, 0%, 0%, 0.12);
+                border: none;
+                height: 1px;
+                margin: 16px 0 15px 0;
+            }
+
+            /* FONT */
+
+            :host .font-caption {
+                font-size: 12px;
+                font-weight: 400;
+                letter-spacing: 0.02em;
+                line-height: 14px;
+                text-overflow: ellipsis;
+                text-rendering: optimizeLegibility;
+                white-space: nowrap;
+            }
+
+            :host .font-button {
+                font-size: 14px;
+                font-weight: 500;
+                letter-spacing: 0.01em;
+                line-height: 20px;
+                text-overflow: ellipsis;
+                text-rendering: optimizeLegibility;
+                text-transform: uppercase;
+                white-space: nowrap;
+            }
+
+            :host .font-subhead {
+                font-size: 16px;
+                font-weight: 400;
+                letter-spacing: 0.01em;
+                line-height: 24px;
+                text-overflow: clip;
+                text-rendering: optimizeLegibility;
+                white-space: normal;
+            }
+
+            :host .font-title {
+                font-size: 20px;
+                font-weight: 500;
+                letter-spacing: 0.005em;
+                line-height: 24px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-rendering: optimizeLegibility;
+                white-space: nowrap;
+            }
+
+            :host .font-display2 {
+                font-size: 44px;
+                font-weight: 400;
+                letter-spacing: 0;
+                line-height: 48px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-rendering: optimizeLegibility;
+                white-space: nowrap;
+            }
+
+            /* HEADER */
+
+            :host header .demo,
+            :host header .repository {
+                float: right;
+                margin-left: 16px;
+            }
+
+            :host header .demo > *,
+            :host header .repository > * {
+                display: block;
+            }
+
+            :host header .type {
+                float: left;
+                opacity: 0.30;
+                text-transform: capitalize;
+            }
+
+            /* SECTION */
+
+            :host section {
+                margin-top: 16px;
+            }
+
+            :host section .extends,
+            :host section .adapts,
+            :host section .behaviors {
+                @apply(--layout-horizontal);
+                @apply(--layout-wrap);
+            }
+
+            :host section .title {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                @apply(--layout-justified);
+                margin-bottom: 16px;
+                text-transform: capitalize;
+            }
+
+            :host section .summary::shadow #xpMarkdownWrapper > *:last-child {
+                margin-bottom: 0;
+            }
+
+            :host section[data-private] .features-private::after {
+                content: "Hide private";
+            }
+
+            :host section:not([data-private]) .features-private::after {
+                content: "Show private";
+            }
+
+            :host section .feature {
+                @apply(--layout-vertical);
+            }
+
+            :host section:not([data-private]) .feature[data-private] {
+                display: none !important;
+            }
+
+            :host section .feature-name,
+            :host section .param-name {
+                font-weight: 600;
+                margin-right: 6px;
+                opacity: 0.80;
+            }
+
+            :host section .feature-type,
+            :host section .param-type,
+            :host section .returns-type {
+                margin-right: 6px;
+                opacity: 0.50;
+            }
+
+            :host section .feature-type:not(:last-of-type)::after {
+                content: ",";
+                margin: 0;
+            }
+
+            :host section .feature-tag {
+                @apply(--layout-self-start);
+                background: hsla(0, 0%, 13%, 0.80);
+                border-radius: 2px;
+                box-sizing: border-box;
+                color: hsla(0, 0%, 100%, 1);
+                margin-right: 6px;
+                padding: 4px 8px;
+            }
+
+            :host section .feature-default,
+            :host section .param-name.optional,
+            :host section .subtitle {
+                font-style: italic;
+            }
+
+            :host section .feature-summary::shadow ol,
+            :host section .feature-summary::shadow p,
+            :host section .feature-summary::shadow ul {
+                margin: 0;
+            }
+
+            :host section .param-name.optional:after {
+                content: ']';
+            }
+
+            :host section .param-name.optional:before {
+                content: '[';
+            }
+        </style>
 
         <!-- HEADER -->
         <template is="dom-if" if="[[data]]" restamp>

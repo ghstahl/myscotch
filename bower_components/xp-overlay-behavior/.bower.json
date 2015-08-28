@@ -1,7 +1,7 @@
 {
   "name": "xp-overlay-behavior",
   "license": "BSD-3-Clause",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "main": "xp-overlay-behavior.html",
   "description": "A behavior used to add overlay capabilities on the context element",
   "homepage": "http://expandjs.com/elements/xp-overlay-behavior",
@@ -20,17 +20,17 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.7",
-    "xp-targeter-behavior": "ExpandJS/xp-targeter-behavior#0.9.7",
-    "polymer": "Polymer/polymer#^1.0.0"
+    "expandjs": "ExpandJS/expandjs#0.9.8",
+    "xp-targeter-behavior": "ExpandJS/xp-targeter-behavior#0.9.8",
+    "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.7",
+  "_release": "0.9.8",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.7",
-    "commit": "ddd88e2069145310001abd70e2b4f4f67bb8994b"
+    "tag": "v0.9.8",
+    "commit": "cc00747695d99a7334c0dd50de24f6dee4406e65"
   },
   "_source": "git://github.com/ExpandJS/xp-overlay-behavior.git",
-  "_target": "0.9.7",
+  "_target": "0.9.8",
   "_originalSource": "ExpandJS/xp-overlay-behavior"
 }

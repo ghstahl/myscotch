@@ -38,14 +38,14 @@ It works either by explicitly specifying the `id` of an input...
 @adapts xp-label /bower_components/xp-label/xp-label.html
 @behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency mat-ink ExpandJS/mat-ink#0.9.7
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.7
-@dependency xp-label ExpandJS/xp-label#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency mat-ink ExpandJS/mat-ink#0.9.8
+@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.8
+@dependency xp-label ExpandJS/xp-label#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
-@devDependency mat-text-field ExpandJS/mat-text-field#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
+@devDependency mat-text-field ExpandJS/mat-text-field#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -56,27 +56,29 @@ It works either by explicitly specifying the `id` of an input...
 
 <dom-module id="mat-label">
 
-    <style>
-        :host {
-            @apply(--mat-font-caption);
-            cursor: default;
-            display: block;
-            margin-bottom: -8px;
-            overflow: visible;
-            padding-top: 8px;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                @apply(--mat-font-caption);
+                cursor: default;
+                display: block;
+                margin-bottom: -8px;
+                overflow: visible;
+                padding-top: 8px;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+        </style>
+
         <label is="xp-label" id="matLabelAdaptee" focused="{{focused}}" for$="[[for]]">
             <mat-ink id="matLabelWrapper" color="[[_computeColor(focused)]]" disabled="[[disabled]]" opacity="secondary">
                 <content id="content"></content>
             </mat-ink>
         </label>
+
     </template>
 
     <script>

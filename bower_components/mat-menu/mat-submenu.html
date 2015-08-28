@@ -39,21 +39,21 @@ It must be used inside a [mat-menu](http://expandjs.com/elements/mat-menu) or in
 @behavior xp-referral-behavior /bower_components/xp-referral-behavior/xp-referral-behavior.html
 @behavior xp-slave-behavior /bower_components/xp-slave-behavior/xp-slave-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency mat-icons ExpandJS/mat-icons#0.9.7
-@dependency mat-option ExpandJS/mat-option#0.9.7
-@dependency mat-overlay ExpandJS/mat-overlay#0.9.7
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.7
-@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.7
-@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.7
-@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency mat-icons ExpandJS/mat-icons#0.9.8
+@dependency mat-option ExpandJS/mat-option#0.9.8
+@dependency mat-overlay ExpandJS/mat-overlay#0.9.8
+@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.8
+@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.8
+@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.8
+@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
-@devDependency mat-divider ExpandJS/mat-divider#0.9.7
-@devDependency mat-icon-button ExpandJS/mat-icon-button#0.9.7
-@devDependency mat-icons ExpandJS/mat-icons#0.9.7
-@devDependency mat-option ExpandJS/mat-option#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
+@devDependency mat-divider ExpandJS/mat-divider#0.9.8
+@devDependency mat-icon-button ExpandJS/mat-icon-button#0.9.8
+@devDependency mat-icons ExpandJS/mat-icons#0.9.8
+@devDependency mat-option ExpandJS/mat-option#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -69,31 +69,33 @@ It must be used inside a [mat-menu](http://expandjs.com/elements/mat-menu) or in
 
 <dom-module id="mat-submenu">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-        }
-
-        :host #matSubmenuHolder::shadow #matOptionSecondaryIcon {
-            -webkit-transform: rotate(-90deg);
-            transform: rotate(-90deg);
-        }
-
-        :host([showed]) #matSubmenuHolder::shadow #matOptionRipple #matRippleBackground {
-            opacity: 0.10;
-        }
-
-        :host #matSubmenuAdaptee::shadow #matOverlayBody {
-            padding: 16px 0;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+            }
+
+            :host #matSubmenuHolder::shadow #matOptionSecondaryIcon {
+                -webkit-transform: rotate(-90deg);
+                transform: rotate(-90deg);
+            }
+
+            :host([showed]) #matSubmenuHolder::shadow #matOptionRipple #matRippleBackground {
+                opacity: 0.10;
+            }
+
+            :host #matSubmenuAdaptee::shadow #matOverlayBody {
+                padding: 16px 0;
+            }
+        </style>
+
         <mat-option id="matSubmenuHolder" icon="[[icon]]" icon-src="[[iconSrc]]" label="[[label]]" secondary-icon="navigation:arrow-drop-down" on-xp-activate="_handleShow"></mat-option>
         <mat-overlay id="matSubmenuAdaptee" background="[[background]]" context="[[self]]" position="aside" showed="{{showed}}" target="[[self.$.matSubmenuHolder]]" z="[[z]]">
             <content id="content"></content>
         </mat-overlay>
+
     </template>
 
     <script>

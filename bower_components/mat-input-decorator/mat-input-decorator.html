@@ -26,11 +26,11 @@ It only applies the style on the input. All the logic must be done by the develo
 @homepage http://expandjs.com/elements/mat-input-decorator
 @repository https://github.com/ExpandJS/mat-input-decorator
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-divider ExpandJS/mat-divider#0.9.7
-@dependency mat-ink ExpandJS/mat-ink#0.9.7
+@dependency mat-divider ExpandJS/mat-divider#0.9.8
+@dependency mat-ink ExpandJS/mat-ink#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -47,218 +47,219 @@ It only applies the style on the input. All the logic must be done by the develo
 
 <dom-module id="mat-input-decorator">
 
-    <style>
-        :host {
-            cursor: default;
-            display: block;
-            overflow: hidden;
-            position: relative;
-            text-align: left;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        :host([disabled]) {
-            cursor: not-allowed !important;
-            pointer-events: none !important;
-        }
-
-        :host,
-        :host ::content input,
-        :host ::content textarea {
-            @apply(--mat-font-subhead);
-        }
-
-        :host ::content input,
-        :host ::content textarea {
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            color: inherit;
-            font-family: inherit;
-            height: 100%;
-            margin: 0;
-            outline: 0;
-            padding: 0;
-            resize: none;
-            width: 100%;
-        }
-
-        :host ::content input,
-        :host #matInputPrefix,
-        :host #matInputSuffix,
-        :host #matInputPlaceholder {
-            overflow: hidden;
-            text-overflow: ellipsis !important; /* override */
-            white-space: nowrap !important; /* override */
-        }
-
-        :host ::content input:not([type="search"])::-ms-clear {
-            display: none !important;
-        }
-
-        :host #matInputWrapper {
-            display: block;
-            padding: 16px 0 4px 0;
-        }
-
-        :host([empty-label]) #matInputWrapper {
-            padding: 8px 0 4px 0;
-        }
-
-        :host([full-width]) #matInputWrapper {
-            padding: 16px 0;
-        }
-
-        :host([full-width]:not([mirrored])) #matInputWrapper {
-            @apply(--layout-horizontal);
-        }
-
-        :host #matInputDivider {
-            display: none;
-        }
-
-        :host #matInputLabel {
-            height: 16px;
-        }
-
-        :host([empty-label]) #matInputLabel,
-        :host([full-width]) #matInputLabel,
-        :host(:not([floating-label])) #matInputLabel {
-            display: none !important;
-        }
-
-        :host #matInputMain {
-            margin: 4px 0;
-            position: relative;
-        }
-
-        :host(:not([disabled])) #matInputMain {
-            cursor: text;
-        }
-
-        :host([full-width]) #matInputMain {
-            @apply(--layout-flex);
-            margin: 0;
-        }
-
-        :host #matInputPlaceholder {
-            @apply(--layout-fit);
-            pointer-events: none !important;
-            -webkit-transition: font-size 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                font-weight 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                letter-spacing 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                line-height 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                                -webkit-transform 0.4s cubic-bezier(0.55, 0, 0.01, 1);
-            transition: font-size 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        font-weight 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        letter-spacing 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        line-height 0.4s cubic-bezier(0.55, 0, 0.01, 1),
-                        transform 0.4s cubic-bezier(0.55, 0, 0.01, 1);
-            will-change: font-size, font-weight, letter-spacing, line-height, opacity, transform;
-        }
-
-        :host([floated]) #matInputPlaceholder {
-            @apply(--mat-font-caption);
-            -webkit-transform: translate3d(0, -22px, 0);
-            transform: translate3d(0, -22px, 0);
-            -webkit-transform-origin: 0 0 0;
-            transform-origin: 0 0 0;
-        }
-
-        :host([empty-label]) #matInputPlaceholder,
-        :host(:not([empty]):not([floating-label])) #matInputPlaceholder {
-            display: none !important;
-        }
-
-        :host #matInputPrefix {
-            float: left;
-        }
-
-        :host #matInputSuffix {
-            float: right;
-        }
-
-        :host #matInputMirror {
-            min-height: 20px;
-            opacity: 0 !important;
-            visibility: hidden !important;
-            word-wrap: break-word !important;
-        }
-
-        :host(:not([mirrored])) #matInputMirror {
-            display: none !important;
-        }
-
-        :host #matInputHolder {
-            overflow: hidden;
-        }
-
-        :host([mirrored]) #matInputHolder {
-            @apply(--layout-fit);
-        }
-
-        :host #matInputUnderline {
-            margin: -2px 0 4px 0;
-        }
-
-        :host([full-width]) #matInputUnderline {
-            display: none !important;
-        }
-
-        :host #matInputUnderlineDefault {
-            border-top: 1px solid currentColor;
-            transition: border 0.4s cubic-bezier(0.55, 0, 0.01, 1);
-            will-change: border;
-        }
-
-        :host([disabled]) #matInputUnderlineDefault {
-            border-top-style: dashed;
-        }
-
-        :host #matInputUnderlineFocused {
-            border-top: 2px solid currentColor;
-            margin-top: -1px;
-            -webkit-transform: scale(0, 1);
-            transform: scale(0, 1);
-            -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.55, 0, 0.01, 1);
-            transition: transform 0.4s cubic-bezier(0.55, 0, 0.01, 1);
-            will-change: transform;
-        }
-
-        :host([focused]) #matInputUnderlineFocused,
-        :host([invalid]) #matInputUnderlineFocused {
-            -webkit-transform: scale(1, 1);
-            transform: scale(1, 1);
-        }
-
-        :host #matInputHelper {
-            @apply(--mat-font-caption);
-            min-height: 16px;
-            white-space: normal !important; /* override */
-        }
-
-        :host([full-width]) #matInputHelper {
-            line-height: 24px !important; /* override */
-        }
-
-        :host([full-width][mirrored]) #matInputHelper {
-            margin-bottom: -4px;
-        }
-
-        :host([helper-disabled]) #matInputHelper {
-            display: none !important;
-        }
-
-        :host #matInputCounter {
-            float: right;
-            margin-left: 16px;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                cursor: default;
+                display: block;
+                overflow: hidden;
+                position: relative;
+                text-align: left;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+
+            :host([disabled]) {
+                cursor: not-allowed !important;
+                pointer-events: none !important;
+            }
+
+            :host,
+            :host ::content input,
+            :host ::content textarea {
+                @apply(--mat-font-subhead);
+            }
+
+            :host ::content input,
+            :host ::content textarea {
+                background: transparent;
+                border: none;
+                box-shadow: none;
+                color: inherit;
+                font-family: inherit;
+                height: 100%;
+                margin: 0;
+                outline: 0;
+                padding: 0;
+                resize: none;
+                width: 100%;
+            }
+
+            :host ::content input,
+            :host #matInputPrefix,
+            :host #matInputSuffix,
+            :host #matInputPlaceholder {
+                overflow: hidden;
+                text-overflow: ellipsis !important; /* override */
+                white-space: nowrap !important; /* override */
+            }
+
+            :host ::content input:not([type="search"])::-ms-clear {
+                display: none !important;
+            }
+
+            :host #matInputWrapper {
+                display: block;
+                padding: 16px 0 4px 0;
+            }
+
+            :host([empty-label]) #matInputWrapper {
+                padding: 8px 0 4px 0;
+            }
+
+            :host([full-width]) #matInputWrapper {
+                padding: 16px 0;
+            }
+
+            :host([full-width]:not([mirrored])) #matInputWrapper {
+                @apply(--layout-horizontal);
+            }
+
+            :host #matInputDivider {
+                display: none;
+            }
+
+            :host #matInputLabel {
+                height: 16px;
+            }
+
+            :host([empty-label]) #matInputLabel,
+            :host([full-width]) #matInputLabel,
+            :host(:not([floating-label])) #matInputLabel {
+                display: none !important;
+            }
+
+            :host #matInputMain {
+                margin: 4px 0;
+                position: relative;
+            }
+
+            :host(:not([disabled])) #matInputMain {
+                cursor: text;
+            }
+
+            :host([full-width]) #matInputMain {
+                @apply(--layout-flex);
+                margin: 0;
+            }
+
+            :host #matInputPlaceholder {
+                @apply(--layout-fit);
+                pointer-events: none !important;
+                -webkit-transition: font-size 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                font-weight 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                letter-spacing 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                line-height 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                -webkit-transform 0.4s cubic-bezier(0.55, 0, 0.01, 1);
+                transition: font-size 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                font-weight 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                letter-spacing 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                line-height 0.4s cubic-bezier(0.55, 0, 0.01, 1),
+                transform 0.4s cubic-bezier(0.55, 0, 0.01, 1);
+                will-change: font-size, font-weight, letter-spacing, line-height, opacity, -webkit-transform, transform;
+            }
+
+            :host([floated]) #matInputPlaceholder {
+                @apply(--mat-font-caption);
+                -webkit-transform: translate3d(0, -22px, 0);
+                transform: translate3d(0, -22px, 0);
+                -webkit-transform-origin: 0 0 0;
+                transform-origin: 0 0 0;
+            }
+
+            :host([empty-label]) #matInputPlaceholder,
+            :host(:not([empty]):not([floating-label])) #matInputPlaceholder {
+                display: none !important;
+            }
+
+            :host #matInputPrefix {
+                float: left;
+            }
+
+            :host #matInputSuffix {
+                float: right;
+            }
+
+            :host #matInputMirror {
+                min-height: 20px;
+                opacity: 0 !important;
+                visibility: hidden !important;
+                word-wrap: break-word !important;
+            }
+
+            :host(:not([mirrored])) #matInputMirror {
+                display: none !important;
+            }
+
+            :host #matInputHolder {
+                overflow: hidden;
+            }
+
+            :host([mirrored]) #matInputHolder {
+                @apply(--layout-fit);
+            }
+
+            :host #matInputUnderline {
+                margin: -2px 0 4px 0;
+            }
+
+            :host([full-width]) #matInputUnderline {
+                display: none !important;
+            }
+
+            :host #matInputUnderlineDefault {
+                border-top: 1px solid currentColor;
+                transition: border 0.4s cubic-bezier(0.55, 0, 0.01, 1);
+                will-change: border;
+            }
+
+            :host([disabled]) #matInputUnderlineDefault {
+                border-top-style: dashed;
+            }
+
+            :host #matInputUnderlineFocused {
+                border-top: 2px solid currentColor;
+                margin-top: -1px;
+                -webkit-transform: scale(0, 1);
+                transform: scale(0, 1);
+                -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.55, 0, 0.01, 1);
+                transition: transform 0.4s cubic-bezier(0.55, 0, 0.01, 1);
+                will-change: -webkit-transform, transform;
+            }
+
+            :host([focused]) #matInputUnderlineFocused,
+            :host([invalid]) #matInputUnderlineFocused {
+                -webkit-transform: scale(1, 1);
+                transform: scale(1, 1);
+            }
+
+            :host #matInputHelper {
+                @apply(--mat-font-caption);
+                min-height: 16px;
+                white-space: normal !important; /* override */
+            }
+
+            :host([full-width]) #matInputHelper {
+                line-height: 24px !important; /* override */
+            }
+
+            :host([full-width][mirrored]) #matInputHelper {
+                margin-bottom: -4px;
+            }
+
+            :host([helper-disabled]) #matInputHelper {
+                display: none !important;
+            }
+
+            :host #matInputCounter {
+                float: right;
+                margin-left: 16px;
+            }
+        </style>
+
         <div id="matInputWrapper">
             <mat-divider id="matInputDivider" cap></mat-divider>
             <div id="matInputLabel"></div>
@@ -279,6 +280,7 @@ It only applies the style on the input. All the logic must be done by the develo
                 <div style="clear: both"></div>
             </mat-ink>
         </div>
+
     </template>
 
     <script>

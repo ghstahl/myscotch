@@ -54,18 +54,18 @@ A footer can also be added, in the form of a [Material Design navigation bar](ht
 @repository https://github.com/ExpandJS/mat-header-panel
 @demo http://expandjs.com/demo/mat-header-panel
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-paper ExpandJS/mat-paper#0.9.7
+@dependency mat-paper ExpandJS/mat-paper#0.9.8
 
-@devDependency mat-content ExpandJS/mat-content#0.9.7
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
-@devDependency mat-icon-button ExpandJS/mat-icon-button#0.9.7
-@devDependency mat-icons ExpandJS/mat-icons#0.9.7
-@devDependency mat-menu ExpandJS/mat-menu#0.9.7
-@devDependency mat-option ExpandJS/mat-option#0.9.7
-@devDependency mat-toolbar ExpandJS/mat-toolbar#0.9.7
+@devDependency mat-content ExpandJS/mat-content#0.9.8
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
+@devDependency mat-icon-button ExpandJS/mat-icon-button#0.9.8
+@devDependency mat-icons ExpandJS/mat-icons#0.9.8
+@devDependency mat-menu ExpandJS/mat-menu#0.9.8
+@devDependency mat-option ExpandJS/mat-option#0.9.8
+@devDependency mat-toolbar ExpandJS/mat-toolbar#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -76,63 +76,64 @@ A footer can also be added, in the form of a [Material Design navigation bar](ht
 
 <dom-module id="mat-header-panel">
 
-    <style>
-        :host {
-            @apply(--layout-fit);
-            display: block;
-            overflow: visible;
-            text-align: left;
-        }
-
-        :host #matHeaderPanelWrapper {
-            @apply(--layout-vertical);
-            @apply(--layout-fit);
-            background: transparent;
-            overflow: hidden;
-        }
-
-        :host #matHeaderPanelMain {
-            @apply(--layout-vertical);
-            @apply(--layout-flex);
-        }
-
-        :host #matHeaderPanelHeader,
-        :host #matHeaderPanelBody,
-        :host #matHeaderPanelFooter {
-            position: relative;
-        }
-
-        :host #matHeaderPanelHeader {
-            -ms-flex-order: 1;
-            -webkit-order: 1;
-            order: 1;
-        }
-
-        :host #matHeaderPanelBody {
-            @apply(--layout-flex);
-            -ms-flex-order: 2;
-            -webkit-order: 2;
-            order: 2;
-        }
-
-        :host #matHeaderPanelPositioner {
-            @apply(--layout-fit);
-        }
-
-        :host #matHeaderPanelScroller {
-            height: 100%;
-        }
-
-        :host([emptyFooter]) #matHeaderPanelFooter {
-            display: none !important;
-        }
-
-        :host [scroller] {
-            overflow-y: auto;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                @apply(--layout-fit);
+                display: block;
+                overflow: visible;
+                text-align: left;
+            }
+
+            :host #matHeaderPanelWrapper {
+                @apply(--layout-vertical);
+                @apply(--layout-fit);
+                background: transparent;
+                overflow: hidden;
+            }
+
+            :host #matHeaderPanelMain {
+                @apply(--layout-vertical);
+                @apply(--layout-flex);
+            }
+
+            :host #matHeaderPanelHeader,
+            :host #matHeaderPanelBody,
+            :host #matHeaderPanelFooter {
+                position: relative;
+            }
+
+            :host #matHeaderPanelHeader {
+                -ms-flex-order: 1;
+                -webkit-order: 1;
+                order: 1;
+            }
+
+            :host #matHeaderPanelBody {
+                @apply(--layout-flex);
+                -ms-flex-order: 2;
+                -webkit-order: 2;
+                order: 2;
+            }
+
+            :host #matHeaderPanelPositioner {
+                @apply(--layout-fit);
+            }
+
+            :host #matHeaderPanelScroller {
+                height: 100%;
+            }
+
+            :host([emptyFooter]) #matHeaderPanelFooter {
+                display: none !important;
+            }
+
+            :host [scroller] {
+                overflow-y: auto;
+            }
+        </style>
+
         <mat-paper id="matHeaderPanelWrapper" background="[[background]]" z="[[_computeZ(raised)]]">
             <div id="matHeaderPanelMain" on-scroll="_handleScroll">
                 <div id="matHeaderPanelBody">
@@ -150,6 +151,7 @@ A footer can also be added, in the form of a [Material Design navigation bar](ht
                 <content id="footerContent" select='[footer=""]'></content>
             </div>
         </mat-paper>
+
     </template>
 
     <script>

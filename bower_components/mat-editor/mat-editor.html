@@ -52,16 +52,16 @@ Generally, we recommend to use the `model` for data binding and `value` to set t
 @behavior xp-input-behavior /bower_components/xp-input-behavior/xp-input-behavior.html
 
 @dependency codemirror Codemirror/codemirror#^5.0.0
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-icon-button ExpandJS/mat-icon-button#0.9.7
-@dependency mat-icons ExpandJS/mat-icons#0.9.7
-@dependency mat-label ExpandJS/mat-label#0.9.7
-@dependency mat-paper ExpandJS/mat-paper#0.9.7
-@dependency xp-input-behavior ExpandJS/xp-input-behavior#0.9.7
+@dependency mat-icon-button ExpandJS/mat-icon-button#0.9.8
+@dependency mat-icons ExpandJS/mat-icons#0.9.8
+@dependency mat-label ExpandJS/mat-label#0.9.8
+@dependency mat-paper ExpandJS/mat-paper#0.9.8
+@dependency xp-input-behavior ExpandJS/xp-input-behavior#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
 -->
 
 <script src="../codemirror/lib/codemirror.js"></script>
@@ -82,105 +82,107 @@ Generally, we recommend to use the `model` for data binding and `value` to set t
 
 <dom-module id="mat-editor">
 
-    <style>
-        :host {
-            display: block;
-            height: 100%;
-            overflow: visible;
-            text-align: left;
-        }
-
-        :host([full-screen]) {
-            @apply(--layout-fit);
-            height: auto !important;
-            margin: 0 !important;
-            width: auto !important;
-            z-index: 1;
-        }
-
-        :host #matEditorWrapper,
-        :host #matEditorContainer {
-            height: 100%;
-            position: relative;
-            transition: none;
-        }
-
-        :host #matEditorWrapper {
-            z-index: 0;
-        }
-
-        :host(:not([empty-label])) #matEditorWrapper {
-            margin-top: 32px;
-            height: calc(100% - 32px);
-        }
-
-        :host([full-screen]) #matEditorWrapper,
-        :host([full-screen]) #matEditorContainer {
-            height: 100% !important;
-            margin: 0 !important;
-        }
-
-        :host #matEditorLabel {
-            left: 0;
-            padding-bottom: 8px;
-            position: absolute;
-            right: 0;
-            top: -32px;
-        }
-
-        :host([empty-label]) #matEditorLabel,
-        :host([full-screen]) #matEditorLabel {
-            display: none !important;
-        }
-
-        :host #matEditorContainer ::content .CodeMirror {
-            @apply(--mat-font-body);
-        }
-
-        :host #matEditorContainer ::content .CodeMirror,
-        :host #matEditorContainer ::content .CodeMirror-scrollbar-filler {
-            background: transparent !important;
-            cursor: text !important;
-        }
-
-        :host #matEditorContainer ::content .CodeMirror-gutters {
-            background: hsla(0, 0%, 26%, 1) !important;
-            border: none !important;
-        }
-
-        :host #matEditorContainer ::content .CodeMirror-gutters,
-        :host #matEditorContainer ::content .CodeMirror-hscrollbar,
-        :host #matEditorContainer ::content .CodeMirror-vscrollbar {
-            cursor: default !important;
-        }
-
-        :host #matEditorContainer ::content .CodeMirror-linenumber {
-            color: inherit;
-        }
-
-        :host #matEditorToggle {
-            opacity: 0.10;
-            position: absolute;
-            right: 4px;
-            top: 0;
-            z-index: 2;
-        }
-
-        :host #matEditorToggle:hover {
-            opacity: 0.30;
-        }
-
-        :host(:not([expandable])) #matEditorToggle {
-            display: none !important;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                height: 100%;
+                overflow: visible;
+                text-align: left;
+            }
+
+            :host([full-screen]) {
+                @apply(--layout-fit);
+                height: auto !important;
+                margin: 0 !important;
+                width: auto !important;
+                z-index: 1;
+            }
+
+            :host #matEditorWrapper,
+            :host #matEditorContainer {
+                height: 100%;
+                position: relative;
+                transition: none;
+            }
+
+            :host #matEditorWrapper {
+                z-index: 0;
+            }
+
+            :host(:not([empty-label])) #matEditorWrapper {
+                margin-top: 32px;
+                height: calc(100% - 32px);
+            }
+
+            :host([full-screen]) #matEditorWrapper,
+            :host([full-screen]) #matEditorContainer {
+                height: 100% !important;
+                margin: 0 !important;
+            }
+
+            :host #matEditorLabel {
+                left: 0;
+                padding-bottom: 8px;
+                position: absolute;
+                right: 0;
+                top: -32px;
+            }
+
+            :host([empty-label]) #matEditorLabel,
+            :host([full-screen]) #matEditorLabel {
+                display: none !important;
+            }
+
+            :host #matEditorContainer ::content .CodeMirror {
+                @apply(--mat-font-body);
+            }
+
+            :host #matEditorContainer ::content .CodeMirror,
+            :host #matEditorContainer ::content .CodeMirror-scrollbar-filler {
+                background: transparent !important;
+                cursor: text !important;
+            }
+
+            :host #matEditorContainer ::content .CodeMirror-gutters {
+                background: hsla(0, 0%, 26%, 1) !important;
+                border: none !important;
+            }
+
+            :host #matEditorContainer ::content .CodeMirror-gutters,
+            :host #matEditorContainer ::content .CodeMirror-hscrollbar,
+            :host #matEditorContainer ::content .CodeMirror-vscrollbar {
+                cursor: default !important;
+            }
+
+            :host #matEditorContainer ::content .CodeMirror-linenumber {
+                color: inherit;
+            }
+
+            :host #matEditorToggle {
+                opacity: 0.10;
+                position: absolute;
+                right: 4px;
+                top: 0;
+                z-index: 2;
+            }
+
+            :host #matEditorToggle:hover {
+                opacity: 0.30;
+            }
+
+            :host(:not([expandable])) #matEditorToggle {
+                display: none !important;
+            }
+        </style>
+
         <div id="matEditorWrapper">
             <mat-label id="matEditorLabel" focused="[[focused]]">{{label}}</mat-label>
             <mat-paper id="matEditorContainer" background="grey-900"><content id="content"></content></mat-paper>
             <mat-icon-button id="matEditorToggle" active="{{fullScreen}}" active-icon="navigation:fullscreen-exit" color="white" icon="navigation:fullscreen" toggleable></mat-icon-button>
         </div>
+
     </template>
 
     <script>
@@ -240,6 +242,28 @@ Generally, we recommend to use the `model` for data binding and `value` to set t
                 // Resizing
                 self.adaptee.setSize(null, (!self.fullScreen && self.height) || '100%');
                 self.adaptee.refresh();
+
+                return self;
+            },
+
+            /**
+             * Updates element's validation state.
+             *
+             * @method updateValidation
+             * @param {boolean | string} [invalidMessage = ""]
+             * @returns {Element}
+             */
+            updateValidation: function (invalidMessage) {
+
+                // Asserting
+                XP.assertArgument(XP.isVoid(invalidMessage) || XP.isFalse(invalidMessage) || XP.isString(invalidMessage), 1, 'string');
+
+                // Vars
+                var self = this;
+
+                // Setting
+                self._setInvalidMessage(invalidMessage !== undefined ? invalidMessage || null : self.invalidMessage);
+                self._setInvalid(!!self.invalidMessage);
 
                 return self;
             },

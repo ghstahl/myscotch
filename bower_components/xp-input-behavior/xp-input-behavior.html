@@ -18,9 +18,9 @@ This behavior is used to add input capabilities on a custom element.
 
 @behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -36,6 +36,15 @@ This behavior is used to add input capabilities on a custom element.
          * @event xp-input-change
          * @param {Element} firer
          * @param {boolean} isChanged
+         * @param {*} model
+         * @bubbles
+         */
+
+        /**
+         * Fired when the input's model is validated.
+         *
+         * @event xp-input-validation
+         * @param {Element} firer
          * @param {*} model
          * @bubbles
          */
@@ -67,6 +76,17 @@ This behavior is used to add input capabilities on a custom element.
         select: XP.mock(),
 
         /**
+         * The method that will update element's validation state.
+         *
+         * @method updateValidation
+         * @param {boolean | string} [invalidMessage = ""]
+         * @abstract
+         */
+        updateValidation: XP.mock(),
+
+        /*********************************************************************/
+
+        /**
          * The method that will set the adaptee.
          *
          * @method _adapt
@@ -94,6 +114,7 @@ This behavior is used to add input capabilities on a custom element.
          * The method that will reflect element's `tabIndex` onto the adapted input.
          *
          * @method _index
+         * @param {number} index
          * @abstract
          */
         _index: XP.mock(),
@@ -113,14 +134,6 @@ This behavior is used to add input capabilities on a custom element.
          * @abstract
          */
         _update: XP.mock(),
-
-        /**
-         * The method that will validate adapted input's `value`.
-         *
-         * @method _validate
-         * @abstract
-         */
-        _validate: XP.mock(),
 
         /*********************************************************************/
 
@@ -232,12 +245,26 @@ This behavior is used to add input capabilities on a custom element.
             return XP.toString(from, true);
         },
 
+        /**
+         * Validates the element's model.
+         *
+         * @method _validate
+         * @returns {Element}
+         * @private
+         */
+        _validate: function () {
+            var self = this;
+            self.updateValidation();
+            self.fire('xp-input-validation', {firer: self, model: self.model});
+            return self;
+        },
+
         /*********************************************************************/
 
         // LISTENERS
         listeners: {
             'click': '_clickHandler',
-            'adaptee-changed': '_adapteeHandler'
+            'adaptee-changed': '_adapteeChanged'
         },
 
         // OBSERVERS
@@ -540,13 +567,33 @@ This behavior is used to add input capabilities on a custom element.
         /*********************************************************************/
 
         // OBSERVER
+        _adapteeChanged: function () {
+
+            // Vars
+            var self = this;
+
+            // Listening
+            if (XP.isElement(self.adaptee)) {
+                self.listen(self.adaptee, 'blur', '_blurHandler');
+                self.listen(self.adaptee, 'change', '_changeHandler');
+                self.listen(self.adaptee, 'focus', '_focusHandler');
+            }
+
+            // Mutating
+            if (self.adaptee) { Polymer.XPInputBehaviorImp.mutated.apply(self); }
+
+            // Refreshing
+            self._refresh();
+        },
+
+        // OBSERVER
         _checkedChanged: function (post) {
 
             // Vars
             var self = this;
 
             // Checking
-            if (!self.adaptee) { return; }
+            if (!self.adaptee || self.primitive !== 'boolean') { return; }
 
             // Setting
             self._setChanged(self.initial.checked !== post);
@@ -554,6 +601,9 @@ This behavior is used to add input capabilities on a custom element.
 
             // Committing
             self._commitTo();
+
+            // Validating
+            self._validate();
 
             // Firing
             self.fire('xp-input-change', {firer: self, isChanged: self.changed, model: self.model});
@@ -587,30 +637,13 @@ This behavior is used to add input capabilities on a custom element.
         },
 
         // OBSERVER
-        _adapteeHandler: function () {
+        _modelChanged: function () {
 
             // Vars
             var self = this;
 
-            // Listening
-            if (XP.isElement(self.adaptee)) {
-                self.listen(self.adaptee, 'blur', '_blurHandler');
-                self.listen(self.adaptee, 'change', '_changeHandler');
-                self.listen(self.adaptee, 'focus', '_focusHandler');
-            }
-
-            // Mutating
-            if (self.adaptee) { Polymer.XPInputBehaviorImp.mutated.apply(self); }
-
-            // Refreshing
-            self._refresh();
-        },
-
-        // OBSERVER
-        _modelChanged: function () {
-
             // Casting
-            this[this.primitive === 'boolean' ? 'checked' : 'value'] = this._toValue(this.model);
+            self[self.primitive === 'boolean' ? 'checked' : 'value'] = self._toValue(self.model);
         },
 
         // OBSERVER
@@ -633,7 +666,7 @@ This behavior is used to add input capabilities on a custom element.
             var self = this;
 
             // Checking
-            if (!self.adaptee) { return; }
+            if (!self.adaptee || self.primitive === 'boolean') { return; }
 
             // Sanitizing
             self._sanitize();

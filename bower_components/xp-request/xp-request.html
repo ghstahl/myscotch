@@ -18,17 +18,17 @@ This element is used to perform XHR requests.
 
 @behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.7
-@dependency xp-emitter ExpandJS/xp-emitter#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.8
+@dependency xp-emitter ExpandJS/xp-emitter#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
 <link rel="import" href="../xp-emitter/xp-emitter.html">
 <link rel="import" href="../xp-adapter-behavior/xp-adapter-behavior.html">
-<script src="dist/xp-request.min.js"></script>
+<script src="dist/xp-request.js"></script>
 
 <script>
     Polymer({
@@ -163,8 +163,10 @@ This element is used to perform XHR requests.
 
             // Adapting
             self._setAdaptee(adaptable ? new XPRequest({
+                contentType: self.contentType,
                 dataType: self.dataType,
-                headers: XP.assign({}, self.headers, self.enctype && {'Content-Type': self.enctype}),
+                encoding: self.encoding,
+                headers: self.headers,
                 keepAlive: self.keepAlive,
                 method: self.method,
                 path: self.path + (query ? '?' + query : ''),
@@ -194,7 +196,7 @@ This element is used to perform XHR requests.
          */
         _isExpired: function (adaptee) {
             XP.assertArgument(XP.isObject(adaptee), 1, 'Object');
-            return this.responded ? adaptee.timeSubmit < this.responded.timeSubmit : false;
+            return this.responded ? adaptee.tsSubmit < this.responded.tsSubmit : false;
         },
 
         /**
@@ -239,7 +241,7 @@ This element is used to perform XHR requests.
 
         // OBSERVERS
         observers: [
-            '_refresh(dataType, enctype, headers, method, path, port, url)'
+            '_refresh(contentType, dataType, headers, method, path, port, url)'
         ],
 
         // PROPERTIES
@@ -256,6 +258,18 @@ This element is used to perform XHR requests.
                 reflectToAttribute: true,
                 type: Boolean,
                 value: false
+            },
+
+            /**
+             * A shortcut for the "Content-Type" header.
+             *
+             * @attribute content-type
+             * @type String
+             */
+            contentType: {
+                reflectToAttribute: true,
+                type: String,
+                value: null
             },
 
             /**
@@ -276,13 +290,12 @@ This element is used to perform XHR requests.
              * The type of data expected back from the server.
              *
              * @attribute data-type
-             * @type "json" | "text"
-             * @default "text"
+             * @type string
              */
             dataType: {
                 reflectToAttribute: true,
                 type: String,
-                value: 'text'
+                value: null
             },
 
             /**
@@ -314,15 +327,16 @@ This element is used to perform XHR requests.
             },
 
             /**
-             * The encoding type used on request.
+             * The response encoding.
              *
-             * @attribute enctype
-             * @type String
+             * @attribute encoding
+             * @type string
+             * @default "utf-8"
              */
-            enctype: {
+            encoding: {
                 reflectToAttribute: true,
                 type: String,
-                value: null
+                value: 'utf-8'
             },
 
             /**

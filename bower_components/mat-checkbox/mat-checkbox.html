@@ -52,14 +52,14 @@ Generally, we recommend to use the `model` for data binding and `checked` to set
 
 @behavior xp-input-behavior /bower_components/xp-input-behavior/xp-input-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency mat-icon-button ExpandJS/mat-icon-button#0.9.7
-@dependency mat-icons ExpandJS/mat-icons#0.9.7
-@dependency mat-ink ExpandJS/mat-ink#0.9.7
-@dependency xp-input-behavior ExpandJS/xp-input-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency mat-icon-button ExpandJS/mat-icon-button#0.9.8
+@dependency mat-icons ExpandJS/mat-icons#0.9.8
+@dependency mat-ink ExpandJS/mat-ink#0.9.8
+@dependency xp-input-behavior ExpandJS/xp-input-behavior#0.9.8
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.7
+@devDependency mat-demo ExpandJS/mat-demo#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -71,107 +71,110 @@ Generally, we recommend to use the `model` for data binding and `checked` to set
 
 <dom-module id="mat-checkbox">
 
-    <style>
-        :host {
-            @apply(--mat-font-subhead);
-            cursor: pointer;
-            display: block;
-            height: 48px;
-            line-height: 48px !important; /* override */
-            overflow: visible;
-            text-overflow: ellipsis !important; /* override */
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-user-select: none;
-            user-select: none;
-            white-space: nowrap !important; /* override */
-        }
-
-        :host([disabled]) {
-            cursor: not-allowed !important;
-            pointer-events: none !important;
-        }
-
-        :host([empty-label]) {
-            height: 40px;
-            margin: 4px;
-            width: 40px;
-        }
-
-        :host([flip]) {
-            margin-right: -12px;
-            text-align: right;
-        }
-
-        :host(:not([flip])) {
-            margin-left: -12px;
-            text-align: left;
-        }
-
-        :host ::content input {
-            display: none !important;
-        }
-
-        :host #matCheckboxWrapper {
-            height: 100%;
-            position: relative;
-        }
-
-        :host([disabled]) #matCheckboxToggle[active]::shadow #matIconButtonIcon {
-            display: none !important;
-        }
-
-        :host([empty-label]) #matCheckboxToggle {
-            margin: 0;
-        }
-
-        :host(:not([empty-label])[flip]) #matCheckboxToggle {
-            right: 0;
-            position: absolute;
-        }
-
-        :host(:not([empty-label]):not([flip])) #matCheckboxToggle {
-            left: 0;
-            position: absolute;
-        }
-
-        :host #matCheckboxLabel {
-            height: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        :host([flip]) #matCheckboxLabel {
-            padding-right: 64px;
-        }
-
-        :host(:not([flip])) #matCheckboxLabel {
-            padding-left: 64px;
-        }
-
-        /* ANIMATION */
-
-        :host #matCheckboxToggle::shadow #matIconButtonIcon {
-            -webkit-transform: scale(1);
-            transform: scale(1);
-            transition-delay: -0.05s;
-        }
-
-        :host #matCheckboxToggle[active]::shadow #matIconButtonIcon {
-            opacity: 0;
-            transition-delay: 0.1s;
-        }
-
-        :host #matCheckboxToggle::shadow #matIconButtonIcon #matIconWrapper {
-            transition: color 0.4s;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                @apply(--mat-font-subhead);
+                cursor: pointer;
+                display: block;
+                height: 48px;
+                line-height: 48px !important; /* override */
+                overflow: visible;
+                text-overflow: ellipsis !important; /* override */
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-user-select: none;
+                user-select: none;
+                white-space: nowrap !important; /* override */
+            }
+
+            :host([disabled]) {
+                cursor: not-allowed !important;
+                pointer-events: none !important;
+            }
+
+            :host([empty-label]) {
+                height: 40px;
+                margin: 4px;
+                width: 40px;
+            }
+
+            :host([flip]) {
+                margin-right: -12px;
+                text-align: right;
+            }
+
+            :host(:not([flip])) {
+                margin-left: -12px;
+                text-align: left;
+            }
+
+            :host ::content input {
+                display: none !important;
+            }
+
+            :host #matCheckboxWrapper {
+                height: 100%;
+                position: relative;
+            }
+
+            :host([disabled]) #matCheckboxToggle[active]::shadow #matIconButtonIcon {
+                display: none !important;
+            }
+
+            :host([empty-label]) #matCheckboxToggle {
+                margin: 0;
+            }
+
+            :host(:not([empty-label])[flip]) #matCheckboxToggle {
+                right: 0;
+                position: absolute;
+            }
+
+            :host(:not([empty-label]):not([flip])) #matCheckboxToggle {
+                left: 0;
+                position: absolute;
+            }
+
+            :host #matCheckboxLabel {
+                height: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            :host([flip]) #matCheckboxLabel {
+                padding-right: 64px;
+            }
+
+            :host(:not([flip])) #matCheckboxLabel {
+                padding-left: 64px;
+            }
+
+            /* ANIMATION */
+
+            :host #matCheckboxToggle::shadow #matIconButtonIcon {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                transition-delay: -0.05s;
+            }
+
+            :host #matCheckboxToggle[active]::shadow #matIconButtonIcon {
+                opacity: 0;
+                transition-delay: 0.1s;
+            }
+
+            :host #matCheckboxToggle::shadow #matIconButtonIcon #matIconWrapper {
+                transition: color 0.4s;
+            }
+        </style>
+
         <div id="matCheckboxWrapper">
             <mat-icon-button id="matCheckboxToggle" active="{{checked}}" active-color="teal" active-icon="toggle:check-box" disabled="[[disabled]]" focused="{{focused}}" icon="toggle:check-box-outline-blank" toggleable></mat-icon-button>
             <template is="dom-if" if="[[label]]"><mat-ink id="matCheckboxLabel" disabled="[[disabled]]" on-click="_handleToggle">{{label}}</mat-ink></template>
+            <content id="content" select="input"></content>
         </div>
+
     </template>
 
     <script>
@@ -211,6 +214,31 @@ Generally, we recommend to use the `model` for data binding and `checked` to set
                 return self;
             },
 
+            /**
+             * Updates element's validation state.
+             *
+             * @method updateValidation
+             * @param {boolean | string} [invalidMessage = ""]
+             * @returns {Element}
+             */
+            updateValidation: function (invalidMessage) {
+
+                // Asserting
+                XP.assertArgument(XP.isVoid(invalidMessage) || XP.isFalse(invalidMessage) || XP.isString(invalidMessage), 1, 'string');
+
+                // Vars
+                var self = this;
+
+                // Customizing
+                if (invalidMessage !== undefined) { self.adaptee.setCustomValidity(invalidMessage || ''); }
+
+                // Setting
+                self._setInvalidMessage(self.adaptee.validationMessage || null);
+                self._setInvalid(self.adaptee.validity.valid === false);
+
+                return self;
+            },
+
             /*********************************************************************/
 
             /**
@@ -222,7 +250,7 @@ Generally, we recommend to use the `model` for data binding and `checked` to set
              */
             _adapt: function () {
                 var self = this;
-                self._setAdaptee(XP.appendChild(Polymer.dom(self), XP.createElement('input', {attributes: {type: self.type, checked: self.checked}})));
+                self._setAdaptee(XP.appendChild(Polymer.dom(self), XP.createElement('input', {attributes: {type: self.type, checked: self.checked, value: self.value}})));
                 return self;
             },
 
@@ -236,6 +264,7 @@ Generally, we recommend to use the `model` for data binding and `checked` to set
             _commitFrom: function () {
                 var self = this;
                 self.checked = self.adaptee.checked;
+                self.value = self.adaptee.value;
                 return self;
             },
 
@@ -249,6 +278,7 @@ Generally, we recommend to use the `model` for data binding and `checked` to set
             _commitTo: function () {
                 var self = this;
                 if (self.checked !== self.adaptee.checked) { self.adaptee.checked = self.checked; }
+                if (self.value !== self.adaptee.value ) { self.adaptee.value = self.value }
                 return self;
             },
 
@@ -277,6 +307,7 @@ Generally, we recommend to use the `model` for data binding and `checked` to set
                 var self = this;
                 XP.setAttribute(self.adaptee, 'disabled', self.disabled);
                 XP.setAttribute(self.adaptee, 'name', self.name);
+                XP.setAttribute(self.adaptee, 'value', self.value);
                 return self;
             },
 

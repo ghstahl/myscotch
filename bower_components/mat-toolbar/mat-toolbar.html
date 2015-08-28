@@ -44,10 +44,10 @@ The toolbar's background color can be changed accordingly to the [Material Desig
 @homepage http://expandjs.com/elements/mat-toolbar
 @repository https://github.com/ExpandJS/mat-toolbar
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-paper ExpandJS/mat-paper#0.9.7
+@dependency mat-paper ExpandJS/mat-paper#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -57,48 +57,50 @@ The toolbar's background color can be changed accordingly to the [Material Desig
 
 <dom-module id="mat-toolbar">
 
-    <style>
-        :host {
-            @apply(--mat-font-subhead);
-            display: block;
-            height: 48px;
-            overflow: visible;
-            text-align: left;
-        }
-
-        :host #matToolbarWrapper {
-            @apply(--layout-horizontal);
-            @apply(--layout-center);
-            height: 100%;
-            overflow: visible;
-            padding: 0 4px;
-        }
-
-        :host([justified="around"]) #matToolbarWrapper {
-            @apply(--layout-around-justified);
-        }
-
-        :host([justified="center"]) #matToolbarWrapper {
-            @apply(--layout-center-justified);
-        }
-
-        :host([justified="end"]) #matToolbarWrapper {
-            @apply(--layout-end-justified);
-        }
-
-        :host([justified="normal"]) #matToolbarWrapper {
-            @apply(--layout-justified);
-        }
-
-        :host([justified="start"]) #matToolbarWrapper {
-            @apply(--layout-start-justified);
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                @apply(--mat-font-subhead);
+                display: block;
+                height: 48px;
+                overflow: visible;
+                text-align: left;
+            }
+
+            :host #matToolbarWrapper {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                height: 100%;
+                overflow: visible;
+                padding: 0 4px;
+            }
+
+            :host([justified="around"]) #matToolbarWrapper {
+                @apply(--layout-around-justified);
+            }
+
+            :host([justified="center"]) #matToolbarWrapper {
+                @apply(--layout-center-justified);
+            }
+
+            :host([justified="end"]) #matToolbarWrapper {
+                @apply(--layout-end-justified);
+            }
+
+            :host([justified="normal"]) #matToolbarWrapper {
+                @apply(--layout-justified);
+            }
+
+            :host([justified="start"]) #matToolbarWrapper {
+                @apply(--layout-start-justified);
+            }
+        </style>
+
         <mat-paper id="matToolbarWrapper" background="[[background]]" brightness="toolbar" z="[[_computeZ(raised)]]">
             <content id="content"></content>
         </mat-paper>
+
     </template>
 
     <script>

@@ -16,8 +16,8 @@ This element is used to display a fixed or flexible grid to design your applicat
 @homepage http://expandjs.com/elements/xp-grid
 @repository https://github.com/ExpandJS/xp-grid
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -26,68 +26,70 @@ This element is used to display a fixed or flexible grid to design your applicat
 
 <dom-module id="xp-grid">
 
-    <style>
-        :host {
-            @apply(--layout-fit);
-            display: block;
-            opacity: 0.25;
-            overflow: visible;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        :host #xpGridWrapper {
-            height: 100%;
-            margin: auto;
-        }
-
-        :host #xpGridWrapper [column] {
-            background: hsla(0, 100%, 100%, 0.75);
-            height: 100%;
-            float: left;
-        }
-
-        :host:not([type="graph-paper"]) #xpGridWrapper {
-            background: hsla(0, 100%, 50%, 0.75);
-        }
-
-        :host[type="bootstrap-12"] #xpGridWrapper [column] {
-            margin: 0 15px;
-            width: calc(8.333% - 30px);
-        }
-
-        :host[type="fixed-12"] #xpGridWrapper,
-        :host[type="fixed-16"] #xpGridWrapper {
-            width: 960px;
-        }
-
-        :host[type="fixed-12"] #xpGridWrapper [column] {
-            margin: 0 10px;
-            width: 60px;
-        }
-
-        :host[type="fixed-16"] #xpGridWrapper [column] {
-            margin: 0 10px;
-            width: 40px;
-        }
-
-        :host[type="fluid-12"] #xpGridWrapper [column] {
-            margin: 0 0.83%;
-            width: calc(8.333333333% - 1.66%);
-        }
-
-        :host[type="fluid-16"] #xpGridWrapper [column] {
-            margin: 0 0.625%;
-            width: calc(6.25% - 1.250%);
-        }
-
-        :host[type="graph-paper"] #xpGridWrapper {
-            background: url('grid.png') repeat;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                @apply(--layout-fit);
+                display: block;
+                opacity: 0.25;
+                overflow: visible;
+                pointer-events: none;
+                z-index: 9999;
+            }
+
+            :host #xpGridWrapper {
+                height: 100%;
+                margin: auto;
+            }
+
+            :host #xpGridWrapper [column] {
+                background: hsla(0, 100%, 100%, 0.75);
+                height: 100%;
+                float: left;
+            }
+
+            :host:not([type="graph-paper"]) #xpGridWrapper {
+                background: hsla(0, 100%, 50%, 0.75);
+            }
+
+            :host[type="bootstrap-12"] #xpGridWrapper [column] {
+                margin: 0 15px;
+                width: calc(8.333% - 30px);
+            }
+
+            :host[type="fixed-12"] #xpGridWrapper,
+            :host[type="fixed-16"] #xpGridWrapper {
+                width: 960px;
+            }
+
+            :host[type="fixed-12"] #xpGridWrapper [column] {
+                margin: 0 10px;
+                width: 60px;
+            }
+
+            :host[type="fixed-16"] #xpGridWrapper [column] {
+                margin: 0 10px;
+                width: 40px;
+            }
+
+            :host[type="fluid-12"] #xpGridWrapper [column] {
+                margin: 0 0.83%;
+                width: calc(8.333333333% - 1.66%);
+            }
+
+            :host[type="fluid-16"] #xpGridWrapper [column] {
+                margin: 0 0.625%;
+                width: calc(6.25% - 1.250%);
+            }
+
+            :host[type="graph-paper"] #xpGridWrapper {
+                background: url('grid.png') repeat;
+            }
+        </style>
+
         <div id="xpGridWrapper"></div>
+
     </template>
 
     <script>

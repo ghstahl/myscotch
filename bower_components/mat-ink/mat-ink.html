@@ -44,12 +44,12 @@ The ink's `color` can be changed accordingly to the
 @behavior xp-shared-behavior /bower_components/xp-shared-behavior/xp-shared-behavior.html
 @behavior xp-slave-behavior /bower_components/xp-slave-behavior/xp-slave-behavior.html
 
-@dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.7
-@dependency mat-palette ExpandJS/mat-palette#0.9.7
-@dependency mat-typography ExpandJS/mat-typography#0.9.7
-@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.7
-@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.7
+@dependency polymer Polymer/polymer#^1.1.0
+@dependency expandjs ExpandJS/expandjs#0.9.8
+@dependency mat-palette ExpandJS/mat-palette#0.9.8
+@dependency mat-typography ExpandJS/mat-typography#0.9.8
+@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.8
+@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.8
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -61,48 +61,50 @@ The ink's `color` can be changed accordingly to the
 
 <dom-module id="mat-ink">
 
-    <style>
-        :host {
-            display: block;
-            overflow: visible;
-        }
-
-        /* FOREGROUND */
-
-        :host([foreground="dark"]) { color: hsla(0, 0%, 0%, 0.87); }
-        :host([foreground="light"]) { color: hsla(0, 0%, 100%, 1); }
-
-        /* OPACITY */
-
-        :host([opacity="divider"][foreground="dark"]) { color: hsla(0, 0%, 0%, 0.12); }
-        :host([opacity="divider"][foreground="light"]) { color: hsla(0, 0%, 100%, 0.12); }
-        :host([opacity="hint"][foreground="dark"]) { color: hsla(0, 0%, 0%, 0.26); }
-        :host([opacity="hint"][foreground="light"]) { color: hsla(0, 0%, 100%, 0.30); }
-        :host([opacity="icon"][foreground="dark"]) { color: hsla(0, 0%, 0%, 0.54); }
-        :host([opacity="icon"][foreground="light"]) { color: hsla(0, 0%, 100%, 1); }
-        :host([opacity="secondary"][foreground="dark"]) { color: hsla(0, 0%, 0%, 0.54); }
-        :host([opacity="secondary"][foreground="light"]) { color: hsla(0, 0%, 100%, 0.70); }
-
-        /* DISABLED */
-        :host([disabled]) {
-            filter: gray;
-            filter: grayscale(100%);
-            -webkit-filter: grayscale(100%);
-            pointer-events: none !important;
-            text-shadow: none !important;
-        }
-
-        :host([disabled][foreground="dark"]) {
-            color: hsla(0, 0%, 0%, 0.26) !important;
-        }
-
-        :host([disabled][foreground="light"]) {
-            color: hsla(0, 0%, 100%, 0.30) !important;
-        }
-    </style>
-
     <template>
+
+        <style>
+            :host {
+                display: block;
+                overflow: visible;
+            }
+
+            /* FOREGROUND */
+
+            :host([foreground="dark"]) { color: hsla(0, 0%, 0%, 0.87); }
+            :host([foreground="light"]) { color: hsla(0, 0%, 100%, 1); }
+
+            /* OPACITY */
+
+            :host([opacity="divider"][foreground="dark"]) { color: hsla(0, 0%, 0%, 0.12); }
+            :host([opacity="divider"][foreground="light"]) { color: hsla(0, 0%, 100%, 0.12); }
+            :host([opacity="hint"][foreground="dark"]) { color: hsla(0, 0%, 0%, 0.26); }
+            :host([opacity="hint"][foreground="light"]) { color: hsla(0, 0%, 100%, 0.30); }
+            :host([opacity="icon"][foreground="dark"]) { color: hsla(0, 0%, 0%, 0.54); }
+            :host([opacity="icon"][foreground="light"]) { color: hsla(0, 0%, 100%, 1); }
+            :host([opacity="secondary"][foreground="dark"]) { color: hsla(0, 0%, 0%, 0.54); }
+            :host([opacity="secondary"][foreground="light"]) { color: hsla(0, 0%, 100%, 0.70); }
+
+            /* DISABLED */
+            :host([disabled]) {
+                filter: gray;
+                filter: grayscale(100%);
+                -webkit-filter: grayscale(100%);
+                pointer-events: none !important;
+                text-shadow: none !important;
+            }
+
+            :host([disabled][foreground="dark"]) {
+                color: hsla(0, 0%, 0%, 0.26) !important;
+            }
+
+            :host([disabled][foreground="light"]) {
+                color: hsla(0, 0%, 100%, 0.30) !important;
+            }
+        </style>
+
         <content id="content"></content>
+
     </template>
 
     <script>
