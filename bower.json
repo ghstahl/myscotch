@@ -25,6 +25,7 @@
     "xp-elements": "expandjs/xp-elements#~0.9.7",
     "marked-element": "polymerelements/marked-element#~1.0.2",
     "mark-down": "robdodson/mark-down#~1.0.0",
-    "polymer-markdown": "paradox41/polymer-markdown#~2.0.0"
+    "polymer-markdown": "paradox41/polymer-markdown#~2.0.0",
+    "disqus-comments": "divshot/disqus-comments#master"
   }
 }
