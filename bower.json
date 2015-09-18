@@ -13,7 +13,6 @@
     "tests"
   ],
   "dependencies": {
-  
     "expandjs": "expandjs/expandjs#~0.9.7",
     "iron-ajax": "polymerelements/iron-ajax#~1.0.4",
     "iron-pages": "polymerelements/iron-pages#~1.0.3",
@@ -31,6 +30,7 @@
     "pingo-sidebar": "ghstahl/pingo-sidebar",
     "polymer": "Polymer/polymer#1.0",
     "polymer-markdown": "paradox41/polymer-markdown#~2.0.0",
+    "x-json": "~0.2.3",
     "xp-elements": "expandjs/xp-elements#~0.9.7"
   }
 }

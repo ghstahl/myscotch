@@ -1,3 +1,4 @@
+<link rel="import" href="../../../bower_components/x-json/dist/x-json.html">
 <dom-module id="my-rest">
     <style>
         :host {
@@ -23,8 +24,11 @@
 
         <button on-click="handleClick">Kick Me</button>
         </br>
-        <span>{{ajaxResponse}}</span>
 
+
+        <paper-material elevation="1">
+            <x-json id="myjson"></x-json>
+        </paper-material>
     </template>
 
     <script>
@@ -40,21 +44,17 @@
                     },
                     _ajaxResponse: {
                         observer: '_ajaxResponseChanged'
-                    },
-                    ajaxResponse: {
-                        type: String,
-                        notify: true
                     }
                 },
                 handleClick: function () {
                     this.$.ironAjaxId.url = this.url;
-                    this.ajaxResponse = "";
+                    this.$.myjson.data = null;
                     this.$.ironAjaxId.generateRequest();
 
                 },
                 _ajaxResponseChanged: function (newValue, oldValue) {
                     if (newValue !== null) {
-                        this.ajaxResponse = JSON.stringify(newValue);
+                        this.$.myjson.data = newValue;
                     }
                 },
                 handleResponse: function (request) {
