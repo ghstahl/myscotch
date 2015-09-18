@@ -1,0 +1,69 @@
+<link rel="import" href="../../../bower_components/pingo-abstract-section-behavior/pingo-abstract-section-behavior.html">
+<link rel="import" href="../../../bower_components/pingo-content-md-loader-iron-ajax-localstorage/pingo-content-md-loader-iron-ajax-localstorage.html">
+<link rel="import" href="../disqus-comments/disqus-comments.html">
+
+<dom-module id="abstract-markdown-with-disqus">
+
+    <style>
+
+    </style>
+    <template>
+        <paper-material elevation="1">
+            <pingo-content-md-loader-iron-ajax-localstorage id="_mdContent"></pingo-content-md-loader-iron-ajax-localstorage>
+        </paper-material>
+
+        <paper-material id="paperDisqus" elevation="1">
+            <disqus-comments id="myMarkdownDisqusId" shortname="myscotch" identifier={{identifier}} url={{identifier}} title={{title}} https=true></disqus-comments>
+        </paper-material>
+    </template>
+    <script>
+        (function () {
+            Polymer({
+                is: 'abstract-markdown-with-disqus',
+                behaviors: [PingoAbstractSectionBehavior],
+                properties: {
+                    identifier: {
+                        type: String,
+                        value: '',
+                        notify: true
+                    },
+                    title: {
+                        type: String,
+                        value: '',
+                        notify: true
+                    }
+                },
+                _routeRecordChanged: function (value) {
+                    if (value !== null) {
+                        var params = {};
+                        if (this.route_record.customData.params)
+                            params = this.route_record.customData.params;
+
+                        if (this.route_record.cacheBuster) {
+                            params.cbHash = this.route_record.cacheBuster;
+                        }
+                        this.$._mdContent.params = params;
+                        this.$._mdContent.url = this.route_record.customData.url;
+                    }
+
+                },
+                Activate: function () {
+
+                    if (this.route_record) {
+                        this.identifier = this.route_record.identifier;
+                        this.title = this.route_record.label;
+                        this.$.myMarkdownDisqusId.reset();
+                    }
+                },
+                _onActivated: function () {
+                    this.Activate();
+                },
+                ready: function () {
+
+                    console.log("abstract-markdown-with-disqus ready");
+                }
+            });
+        })();
+    </script>
+
+</dom-module>

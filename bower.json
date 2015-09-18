@@ -13,8 +13,7 @@
     "tests"
   ],
   "dependencies": {
-    "disqus-comments": "divshot/disqus-comments#~0.1.2",
-    "disqus-thread": "~0.0.1",
+  
     "expandjs": "expandjs/expandjs#~0.9.7",
     "iron-ajax": "polymerelements/iron-ajax#~1.0.4",
     "iron-pages": "polymerelements/iron-pages#~1.0.3",
@@ -25,6 +24,11 @@
     "page": "~1.6.3",
     "paper-scroll-header-panel": "polymerelements/paper-scroll-header-panel#~1.0.7",
     "paper-toast": "polymerelements/paper-toast#~1.0.0",
+    "pingo-abstract-content-loader": "ghstahl/pingo-abstract-content-loader",
+    "pingo-abstract-section-behavior": "ghstahl/pingo-abstract-section-behavior",
+    "pingo-content-md-loader-iron-ajax-localstorage": "ghstahl/pingo-content-md-loader-iron-ajax-localstorage",
+    "pingo-iron-ajax-localstorage": "ghstahl/pingo-iron-ajax-localstorage",
+    "pingo-sidebar": "ghstahl/pingo-sidebar",
     "polymer": "Polymer/polymer#1.0",
     "polymer-markdown": "paradox41/polymer-markdown#~2.0.0",
     "xp-elements": "expandjs/xp-elements#~0.9.7"

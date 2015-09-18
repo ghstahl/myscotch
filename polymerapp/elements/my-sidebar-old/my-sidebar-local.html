@@ -1,0 +1,95 @@
+<link rel="import" href="../../../bower_components/mat-divider/mat-divider.html">
+<link rel="import" href="../../../bower_components/mat-subheader/mat-subheader.html">
+
+<!--
+
+if we see a titel, we preceed it with a divider.
+if nothing, its just menu items.
+This is based on the page.js work that came in the polymer starter kit.
+
+example
+
+menu_data object:
+
+{ 
+    "title": "Products",
+    "menuItems": [
+        {
+            "label": "Plants",
+            "href": "/product/plants",
+            "icon": "home",
+            "dataRoute": "plants",
+            ...
+        },
+        {
+            "polymerElement": "abstract-markdown-with-disqus",
+            "label": "Los Angeles",
+            "href": "/product/LosAngeles",
+            "icon": "home",
+            "dataRoute": "los angeles",
+             ...
+        }
+    ]
+}
+
+-->
+
+<dom-module id="pingo-sidebar">
+    <style>
+
+    </style>
+    <template>
+        <paper-menu class="list" attr-for-selected="data-route" selected="{{route_selected}}" on-iron-select="onMenuSelect">
+
+            <template is="dom-repeat" items="{{menu_data}}">
+                <template is="dom-if" if="{{item.title}}">
+                    <mat-divider></mat-divider>
+                    <mat-subheader label="{{item.title}}"></mat-subheader>
+                </template>
+                <template is="dom-repeat" items="{{item.menuItems}}">
+                    <a data-route$="{{item.dataRoute}}" href="{{item.href}}">
+                        <iron-icon icon="{{item.icon}}"></iron-icon>
+                        <span>{{item.label}}</span>
+                    </a>
+                </template>
+            </template>
+        </paper-menu>
+
+    </template>
+
+    <script>
+        (function () {
+            Polymer({
+                is: 'pingo-sidebar',
+
+                properties: {
+                    route_selected: {
+                        type: String,
+                        value: null,
+                        notify: true
+                    },
+                    menu_data: {
+                        type: Object
+
+                    }
+                },
+
+                ready: function () {
+                    console.log("pingo-sidebar-local is ready");
+                },
+                onMenuSelect: function () {
+                    var drawerPanel = document.querySelector('#paperDrawerPanel');
+                    if (drawerPanel !== null) {
+
+                        if (drawerPanel.narrow !== null) {
+                            if (drawerPanel.narrow) {
+                                drawerPanel.closeDrawer();
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
+
+</dom-module>

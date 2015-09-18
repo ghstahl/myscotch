@@ -35,13 +35,13 @@
 
 
     <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link href="elements/elements.html" rel="import">
+    <link href="polymerapp/elements/elements.html" rel="import">
 
 </head>
 
 <body fullbreed unresolved>
     <template is="dom-bind" id="app">
-        <the-app></the-app>
+        <the-app cache-buster="herb"></the-app>
     </template>
     <!-- build:js scripts/app.js -->
     <script src="scripts/app.js"></script>
