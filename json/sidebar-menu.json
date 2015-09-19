@@ -116,7 +116,7 @@
                     "dataRoute": "Greetings3",
                     "section": "abstract-section",
                     "customData": {
-                        "url": "/polymerapp/elements/my-greeting/my-greeting3.html"
+                        "url": "https://raw.githubusercontent.com/ghstahl/polybeegae/master/polymerapp/elements/my-greeting/my-greeting3.html"
                     }
                 },
                 {
