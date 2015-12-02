@@ -22,10 +22,11 @@
      *
      * @function AbstractError
      * @param {string} key The key to be used in the error message.
+     * @param {number} [code] Additional status code.
      * @constructor
      */
-    module.exports = function AbstractError(key) {
-        CustomError.call(this, 'AbstractError', key, 'is abstract and should be implemented first');
+    module.exports = function AbstractError(key, code) {
+        CustomError.call(this, 'AbstractError', key + ' is abstract and should be implemented first', code);
     };
 
 }());

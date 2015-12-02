@@ -34,13 +34,13 @@ to explicitly write it every time.
 @behavior xp-shared-behavior /bower_components/xp-shared-behavior/xp-shared-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.11
 -->
 
-<link rel="import" href="/bower_components/polymer/polymer.html">
-<link rel="import" href="/bower_components/expandjs/expandjs.html">
-<link rel="import" href="/bower_components/xp-shared-behavior/xp-shared-behavior.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../expandjs/expandjs.html">
+<link rel="import" href="../xp-shared-behavior/xp-shared-behavior.html">
 
 <script>
     Polymer({
@@ -115,12 +115,12 @@ to explicitly write it every time.
 
         // OBSERVER
         _themeChanged: function (post) {
-            this.share('theme', post);
+            this.share('material.theme', post);
         },
 
         // OBSERVER
         _timeoutToastChanged: function (post) {
-            this.share('timeoutToast', post);
+            this.share('material.toast.timeout', post);
         }
     });
 </script>

@@ -1,7 +1,7 @@
 {
   "name": "xp-observer",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-observer.html",
   "description": "This class is used to provide object observing functionalities",
   "homepage": "http://expandjs.com/classes/xp-observer",
@@ -21,15 +21,15 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9"
+    "expandjs": "ExpandJS/expandjs#0.9.11"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "7f7fd4fad9f1d6911d256e23da1e53cfe6c640b7"
+    "tag": "v0.9.11",
+    "commit": "d115938747c1b7f34965941fcd226cd5f8525fba"
   },
   "_source": "git://github.com/ExpandJS/xp-observer.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/xp-observer"
 }

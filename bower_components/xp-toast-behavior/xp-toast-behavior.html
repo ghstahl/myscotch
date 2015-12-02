@@ -20,9 +20,9 @@ This behavior is used to add toast capabilities on the context element.
 @behavior xp-shared-behavior /bower_components/xp-shared-behavior/xp-shared-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-overlay-behavior ExpandJS/xp-overlay-behavior#0.9.9
-@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-overlay-behavior ExpandJS/xp-overlay-behavior#0.9.11
+@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -34,10 +34,10 @@ This behavior is used to add toast capabilities on the context element.
 <script>
     Polymer.XPToastBehaviorImp = {
 
-        // OBSERVERS
-        observers: [
-            '_timeoutChanged(shared.timeoutToast)'
-        ],
+        // LISTENERS
+        listeners: {
+            'shared-changed': '_sharedHandler'
+        },
 
         /*********************************************************************/
 
@@ -178,16 +178,16 @@ This behavior is used to add toast capabilities on the context element.
 
         /*********************************************************************/
 
-        // OBSERVER
-        _timeoutChanged: function (value) {
-            this._jobHide = XP.debounce(this.hide.bind(this), value || 3000);
+        // LISTENER
+        created: function () {
+            this._jobHide = XP.debounce(this.hide.bind(this), 3000);
         },
 
         /*********************************************************************/
 
-        // LISTENER
-        created: function () {
-            this._jobHide = XP.debounce(this.hide.bind(this), 3000);
+        // HANDLER
+        _sharedHandler: function () {
+            this._jobHide = XP.debounce(this.hide.bind(this), this.get('shared.material.toast.timeout') || 3000);
         }
     };
 

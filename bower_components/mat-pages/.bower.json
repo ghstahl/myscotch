@@ -1,7 +1,7 @@
 {
   "name": "mat-pages",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-pages.html",
   "description": "A custom element used to manage a series of Material Design pages",
   "homepage": "http://expandjs.com/elements/mat-pages",
@@ -22,26 +22,25 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "mat-paper": "ExpandJS/mat-paper#0.9.9",
-    "xp-adapter-behavior": "ExpandJS/xp-adapter-behavior#0.9.9",
-    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.9",
-    "xp-pages": "ExpandJS/xp-pages#0.9.9",
-    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "mat-paper": "ExpandJS/mat-paper#0.9.11",
+    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.11",
+    "xp-pages": "ExpandJS/xp-pages#0.9.11",
+    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   },
   "devDependencies": {
-    "mat-demo": "ExpandJS/mat-demo#0.9.9",
-    "mat-tabs": "ExpandJS/mat-tabs#0.9.9"
+    "mat-demo": "ExpandJS/mat-demo#0.9.11",
+    "mat-tabs": "ExpandJS/mat-tabs#0.9.11"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "162f5fcea3b75dcab955b95bf7f17ee1e2b02403"
+    "tag": "v0.9.11",
+    "commit": "6dee379ea8da81d07efe0f434e60d2493e3146c8"
   },
   "_source": "git://github.com/ExpandJS/mat-pages.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/mat-pages"
 }

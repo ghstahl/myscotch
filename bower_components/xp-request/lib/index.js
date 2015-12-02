@@ -13,6 +13,8 @@
     // Vars
     var http      = require('http'),
         https     = require('https'),
+        adapters  = {'https': https, 'https:': https},
+        location  = global.location || {},
         XP        = global.XP || require('expandjs'),
         XPEmitter = global.XPEmitter || require('xp-emitter');
 
@@ -25,7 +27,7 @@
      * @description This class is used to perform XHR requests
      * @extends XPEmitter
      */
-    module.exports = new XP.Class('XPRequest', {
+    module.exports = global.XPRequest = new XP.Class('XPRequest', {
 
         // EXTENDS
         extends: XPEmitter,
@@ -44,12 +46,12 @@
          * Emitted when the entire data is received.
          *
          * @event data
-         * @param {Buffer | string} data
+         * @param {*} data
          * @param {Object} emitter
          */
 
         /**
-         * Emitted when an error is received.
+         * Emitted when the entire error is received.
          *
          * @event error
          * @param {string} error
@@ -60,7 +62,7 @@
          * Emitted when a response is received.
          *
          * @event response
-         * @param {Object} response
+         * @param {string} url
          * @param {Object} emitter
          */
 
@@ -72,56 +74,83 @@
          * @param {Object} emitter
          */
 
+        /**
+         * Emitted when the request is submitted.
+         *
+         * @event submit
+         * @param {Buffer | string} data
+         * @param {Object} emitter
+         */
+
         /*********************************************************************/
 
         /**
          * @constructs
          * @param {Object | string} options The request url or options.
-         *   @param {string} [options.contentType = "auto"] A shortcut for the "Content-Type" header.
-         *   @param {string} [options.dataType = "auto"] The type of data expected back from the server.
+         *   @param {string} [options.contentType] A shortcut for the "Content-Type" header.
+         *   @param {string} [options.dataType] The type of data expected back from the server.
+         *   @param {string} [options.encoding] The response encoding.
          *   @param {Object} [options.headers] An object containing request headers.
+         *   @param {string} [options.hostname] The request hostname, usable in alternative to url.
          *   @param {number} [options.keepAlive = 0] How often to submit TCP KeepAlive packets over sockets being kept alive.
          *   @param {string} [options.method = "GET"] A string specifying the HTTP request method.
-         *   @param {string} [options.path = ""] The request path, useful for relative requests.
-         *   @param {number} [options.port] The request port, useful for relative requests.
-         *   @param {string} [options.url = ""] The request url.
+         *   @param {string} [options.path] The request path, usable in alternative to url.
+         *   @param {number} [options.port] The request port, usable in alternative to url.
+         *   @param {number} [options.protocol = "http:"] The request protocol, usable in alternative to url.
+         *   @param {string} [options.url] The request url.
          */
         initialize: {
             promise: true,
             value: function (options, resolver) {
 
-                // Asserting
-                XP.assertArgument(XP.isObject(options) || XP.isString(options, true), 1, 'Object or string');
-
                 // Vars
-                var self     = this,
-                    location = global.location || {};
+                var self    = this,
+                    adaptee = null;
 
                 // Super
                 XPEmitter.call(self);
 
+                // Overriding
+                if (!XP.isObject(options)) { options = {url: options}; }
+                if (!XP.isFalsy(options.url)) { XP.assign(options, XP.pick(XP.parseURL(options.url), ['hostname', 'path', 'port', 'protocol'])); }
+
                 // Setting
-                self.options     = (XP.isString(options) && {}) || options;
-                self.contentType = self.options.contentType || 'auto';
-                self.dataType    = self.options.dataType || 'auto';
+                self.chunks      = [];
+                self.state       = 'idle';
+                self.options     = options;
+                self.contentType = self.options.contentType || null;
+                self.dataType    = self.options.dataType || null;
                 self.encoding    = self.options.encoding || null;
                 self.headers     = self.options.headers || {};
+                self.hostname    = self.options.hostname || location.hostname || null;
                 self.keepAlive   = self.options.keepAlive || 0;
                 self.method      = self.options.method || 'GET';
-                self.url         = self.options.url || '';
-                self.path        = self.options.path || '';
-                self.port        = self.options.port || null;
-                self.secure      = (self.parsed.protocol || location.protocol) === 'https:';
-                self.resolver    = resolver;
-                self.state       = 'idle';
-                self._chunks     = [];
+                self.path        = self.options.path || null;
+                self.port        = self.options.port || (!self.options.hostname && XP.toNumber(location.port)) || null;
+                self.protocol    = self.options.protocol || (!self.options.hostname && location.protocol) || 'http:';
+                self.url         = XP.toURL({protocol: self.protocol, hostname: self.hostname, port: self.port, pathname: self.pathname, search: self.search});
 
                 // Adapting
-                self._adapt();
+                adaptee = (adapters[self.protocol] || http).request({
+                    headers: self.headers,
+                    hostname: self.hostname,
+                    keepAlive: self.keepAlive > 0,
+                    keepAliveMsecs: self.keepAlive,
+                    method: self.method,
+                    path: self.path,
+                    port: self.port,
+                    protocol: self.protocol,
+                    withCredentials: false
+                });
 
                 // Listening
-                self._adaptee.on('error', self._handleError.bind(self));
-                self._adaptee.on('response', self._handleResponse.bind(self));
+                adaptee.on('error', self._handleError.bind(self, resolver));
+                adaptee.on('response', self._handleResponse.bind(self, resolver));
+
+                // Overriding
+                self.abort  = self.abort.bind(self, adaptee);
+                self.header = self.header.bind(self, adaptee);
+                self.submit = self.submit.bind(self, adaptee);
             }
         },
 
@@ -133,7 +162,7 @@
          * @method abort
          * @returns {Object}
          */
-        abort: function () {
+        abort: function (adaptee) {
 
             // Vars
             var self = this;
@@ -142,7 +171,7 @@
             if (self.tsAbort) { return self; }
 
             // Aborting
-            self._adaptee.abort();
+            adaptee.abort();
 
             // Setting
             self.state   = 'aborted';
@@ -152,91 +181,88 @@
         },
 
         /**
-         * Submits the request, using data for the request body.
+         * Get or set a header.
          *
-         * @method submit
-         * @param {Buffer | Object | string} [data]
-         * @returns {Object}
+         * @method header
+         * @param {string} name
+         * @param {number | string} [value]
+         * @returns {number | string}
          */
-        submit: function (data) {
+        header: function (adaptee, name, value) {
 
             // Asserting
-            XP.assertArgument(XP.isVoid(data) || XP.isObject(data) || XP.isString(data, true), 1, 'Buffer, Object or string');
+            XP.assertArgument(XP.isString(name, true), 1, 'string');
+            XP.assertArgument(XP.isVoid(value) || XP.isFalse(value) || XP.isInput(value, true), 2, 'string');
 
             // Vars
             var self = this;
 
-            // Checking
-            if (self.tsSubmit) { return self; }
-
-            // Serializing
-            if (self.method !== 'GET' && !XP.isString(data) && !Buffer.isBuffer(data)) { data = JSON.stringify(data); }
-
-            // Ending
-            self._adaptee.end(self.method !== 'GET' ? data : undefined);
+            // Getting
+            if (!XP.isDefined(value) || self.state !== 'idle') { return self.headers[name]; }
 
             // Setting
-            self.state    = 'pending';
-            self.tsSubmit = Date.now();
+            if (value) { adaptee.setHeader(name, self.headers[name] = value); return value; }
 
-            return self;
+            // Removing
+            adaptee.removeHeader(name);
+
+            // Deleting
+            delete self.headers[name];
         },
 
-        /*********************************************************************/
-
         /**
-         * Creates the adpatee
+         * Submits the request, using data for the request body.
          *
-         * @method _adapt
-         * @returns {Object}
-         * @private
+         * @method submit
+         * @param {*} [data]
+         * @param {Function} [resolver]
+         * @returns {Promise}
          */
-        _adapt: {
-            enumerable: false,
-            value: function () {
+        submit: {
+            promise: true,
+            value: function (adaptee, data, resolver) {
+
+                // Asserting
+                XP.assertArgument(XP.isVoid(resolver) || XP.isFunction(resolver), 2, 'Function');
 
                 // Vars
-                var self     = this,
-                    location = global.location || {},
-                    port     = self.secure ? 443 : 80,
-                    protocol = self.secure ? https : http;
-
-                // Adapting
-                self._adaptee = protocol.request({
-                    auth: self.parsed.auth,
-                    headers: self.headers,
-                    hostname: self.parsed.hostname || location.hostname,
-                    keepAlive: self.keepAlive > 0,
-                    keepAliveMsecs: Math.max(self.keepAlive, 0),
-                    method: self.method,
-                    path: self.path || self.parsed.path + (self.parsed.hash || ''),
-                    protocol: self.secure ? 'https:' : 'http:',
-                    port: self.port || self.parsed.port || (self.parsed.hostname && port) || location.port,
-                    withCredentials: false
-                });
-
-                return self;
-            }
-        },
-
-        /**
-         * Parses the data
-         *
-         * @method _parse
-         * @param {Buffer | string} data
-         * @returns {*}
-         * @private
-         */
-        _parse: {
-            enumerable: true,
-            value: function (data) {
                 var self = this;
-                if (self.dataType === 'json') { return JSON.parse(data); }
-                return data;
+
+                // Checking
+                if (self.tsSubmit) { return self; }
+
+                // Serializing
+                if (self.method === 'GET') { data = undefined; }
+                if (self.method !== 'GET') { data = (XP.isInput(data, true) || XP.isBuffer(data) ? data : (XP.isCollection(data) ? XP.toJSON(data) : undefined)); }
+
+                // Listening
+                self.resolved(function (data) { resolver(null, data); });
+                self.rejected(function (error) { resolver(error, null); });
+
+                // Ending
+                adaptee.end(data);
+
+                // Setting
+                self.state    = 'pending';
+                self.tsSubmit = Date.now();
+
+                // Emitting
+                self.emit('submit', data, self);
             }
         },
 
         /*********************************************************************/
+
+        /**
+         * TODO DOC
+         *
+         * @property chunks
+         * @type Array
+         */
+        chunks: {
+            set: function (val) { return this.chunks || val; },
+            validate: function (val) { return !XP.isArray(val) && 'Array'; }
+        },
 
         /**
          * TODO DOC
@@ -245,19 +271,19 @@
          * @type string
          */
         contentType: {
-            set: function (val) { return this.contentType || val; },
-            validate: function (val) { return XP.isString(val, true); }
+            set: function (val) { return XP.isDefined(this.contentType) ? this.contentType : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
         },
 
         /**
          * TODO DOC
          *
          * @property data
-         * @type Buffer | string
+         * @type *
          * @readonly
          */
         data: {
-            validate: function (val) { return XP.isString(val) || Buffer.isBuffer(val); }
+            set: function (val) { return XP.isDefined(this.data) ? this.data : val; }
         },
 
         /**
@@ -267,8 +293,8 @@
          * @type string
          */
         dataType: {
-            set: function (val) { return this.dataType || val; },
-            validate: function (val) { return val === 'auto' || XP.includes(this.dataTypes, val); }
+            set: function (val) { return XP.isDefined(this.dataType) ? this.dataType : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.includes(this.dataTypes, val) && 'string'; }
         },
 
         /**
@@ -293,19 +319,42 @@
          */
         encoding: {
             set: function (val) { return XP.isDefined(this.encoding) ? this.encoding : val; },
-            validate: function (val) { return XP.isVoid(val) || XP.isString(val, true); }
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
         },
 
         /**
          * TODO DOC
          *
-         * @property header
+         * @property error
+         * @type string
+         * @readonly
+         */
+        error: {
+            set: function (val) { return XP.isDefined(this.error) ? this.error : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val) && 'string'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property headers
          * @type Object
          */
         headers: {
             set: function (val) { return this.headers || (XP.isObject(val) && XP.cloneDeep(val)); },
-            then: function () { if (this.contentType !== 'auto') { this.headers['Content-Type'] = this.contentType; } },
-            validate: function (val) { return XP.isObject(val); }
+            then: function () { if (this.contentType) { this.headers['content-type'] = this.contentType; } },
+            validate: function (val) { return !XP.isObject(val) && 'Object'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property hostname
+         * @type string
+         */
+        hostname: {
+            set: function (val) { return this.hostname || val; },
+            validate: function (val) { return !XP.isString(val, true) && 'string'; }
         },
 
         /**
@@ -316,8 +365,8 @@
          * @default 0
          */
         keepAlive: {
-            set: function (val) { return this.keepAlive >= 0 ? this.keepAlive : val; },
-            validate: function (val) { return XP.isInt(val, true); }
+            set: function (val) { return XP.isDefined(this.keepAlive) ? this.keepAlive : val; },
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -329,18 +378,7 @@
          */
         method: {
             set: function (val) { return this.method || XP.upperCase(val); },
-            validate: function (val) { return XP.isString(val, true); }
-        },
-
-        /**
-         * TODO DOC
-         *
-         * @property parsed
-         * @type Object
-         */
-        parsed: {
-            set: function (val) { return this.parsed || val; },
-            validate: function (val) { return XP.isObject(val); }
+            validate: function (val) { return !XP.isString(val, true) && 'string'; }
         },
 
         /**
@@ -350,8 +388,20 @@
          * @type string
          */
         path: {
-            set: function (val) { return XP.isDefined(this.path) ? this.path : (!this.url && val) || ''; },
-            validate: function (val) { return XP.isString(val); }
+            set: function (val) { return XP.isDefined(this.path) ? this.path : val; },
+            then: function (post) { var parts = XP.split(post, '?', true); this.pathname = parts[0] || null; this.search = parts[1] ? '?' + parts[1] : null; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property pathname
+         * @type string
+         */
+        pathname: {
+            set: function (val) { return XP.isDefined(this.path) ? this.path : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
         },
 
         /**
@@ -361,30 +411,30 @@
          * @type number
          */
         port: {
-            set: function (val) { return XP.isDefined(this.port) ? this.port : (!this.url && val) || null; },
-            validate: function (val) { return XP.isVoid(val) || XP.isFinite(val, true); }
-        },
-
-        /**
-         * TODO DOC
-         * @property response
-         * @type Object
-         * @readonly
-         */
-        response: {
-            set: function (val) { return this.response || val; },
-            validate: function (val) { return XP.isObject(val); }
+            set: function (val) { return XP.isDefined(this.port) ? this.port : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isInt(val, true) && 'number'; }
         },
 
         /**
          * TODO DOC
          *
-         * @property secure
-         * @type boolean
-         * @readonly
+         * @property protocol
+         * @type string
          */
-        secure: {
-            set: function (val) { return XP.isDefined(this.secure) ? this.secure : !!val; }
+        protocol: {
+            set: function (val) { return this.protocol || val; },
+            validate: function (val) { return !XP.isString(val, true) && 'string'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property pathname
+         * @type string
+         */
+        search: {
+            set: function (val) { return XP.isDefined(this.search) ? this.search : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
         },
 
         /**
@@ -396,7 +446,7 @@
          */
         state: {
             then: function (post) { this.emit('state', post, this); },
-            validate: function (val) { return XP.includes(this.states, val); }
+            validate: function (val) { return !XP.includes(this.states, val) && 'string'; }
         },
 
         /**
@@ -404,13 +454,37 @@
          *
          * @property states
          * @type Array
-         * @default ["aborted", "failed", "idle", "pending", "received", "receiving"]
+         * @default ["aborted", "idle", "pending", "received", "receiving"]
          * @readonly
          */
         states: {
             frozen: true,
             writable: false,
-            value: ['aborted', 'failed', 'idle', 'pending', 'received', 'receiving']
+            value: ['aborted', 'idle', 'pending', 'received', 'receiving']
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property statusCode
+         * @type number
+         * @readonly
+         */
+        statusCode: {
+            set: function (val) { return this.statusCode || val; },
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property statusMessage
+         * @type string
+         * @readonly
+         */
+        statusMessage: {
+            set: function (val) { return this.statusMessage || val; },
+            validate: function (val) { return !XP.isString(val) && 'string'; }
         },
 
         /**
@@ -422,7 +496,7 @@
          */
         tsAbort: {
             set: function (val) { return this.tsAbort || val; },
-            validate: function (val) { return XP.isFinite(val, true); }
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -434,7 +508,7 @@
          */
         tsData: {
             set: function (val) { return this.tsData || val; },
-            validate: function (val) { return XP.isFinite(val, true); }
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -446,7 +520,7 @@
          */
         tsResponse: {
             set: function (val) { return this.tsResponse || val; },
-            validate: function (val) { return XP.isFinite(val, true); }
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -458,7 +532,7 @@
          */
         tsSubmit: {
             set: function (val) { return this.tsSubmit || val; },
-            validate: function (val) { return XP.isFinite(val, true); }
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -468,37 +542,8 @@
          * @type string
          */
         url: {
-            set: function (val) { return XP.isDefined(this.url) ? this.url : val; },
-            then: function (post) { this.parsed = XP.parseURL(post) || {}; },
-            validate: function (val) { return XP.isString(val); }
-        },
-
-        /*********************************************************************/
-
-        /**
-         * TODO DOC
-         *
-         * @property _adaptee
-         * @type Object
-         * @private
-         */
-        _adaptee: {
-            enumerable: false,
-            set: function (val) { return this.request || val; },
-            validate: function (val) { return XP.isObject(val); }
-        },
-
-        /**
-         * TODO DOC
-         *
-         * @property _chunks
-         * @type Array
-         * @readonly
-         * @private
-         */
-        _chunks: {
-            set: function (val) { return this._chunks || val; },
-            validate: function (val) { return XP.isArray(val); }
+            set: function (val) { return this.url || val; },
+            validate: function (val) { return !XP.isString(val, true) && 'string'; }
         },
 
         /*********************************************************************/
@@ -510,78 +555,77 @@
             var self = this;
 
             // Setting
-            self._chunks.push(chunk);
+            self.chunks.push(chunk);
 
             // Emitting
             self.emit('chunk', chunk, self);
         },
 
         // HANDLER
-        _handleEnd: function () {
+        _handleEnd: function (resolver) {
 
             // Vars
-            var self = this;
+            var self     = this,
+                failed   = self.statusCode >= 400,
+                data     = failed ? null : XP.join(self.chunks),
+                dataType = failed ? 'error' : self.dataType,
+                error    = failed ? XP.join(self.chunks).toString() || self.statusMessage : null,
+                state    = failed ? 'failed' : 'received';
 
-            // Trying
-            try {
+            // Parsing
+            if (dataType === 'json') { data = XP.parseJSON(data.toString()); }
 
-                // Setting
-                self.data   = self._parse(Buffer.isBuffer(self._chunks[0]) ? Buffer.concat(self._chunks) : self._chunks.join(''));
-                self.state  = 'received';
-                self.tsData = Date.now();
-
-            } catch (exc) {
-
-                // Handling
-                return self._handleError(exc.message);
-            }
+            // Setting
+            self.data   = data;
+            self.error  = error;
+            self.state  = state;
+            self.tsData = Date.now();
 
             // Resolving
-            self.resolver(null, self.data);
+            resolver(self.error, self.data);
 
             // Emitting
-            self.emit('data', self.data, self);
+            self.emit(failed ? 'error' : 'data', failed ? self.error : self.data, self);
         },
 
         // HANDLER
-        _handleError: function (error) {
+        _handleError: function (resolver, error) {
 
             // Vars
             var self = this;
 
             // Setting
-            self.state      = 'failed';
-            self.tsResponse = Date.now();
-            self.tsData     = self.tsResponse;
+            self.error = error.message || 'Unknown';
+            self.state = 'failed';
 
-            // Rejecting
-            self.resolver(error);
+            // Resolving
+            resolver(self.error, null);
 
             // Emitting
-            self.emit('response', null, self);
-            self.emit('error', error, self);
+            self.emit('error', self.error, self);
         },
 
         // HANDLER
-        _handleResponse: function (response) {
+        _handleResponse: function (resolver, response) {
 
             // Vars
             var self = this;
 
-            // Setting
-            self.response   = response;
-            self.state      = 'receiving';
-            self.tsResponse = Date.now();
-
-            // Setting
+            // Encoding
             if (self.encoding) { response.setEncoding(self.encoding); }
+
+            // Setting
+            self.state         = 'receiving';
+            self.statusCode    = response.statusCode;
+            self.statusMessage = response.statusMessage || http.STATUS_CODES[self.statusCode] || 'Unknown';
+            self.tsResponse    = Date.now();
 
             // Listening
             response.on('data', self._handleData.bind(self));
-            response.on('end', self._handleEnd.bind(self));
+            response.on('end', self._handleEnd.bind(self, resolver));
 
             // Emitting
-            self.emit('response', response, self);
+            self.emit('response', self.url, self);
         }
     });
 

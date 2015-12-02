@@ -1,7 +1,7 @@
 {
   "name": "xp-list",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-list.html",
   "description": "A custom element used to create a list of items",
   "homepage": "http://expandjs.com/elements/xp-list",
@@ -20,20 +20,20 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "xp-collapse": "ExpandJS/xp-collapse#0.9.9",
-    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.9",
-    "xp-multi-select-behavior": "ExpandJS/xp-multi-select-behavior#0.9.9",
-    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "xp-collapse": "ExpandJS/xp-collapse#0.9.11",
+    "xp-master-behavior": "ExpandJS/xp-master-behavior#0.9.11",
+    "xp-multi-select-behavior": "ExpandJS/xp-multi-select-behavior#0.9.11",
+    "xp-slave-behavior": "ExpandJS/xp-slave-behavior#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "7b0a4fa569910d6432efa1ec4b0b050b18eeb67c"
+    "tag": "v0.9.11",
+    "commit": "10562c89d4e701c7411aa3b2e3538c8abd7f04a9"
   },
   "_source": "git://github.com/ExpandJS/xp-list.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/xp-list"
 }

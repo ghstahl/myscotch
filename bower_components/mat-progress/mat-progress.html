@@ -55,11 +55,11 @@ All the styling API is done using [Material Design palette](http://www.google.co
 @behavior mat-palette /bower_components/mat-palette/mat-palette.html
 
 @dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-ripple ExpandJS/mat-ripple#0.9.9
+@dependency mat-ripple ExpandJS/mat-ripple#0.9.11
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.9
+@devDependency mat-demo ExpandJS/mat-demo#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -374,13 +374,15 @@ All the styling API is done using [Material Design palette](http://www.google.co
                  *
                  * @attribute buffer-ratio
                  * @type number
+                 * @default 0
                  * @notifies
                  * @readonly
                  */
                 bufferRatio: {
                     computed: '_computeRatio(bufferValue, min, max)',
                     notify: true,
-                    type: Number
+                    type: Number,
+                    value: 0
                 },
 
                 /**

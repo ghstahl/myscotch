@@ -16,18 +16,15 @@ This element is used to parse and display a documentation page.
 @repository https://github.com/ExpandJS/xp-doc-viewer
 
 @adapts xp-doc-parser /bower_components/xp-doc-parser/xp-doc-parser.html
-@behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.9
-@dependency xp-doc-page ExpandJS/xp-doc-page#0.9.9
-@dependency xp-doc-parser ExpandJS/xp-doc-parser#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-doc-page ExpandJS/xp-doc-page#0.9.11
+@dependency xp-doc-parser ExpandJS/xp-doc-parser#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
-<link rel="import" href="../xp-adapter-behavior/xp-adapter-behavior.html">
 <link rel="import" href="../xp-doc-page/xp-doc-page.html">
 <link rel="import" href="../xp-doc-parser/xp-doc-parser.html">
 
@@ -53,15 +50,25 @@ This element is used to parse and display a documentation page.
             // ELEMENT
             is: 'xp-doc-viewer',
 
-            // BEHAVIORS
-            behaviors: [
-                Polymer.XPAdapterBehavior
-            ],
-
             /*********************************************************************/
 
             // PROPERTIES
             properties: {
+
+                /**
+                 * The adapted element.
+                 *
+                 * @attribute adaptee
+                 * @type Element
+                 * @notifies
+                 * @readonly
+                 */
+                adaptee: {
+                    notify: true,
+                    readOnly: true,
+                    type: Object,
+                    value: null
+                },
 
                 /**
                  * The documentation's data.
@@ -97,6 +104,7 @@ This element is used to parse and display a documentation page.
                  * @type string
                  */
                 url: {
+                    reflectToAttribute: true,
                     type: String,
                     value: null
                 }
@@ -106,7 +114,7 @@ This element is used to parse and display a documentation page.
 
             // LISTENER
             ready: function () {
-                this._adapt(this.$.xpDocViewerPage);
+                this._setAdaptee(this.$.xpDocViewerPage);
             }
         });
     </script>

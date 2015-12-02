@@ -22,7 +22,7 @@
      * @class XPEmitter
      * @description This class is used to provide event emitting functionalities
      */
-    module.exports = new XP.Class('XPEmitter', {
+    module.exports = global.XPEmitter = new XP.Class('XPEmitter', {
 
         // EXTENDS
         extends: eventemitter3

@@ -1,7 +1,7 @@
 {
   "name": "mat-header-panel",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-header-panel.html",
   "description": "A custom element used to display a Material Design container with an app bar",
   "homepage": "http://expandjs.com/elements/mat-header-panel",
@@ -22,30 +22,30 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "mat-divider": "ExpandJS/mat-divider#0.9.9",
-    "mat-icon-button": "ExpandJS/mat-icon-button#0.9.9",
-    "mat-icons": "ExpandJS/mat-icons#0.9.9",
-    "mat-paper": "ExpandJS/mat-paper#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "mat-divider": "ExpandJS/mat-divider#0.9.11",
+    "mat-icon-button": "ExpandJS/mat-icon-button#0.9.11",
+    "mat-icons": "ExpandJS/mat-icons#0.9.11",
+    "mat-paper": "ExpandJS/mat-paper#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   },
   "devDependencies": {
-    "mat-content": "ExpandJS/mat-content#0.9.9",
-    "mat-demo": "ExpandJS/mat-demo#0.9.9",
-    "mat-icon-button": "ExpandJS/mat-icon-button#0.9.9",
-    "mat-icons": "ExpandJS/mat-icons#0.9.9",
-    "mat-menu": "ExpandJS/mat-menu#0.9.9",
-    "mat-option": "ExpandJS/mat-option#0.9.9",
-    "mat-toolbar": "ExpandJS/mat-toolbar#0.9.9"
+    "mat-content": "ExpandJS/mat-content#0.9.11",
+    "mat-demo": "ExpandJS/mat-demo#0.9.11",
+    "mat-icon-button": "ExpandJS/mat-icon-button#0.9.11",
+    "mat-icons": "ExpandJS/mat-icons#0.9.11",
+    "mat-menu": "ExpandJS/mat-menu#0.9.11",
+    "mat-option": "ExpandJS/mat-option#0.9.11",
+    "mat-toolbar": "ExpandJS/mat-toolbar#0.9.11"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "f33af0570ab953e55b2a824fe04c6c7447a8ff3f"
+    "tag": "v0.9.11",
+    "commit": "8aff1a19ca930e249b603c828865400ce8f959cf"
   },
   "_source": "git://github.com/ExpandJS/mat-header-panel.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/mat-header-panel"
 }

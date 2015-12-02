@@ -16,18 +16,15 @@ This element is used to perform XHR requests.
 @homepage http://expandjs.com/elements/xp-request
 @repository https://github.com/ExpandJS/xp-request
 
-@behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
-
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.9
-@dependency xp-emitter ExpandJS/xp-emitter#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-emitter ExpandJS/xp-emitter#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
 <link rel="import" href="../xp-emitter/xp-emitter.html">
-<link rel="import" href="../xp-adapter-behavior/xp-adapter-behavior.html">
+
 <script src="dist/xp-request.js"></script>
 
 <script>
@@ -35,11 +32,6 @@ This element is used to perform XHR requests.
 
         // ELEMENT
         is: 'xp-request',
-
-        // BEHAVIORS
-        behaviors: [
-            Polymer.XPAdapterBehavior
-        ],
 
         /*********************************************************************/
 
@@ -57,12 +49,12 @@ This element is used to perform XHR requests.
          *
          * @event xp-request-data
          * @param {Element} firer
-         * @param {Buffer | string} data
+         * @param {*} data
          * @bubbles
          */
 
         /**
-         * Fired when an error is received.
+         * Fired when the entire error is received.
          *
          * @event xp-request-error
          * @param {Element} firer
@@ -75,7 +67,7 @@ This element is used to perform XHR requests.
          *
          * @event xp-request-response
          * @param {Element} firer
-         * @param {Object} response
+         * @param {string} url
          * @bubbles
          */
 
@@ -93,7 +85,7 @@ This element is used to perform XHR requests.
          *
          * @event xp-request-submit
          * @param {Element} firer
-         * @param {Buffer | string} data
+         * @param {*} data
          * @bubbles
          * @cancelable
          */
@@ -118,98 +110,109 @@ This element is used to perform XHR requests.
         },
 
         /**
-         * Submits the request, using data for the query string or the request body.
+         * Get or set a header.
          *
-         * @method submit
-         * @param {Buffer | Object | string} [data]
-         * @returns {Element}
+         * @method header
+         * @param {string} name
+         * @param {number | string} [value]
+         * @returns {number | string}
          */
-        submit: function (data) {
+        header: function (name, value) {
+
+            // Asserting
+            XP.assertArgument(XP.isString(name, true), 1, 'string');
+            XP.assertArgument(XP.isVoid(value) || XP.isFalse(value) || XP.isInput(value, true), 2, 'string');
 
             // Vars
             var self = this;
 
-            // Adapting
-            if (!self._adapt(data)) { return self; }
+            // Getting
+            if (!XP.isDefined(value)) { return self.headers[name]; }
 
-            // Firing
-            if (self.fire('xp-request-submit', {firer: self, data: data}, {cancelable: true}).defaultPrevented) { return self; }
+            // Setting
+            if (value) { return self.headers[name] = value; }
 
-            // Submitting
-            self.adaptee.submit(data);
+            // Deleting
+            delete self.headers[name];
+        },
+
+        /**
+         * Resets the request.
+         *
+         * @method reset
+         * @returns {Element}
+         */
+        reset: function () {
+
+            // Vars
+            var self = this;
+
+            // Setting
+            self._setCurrent(null);
 
             return self;
+        },
+
+        /**
+         * Submits the request, using data for the query string or the request body.
+         *
+         * @method submit
+         * @param {*} [data]
+         * @param {Function} [callback]
+         * @returns {Promise}
+         */
+        submit: function (data, callback) {
+
+            // Preparing
+            if (XP.isFunction(data)) { callback = data; data = null; }
+
+            // Vars
+            var self = this;
+
+            // Checking
+            if (!self.adaptable) { return self._setAdaptee(null); }
+
+            // Adapting
+            self._setAdaptee(new XPRequest({
+                contentType: self.contentType,
+                dataType: self.dataType,
+                encoding: self.encoding,
+                headers: self.headers,
+                hostname: self.hostname,
+                keepAlive: self.keepAlive,
+                method: self.method,
+                path: self.path,
+                port: self.port,
+                protocol: self.protocol,
+                url: self.url
+            }));
+
+            // Listening
+            self.adaptee.on('chunk', self._handleChunk);
+            self.adaptee.on('data', self._handleData);
+            self.adaptee.on('error', self._handleError);
+            self.adaptee.on('response', self._handleResponse);
+            self.adaptee.on('state', self._handleState);
+
+            // Firing
+            if (self.fire('xp-request-submit', {firer: self, data: data}, {cancelable: true}).defaultPrevented) { return null; }
+
+            // Submitting
+            return self.adaptee.submit(data, callback);
         },
 
         /*********************************************************************/
 
         /**
-         * Set the adaptee.
-         *
-         * @method _adapt
-         * @param {Buffer | Object | string} [data]
-         * @returns {Element}
-         * @private
-         */
-        _adapt: function (data) {
-
-            // Asserting
-            XP.assertArgument(XP.isVoid(data) || XP.isObject(data) || XP.isString(data), 1, 'Buffer, Object or string');
-
-            // Vars
-            var self      = this,
-                adaptable = self.path || self.port || self.url,
-                query     = adaptable && XP.upperCase(self.method) === 'GET' && (XP.isString(data) ? data : XP.toQueryString(data));
-
-            // Adapting
-            self._setAdaptee(adaptable ? new XPRequest({
-                contentType: self.contentType,
-                dataType: self.dataType,
-                encoding: self.encoding,
-                headers: self.headers,
-                keepAlive: self.keepAlive,
-                method: self.method,
-                path: self.path + (query ? '?' + query : ''),
-                port: self.port,
-                url: self.url + (query ? '?' + query : '')
-            }) : null);
-
-            // Listening
-            if (self.adaptee) {
-                self.adaptee.on('chunk', self._handleChunkBound);
-                self.adaptee.on('data', self._handleDataBound);
-                self.adaptee.on('error', self._handleErrorBound);
-                self.adaptee.on('response', self._handleResponseBound);
-                self.adaptee.on('state', self._handleStateBound);
-            }
-
-            return self.adaptee;
-        },
-
-        /**
-         * Checks if `adaptee` is expired.
+         * Checks if `request` is expired.
          *
          * @method _isExpired
-         * @param {Object} adaptee
+         * @param {Object} request
          * @returns {boolean}
          * @private
          */
-        _isExpired: function (adaptee) {
-            XP.assertArgument(XP.isObject(adaptee), 1, 'Object');
-            return this.responded ? adaptee.tsSubmit < this.responded.tsSubmit : false;
-        },
-
-        /**
-         * Checks if `adaptee` is the current adaptee.
-         *
-         * @method _isCurrent
-         * @param {Object} adaptee
-         * @returns {boolean}
-         * @private
-         */
-        _isCurrent: function (adaptee) {
-            XP.assertArgument(XP.isObject(adaptee), 1, 'Object');
-            return adaptee === this.adaptee;
+        _isExpired: function (request) {
+            return !!this.current && request.tsSubmit < this.current.tsSubmit;
         },
 
         /**
@@ -224,15 +227,11 @@ This element is used to perform XHR requests.
             // Vars
             var self = this;
 
-            // Checking
-            if (!self.auto) { return self; }
-
-            // Setting
-            self._setData(null);
-            self._setError(null);
+            // Resetting
+            self.reset();
 
             // Submitting
-            self._jobSubmit();
+            if (self.auto) { self._jobSubmit(); }
 
             return self;
         },
@@ -241,11 +240,43 @@ This element is used to perform XHR requests.
 
         // OBSERVERS
         observers: [
-            '_refresh(contentType, dataType, headers, method, path, port, url)'
+            '_refresh(contentType, dataType, headers.*, hostname, method, path, port, protocol, url)'
         ],
 
         // PROPERTIES
         properties: {
+
+            /**
+             * If set to true, the request can be adapted.
+             *
+             * @attribute adaptable
+             * @type boolean
+             * @default false
+             * @notifies
+             * @readonly
+             */
+            adaptable: {
+                computed: '_computeAdaptable(hostname, path, port, url)',
+                notify: true,
+                reflectToAttribute: true,
+                type: Boolean,
+                value: false
+            },
+
+            /**
+             * The adapted object.
+             *
+             * @attribute adaptee
+             * @type Object
+             * @notifies
+             * @readonly
+             */
+            adaptee: {
+                notify: true,
+                readOnly: true,
+                type: Object,
+                value: null
+            },
 
             /**
              * If set to true, the request is automatically sent.
@@ -261,6 +292,21 @@ This element is used to perform XHR requests.
             },
 
             /**
+             * The request received chunks.
+             *
+             * @attribute chunks
+             * @type Array
+             * @notifies
+             * @readonly
+             */
+            chunks: {
+                notify: true,
+                readOnly: true,
+                type: Array,
+                value: function () { return []; }
+            },
+
+            /**
              * A shortcut for the "Content-Type" header.
              *
              * @attribute content-type
@@ -273,10 +319,26 @@ This element is used to perform XHR requests.
             },
 
             /**
+             * The current request.
+             *
+             * @attribute current
+             * @type Object
+             * @notifies
+             * @readonly
+             */
+            current: {
+                notify: true,
+                observer: '_currentChanged',
+                readOnly: true,
+                type: Object,
+                value: null
+            },
+
+            /**
              * The request received data.
              *
              * @attribute data
-             * @type Buffer | string
+             * @type *
              * @notifies
              * @readonly
              */
@@ -316,6 +378,7 @@ This element is used to perform XHR requests.
              *
              * @attribute empty-data
              * @type boolean
+             * @default true
              * @notifies
              * @readonly
              */
@@ -323,7 +386,8 @@ This element is used to perform XHR requests.
                 computed: '_computeEmptyData(data)',
                 notify: true,
                 reflectToAttribute: true,
-                type: Boolean
+                type: Boolean,
+                value: true
             },
 
             /**
@@ -359,10 +423,24 @@ This element is used to perform XHR requests.
              *
              * @attribute headers
              * @type Object
+             * @notifies
              */
             headers: {
+                notify: true,
                 type: Object,
                 value: function () { return {}; }
+            },
+
+            /**
+             * The request hostname, useful for relative requests.
+             *
+             * @attribute hostname
+             * @type string
+             */
+            hostname: {
+                reflectToAttribute: true,
+                type: String,
+                value: null
             },
 
             /**
@@ -416,32 +494,14 @@ This element is used to perform XHR requests.
             },
 
             /**
-             * The responded adaptee.
+             * The request protocol, useful for relative requests.
              *
-             * @attribute responded
-             * @type Object
-             * @notifies
-             * @readonly
+             * @attribute protocol
+             * @type string
              */
-            responded: {
-                notify: true,
-                readOnly: true,
-                type: Object,
-                value: null
-            },
-
-            /**
-             * The request received response.
-             *
-             * @attribute response
-             * @type Object
-             * @notifies
-             * @readonly
-             */
-            response: {
-                notify: true,
-                readOnly: true,
-                type: Object,
+            protocol: {
+                reflectToAttribute: true,
+                type: String,
                 value: null
             },
 
@@ -463,18 +523,56 @@ This element is used to perform XHR requests.
             },
 
             /**
+             * The request status code.
+             *
+             * @attribute status-code
+             * @type number
+             * @notifies
+             * @readonly
+             */
+            statusCode: {
+                notify: true,
+                readOnly: true,
+                reflectToAttribute: true,
+                type: Number,
+                value: null
+            },
+
+            /**
+             * The request status code.
+             *
+             * @attribute status-message
+             * @type string
+             * @notifies
+             * @readonly
+             */
+            statusMessage: {
+                notify: true,
+                readOnly: true,
+                reflectToAttribute: true,
+                type: String,
+                value: null
+            },
+
+            /**
              * The request url.
              *
              * @attribute url
              * @type string
              */
             url: {
+                reflectToAttribute: true,
                 type: String,
                 value: null
             }
         },
 
         /*********************************************************************/
+
+        // COMPUTER
+        _computeAdaptable: function (hostname, path, port, url) {
+            return !!hostname || !!path || !!port || !!url;
+        },
 
         // COMPUTER
         _computeEmptyData: function (data) {
@@ -484,8 +582,27 @@ This element is used to perform XHR requests.
         /*********************************************************************/
 
         // OBSERVER
+        _currentChanged: function (post) {
+
+            // Vars
+            var self = this;
+
+            // Setting
+            self._setChunks([]);
+            self._setData(null);
+            self._setError((post && post.error) || null);
+            self._setStatusCode((post && post.statusCode) || null);
+            self._setStatusMessage((post && post.statusMessage) || null);
+        },
+
+        // OBSERVER
         _debounceChanged: function (post) {
-            this._jobSubmit = XP.debounce(this.submit.bind(this), post || 0);
+
+            // Vars
+            var self = this;
+
+            // Debouncing
+            self._jobSubmit = XP.debounce(self.submit.bind(self), post || 0);
         },
 
         /*********************************************************************/
@@ -497,60 +614,58 @@ This element is used to perform XHR requests.
             var self = this;
 
             // Binding
-            self._handleChunkBound    = self._handleChunk.bind(self);
-            self._handleDataBound     = self._handleData.bind(self);
-            self._handleErrorBound    = self._handleError.bind(self);
-            self._handleResponseBound = self._handleResponse.bind(self);
-            self._handleStateBound    = self._handleState.bind(self);
+            self._handleChunk    = self._handleChunk.bind(self);
+            self._handleData     = self._handleData.bind(self);
+            self._handleError    = self._handleError.bind(self);
+            self._handleResponse = self._handleResponse.bind(self);
+            self._handleState    = self._handleState.bind(self);
         },
 
         /*********************************************************************/
 
         // HANDLER
-        _handleChunk: function (chunk, adaptee) {
+        _handleChunk: function (chunk, request) {
 
             // Vars
             var self = this;
 
             // Checking
-            if (!self._isCurrent(adaptee)) { return; }
+            if (request !== self.current) { return; }
 
-            // Setting
-            self._setData(null);
-            self._setError(null);
+            // Pushing
+            self.push('chunks', chunk);
 
             // Firing
             self.fire('xp-request-chunk', {firer: self, chunk: chunk});
         },
 
         // HANDLER
-        _handleData: function (data, adaptee) {
+        _handleData: function (data, request) {
 
             // Vars
             var self = this;
 
             // Checking
-            if (self._isExpired(adaptee)) { return; }
+            if (request !== self.current) { return; }
 
             // Setting
             self._setData(data);
-            self._setError(null);
 
             // Firing
             self.fire('xp-request-data', {firer: self, data: data});
         },
 
         // HANDLER
-        _handleError: function (error, adaptee) {
+        _handleError: function (error, request) {
 
             // Vars
             var self = this;
 
             // Checking
-            if (self._isExpired(adaptee)) { return; }
+            if (self._isExpired(request)) { return; }
 
             // Setting
-            self._setData(null);
+            self._setCurrent(request);
             self._setError(error);
 
             // Firing
@@ -558,30 +673,29 @@ This element is used to perform XHR requests.
         },
 
         // HANDLER
-        _handleResponse: function (response, adaptee) {
+        _handleResponse: function (url, request) {
 
             // Vars
             var self = this;
 
             // Checking
-            if (self._isExpired(adaptee)) { return; }
+            if (self._isExpired(request)) { return; }
 
             // Setting
-            self._setResponded(adaptee);
-            self._setResponse(response);
+            self._setCurrent(request);
 
             // Firing
-            self.fire('xp-request-response', {firer: self});
+            self.fire('xp-request-response', {firer: self, url: self.url});
         },
 
         // HANDLER
-        _handleState: function (state, adaptee) {
+        _handleState: function (state, request) {
 
             // Vars
             var self = this;
 
             // Checking
-            if (!self._isCurrent(adaptee)) { return; }
+            if (request !== self.adaptee) { return; }
 
             // Setting
             self._setState(state);

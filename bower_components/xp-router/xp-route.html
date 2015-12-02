@@ -19,7 +19,7 @@ It must be used in conjunction with xp-router.
 @repository https://github.com/ExpandJS/xp-route
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -97,19 +97,6 @@ It must be used in conjunction with xp-router.
                 reflectToAttribute: true,
                 type: String,
                 value: null
-            },
-
-            /**
-             * If set to true, the route's path is parsed as regex.
-             *
-             * @attribute regex
-             * @type boolean
-             * @default false
-             */
-            regex: {
-                reflectToAttribute: true,
-                type: Boolean,
-                value: false
             }
         }
     });

@@ -1,7 +1,7 @@
 {
   "name": "mat-drawer-panel",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-drawer-panel.html",
   "description": "A custom element used to wrap a Material Design app",
   "homepage": "http://expandjs.com/elements/mat-drawer-panel",
@@ -22,20 +22,20 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "mat-paper": "ExpandJS/mat-paper#0.9.9",
-    "xp-device": "ExpandJS/xp-device#0.9.9",
-    "xp-targeter-behavior": "ExpandJS/xp-targeter-behavior#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "mat-paper": "ExpandJS/mat-paper#0.9.11",
+    "xp-device": "ExpandJS/xp-device#0.9.11",
+    "xp-targeter-behavior": "ExpandJS/xp-targeter-behavior#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "ad468f8f987e77d1d869259d7ec04535f595f9ea"
+    "tag": "v0.9.11",
+    "commit": "8913dd17577f4591b24257c2711ae7abef27f35b"
   },
   "_source": "git://github.com/ExpandJS/mat-drawer-panel.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/mat-drawer-panel"
 }

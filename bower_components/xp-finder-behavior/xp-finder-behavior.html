@@ -19,8 +19,8 @@ This behavior is used to add find capabilities on the context element.
 @behavior xp-array-behavior /bower_components/xp-array-behavior/xp-array-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-array-behavior ExpandJS/xp-array-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-array-behavior ExpandJS/xp-array-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -114,8 +114,8 @@ This behavior is used to add find capabilities on the context element.
 
             // Casting
             if (XP.isIndex(index)) { return index; }
-            if (XP.isString(target) && XP.isString(attribute, true)) { return function (element) { return XP.isElement(element) && target === element.getAttribute(attribute); }; }
-            if (XP.isElement(target) || XP.isFunction(target) || XP.isNullable(target)) { return XP.toDOMIdentity(target); }
+            if (XP.isString(target, true) && XP.isString(attribute, true)) { return function (element) { return XP.isElement(element) && target === element.getAttribute(attribute); }; }
+            if (XP.isElement(target) || XP.isFunction(target) || XP.isString(target, false) || XP.isVoid(target)) { return XP.toDOMIdentity(target); }
 
             // Asserting
             throw new XP.ArgumentError(1, 'Element, Function, number or string');
@@ -155,6 +155,8 @@ This behavior is used to add find capabilities on the context element.
              * @type Element
              */
             context: {
+                observer: '_contextChanged',
+                type: Object,
                 value: null
             },
 
@@ -261,6 +263,15 @@ This behavior is used to add find capabilities on the context element.
 
         /*********************************************************************/
 
+        // OBSERVER
+        _contextChanged: function () {
+
+            // Mutating
+            if (this.contextObserver) { this.mutated(); }
+        },
+
+        /*********************************************************************/
+
         // LISTENER
         attached: function () {
 
@@ -280,11 +291,14 @@ This behavior is used to add find capabilities on the context element.
             // Vars
             var self = this;
 
+            // Disconnecting
+            if (self.contextObserver) { self.contextObserver.disconnect(); }
+
             // Finding
             self.overwrite('items', XP[self.deep ? 'getElements' : 'findElements'](Polymer.dom(self.context || self), self.itemSelector));
 
             // Observing
-            XP.onMutation(self.context || self, Polymer.XPFinderBehaviorImp.mutated.bind(self));
+            self.contextObserver = XP.onMutation(self.context || self, Polymer.XPFinderBehaviorImp.mutated.bind(self));
         },
 
         /*********************************************************************/

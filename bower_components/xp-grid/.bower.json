@@ -1,7 +1,7 @@
 {
   "name": "xp-grid",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-grid.html",
   "description": "A custom element used to display a fixed or flexible grid to design your application on",
   "homepage": "http://expandjs.com/elements/xp-grid",
@@ -20,16 +20,16 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "044346fde055e1a1c9da736783a314fdeeb317b4"
+    "tag": "v0.9.11",
+    "commit": "9939b9403f4c5aa3eace082b5b33ee15f6a98909"
   },
   "_source": "git://github.com/ExpandJS/xp-grid.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/xp-grid"
 }

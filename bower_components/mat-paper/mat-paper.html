@@ -50,16 +50,16 @@ The paper's background color can be changed accordingly to the [Material Design 
 @behavior xp-slave-behavior /bower_components/xp-slave-behavior/xp-slave-behavior.html
 
 @dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-palette ExpandJS/mat-palette#0.9.9
-@dependency mat-shadow ExpandJS/mat-shadow#0.9.9
-@dependency mat-typography ExpandJS/mat-typography#0.9.9
-@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.9
-@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.9
-@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.9
+@dependency mat-palette ExpandJS/mat-palette#0.9.11
+@dependency mat-shadow ExpandJS/mat-shadow#0.9.11
+@dependency mat-typography ExpandJS/mat-typography#0.9.11
+@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.11
+@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.11
+@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.11
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.9
+@devDependency mat-demo ExpandJS/mat-demo#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -336,6 +336,7 @@ The paper's background color can be changed accordingly to the [Material Design 
                  *
                  * @attribute foreground
                  * @type "dark" | "light"
+                 * @default "dark"
                  * @notifies
                  * @readonly
                  */
@@ -344,7 +345,8 @@ The paper's background color can be changed accordingly to the [Material Design 
                     notify: true,
                     observer: '_foregroundChanged',
                     reflectToAttribute: true,
-                    type: String
+                    type: String,
+                    value: 'dark'
                 },
 
                 /**
@@ -373,6 +375,7 @@ The paper's background color can be changed accordingly to the [Material Design 
                     notify: true,
                     observer: '_layerChanged',
                     readOnly: true,
+                    type: Object,
                     value: null
                 },
 
@@ -554,7 +557,7 @@ The paper's background color can be changed accordingly to the [Material Design 
                 self.push('instances', self);
 
                 // Setting
-                self.theme = self.theme || self.shared.theme || 'light';
+                self.theme = self.theme || self.get('shared.material.theme') || 'light';
             },
 
             /*********************************************************************/

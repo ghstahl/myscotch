@@ -14,7 +14,7 @@ For an easier integration, it's recommended to use it in conjunction with
 [mat-option](/http://expandjs.comelements/mat-option).
 
 ```html
-<mat-icon-button icon="navigation:more-vert" target="myMenu" toggles-target></mat-icon-button>
+<mat-icon-button behavior="toggle" icon="navigation:more-vert" target="myMenu"></mat-icon-button>
 <mat-menu id="myMenu">
     <mat-option label="First option"></mat-option>
     <mat-option label="Second option"></mat-option>
@@ -27,7 +27,7 @@ In addition to the default view mode, it provides a
 which is similar to most desktop applications' menus.
 
 ```html
-<mat-icon-button icon="navigation:more-vert" target="myMenu" toggles-target></mat-icon-button>
+<mat-icon-button behavior="toggle" icon="navigation:more-vert" target="myMenu"></mat-icon-button>
 <mat-menu id="myMenu" cascade>
     <mat-option label="First option"></mat-option>
     <mat-option label="Second option"></mat-option>
@@ -38,7 +38,7 @@ which is similar to most desktop applications' menus.
 Menus can also contain [mat-submenu](http://expandjs.com/elements/mat-submenu), allowing for multi level menu.
 
 ```html
-<mat-icon-button icon="navigation:more-vert" target="myMenu" toggles-target></mat-icon-button>
+<mat-icon-button behavior="toggle" icon="navigation:more-vert" target="myMenu"></mat-icon-button>
 <mat-menu id="myMenu">
     <mat-option label="First option"></mat-option>
     <mat-option label="Second option"></mat-option>
@@ -60,32 +60,29 @@ Menus can also contain [mat-submenu](http://expandjs.com/elements/mat-submenu), 
 @demo http://expandjs.com/demo/mat-menu
 
 @adapts mat-overlay /bower_components/mat-overlay/mat-overlay.html
-@behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 @behavior xp-master-behavior /bower_components/xp-master-behavior/xp-master-behavior.html
 @behavior xp-referral-behavior /bower_components/xp-referral-behavior/xp-referral-behavior.html
 @behavior xp-targeter-behavior /bower_components/xp-targeter-behavior/xp-targeter-behavior.html
 
 @dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency mat-option ExpandJS/mat-option#0.9.9
-@dependency mat-overlay ExpandJS/mat-overlay#0.9.9
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.9
-@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.9
-@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.9
-@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency mat-option ExpandJS/mat-option#0.9.11
+@dependency mat-overlay ExpandJS/mat-overlay#0.9.11
+@dependency xp-master-behavior ExpandJS/xp-master-behavior#0.9.11
+@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.11
+@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.11
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.9
-@devDependency mat-divider ExpandJS/mat-divider#0.9.9
-@devDependency mat-icon-button ExpandJS/mat-icon-button#0.9.9
-@devDependency mat-icons ExpandJS/mat-icons#0.9.9
-@devDependency mat-option ExpandJS/mat-option#0.9.9
+@devDependency mat-demo ExpandJS/mat-demo#0.9.11
+@devDependency mat-divider ExpandJS/mat-divider#0.9.11
+@devDependency mat-icon-button ExpandJS/mat-icon-button#0.9.11
+@devDependency mat-icons ExpandJS/mat-icons#0.9.11
+@devDependency mat-option ExpandJS/mat-option#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
 <link rel="import" href="../mat-option/mat-option.html">
 <link rel="import" href="../mat-overlay/mat-overlay.html">
-<link rel="import" href="../xp-adapter-behavior/xp-adapter-behavior.html">
 <link rel="import" href="../xp-master-behavior/xp-master-behavior.html">
 <link rel="import" href="../xp-referral-behavior/xp-referral-behavior.html">
 <link rel="import" href="../xp-targeter-behavior/xp-targeter-behavior.html">
@@ -120,7 +117,6 @@ Menus can also contain [mat-submenu](http://expandjs.com/elements/mat-submenu), 
 
             // BEHAVIORS
             behaviors: [
-                Polymer.XPAdapterBehavior,
                 Polymer.XPMasterBehavior,
                 Polymer.XPReferralBehavior,
                 Polymer.XPTargeterBehavior
@@ -195,6 +191,21 @@ Menus can also contain [mat-submenu](http://expandjs.com/elements/mat-submenu), 
 
             // PROPERTIES
             properties: {
+
+                /**
+                 * The adapted element.
+                 *
+                 * @attribute adaptee
+                 * @type Element
+                 * @notifies
+                 * @readonly
+                 */
+                adaptee: {
+                    notify: true,
+                    readOnly: true,
+                    type: Object,
+                    value: null
+                },
 
                 /**
                  * The paper's background color.
@@ -304,7 +315,7 @@ Menus can also contain [mat-submenu](http://expandjs.com/elements/mat-submenu), 
 
             // LISTENER
             ready: function () {
-                this._adapt(this.$.matMenuAdaptee);
+                this._setAdaptee(this.$.matMenuAdaptee);
             },
 
             /*********************************************************************/

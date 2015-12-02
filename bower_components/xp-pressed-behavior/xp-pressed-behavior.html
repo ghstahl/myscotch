@@ -17,17 +17,19 @@ This behavior is used to add press capabilities on the context element.
 @repository https://github.com/ExpandJS/xp-pressed-behavior
 
 @behavior xp-focused-behavior /bower_components/xp-focused-behavior/xp-focused-behavior.html
+@behavior xp-overlay-injector /bower_components/xp-overlay-behavior/xp-overlay-injector.html
 @behavior xp-targeter-behavior /bower_components/xp-targeter-behavior/xp-targeter-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-focused-behavior ExpandJS/xp-focused-behavior#0.9.9
-@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-focused-behavior ExpandJS/xp-focused-behavior#0.9.11
+@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
 <link rel="import" href="../xp-focused-behavior/xp-focused-behavior.html">
+<link rel="import" href="../xp-overlay-behavior/xp-overlay-injector.html">
 <link rel="import" href="../xp-targeter-behavior/xp-targeter-behavior.html">
 <link rel="import" href="xp-pressed-styles.html">
 
@@ -67,7 +69,10 @@ This behavior is used to add press capabilities on the context element.
 
             // Vars
             var self   = this,
-                target = self.findTarget();
+                target = self.target;
+
+            // Finding
+            if (self.behavior === 'toggle') { target = self.findTarget(); }
 
             // Firing
             if (self.fire('xp-activate', {firer: self, target: target, data: self.data, isActive: self.active}, {cancelable: true}).defaultPrevented) { return self; }
@@ -75,8 +80,12 @@ This behavior is used to add press capabilities on the context element.
             // Setting
             if (self.toggleable) { self.active = !self.active; }
 
-            // Toggling
-            if (self.togglesTarget && target && target.toggle) { target.toggle(self, self.data); }
+            // Checking
+            if (!target) { return self; }
+
+            // Scoping
+            if (self.behavior === 'injector') { self.inject(target, self.data); }
+            if (self.behavior === 'toggle') { target.toggle(self, self.data); }
 
             return self;
         },
@@ -107,6 +116,18 @@ This behavior is used to add press capabilities on the context element.
                 reflectToAttribute: true,
                 type: Boolean,
                 value: false
+            },
+
+            /**
+             * Determines how the element behaves in relation to its target.
+             *
+             * @attribute behavior
+             * @type "injector" | "toggle"
+             */
+            behavior: {
+                reflectToAttribute: true,
+                type: String,
+                value: null
             },
 
             /**
@@ -141,16 +162,15 @@ This behavior is used to add press capabilities on the context element.
             },
 
             /**
-             * If set to true, the target's `toggle` method is called on press.
+             * The element's type, useful in conjunction with `xp-form`.
              *
-             * @attribute toggles-target
-             * @type boolean
-             * @default false
+             * @attribute type
+             * @type string
              */
-            togglesTarget: {
+            type: {
                 reflectToAttribute: true,
-                type: Boolean,
-                value: false
+                type: String,
+                value: null
             }
         },
 
@@ -183,6 +203,7 @@ This behavior is used to add press capabilities on the context element.
 
     Polymer.XPPressedBehavior = [
         Polymer.XPFocusedBehavior,
+        Polymer.XPOverlayInjector,
         Polymer.XPTargeterBehavior,
         Polymer.XPPressedBehaviorImp
     ];

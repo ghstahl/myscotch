@@ -16,21 +16,19 @@ This element is used to parse and display a markdown formatted text.
 @homepage http://expandjs.com/elements/xp-markdown
 @repository https://github.com/ExpandJS/xp-markdown
 
-@behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
-
 @dependency prism PrismJS/prism#^1.0.0
 @dependency markdown-it Markdown-it/markdown-it#^4.0.0
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
 -->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../expandjs/expandjs.html">
+
+<link rel="stylesheet" href="../prism/themes/prism.css">
 
 <script src="../prism/prism.js"></script>
 <script src="../markdown-it/dist/markdown-it.min.js"></script>
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../expandjs/expandjs.html">
-<link rel="import" href="../xp-adapter-behavior/xp-adapter-behavior.html">
-<link rel="stylesheet" href="../prism/themes/prism.css">
 
 <dom-module id="xp-markdown">
 
@@ -73,11 +71,6 @@ This element is used to parse and display a markdown formatted text.
 
             // ELEMENT
             is: 'xp-markdown',
-
-            // BEHAVIORS
-            behaviors: [
-                Polymer.XPAdapterBehavior
-            ],
 
             /*********************************************************************/
 
@@ -189,6 +182,21 @@ This element is used to parse and display a markdown formatted text.
             properties: {
 
                 /**
+                 * The adapted object.
+                 *
+                 * @attribute adaptee
+                 * @type Object
+                 * @notifies
+                 * @readonly
+                 */
+                adaptee: {
+                    notify: true,
+                    readOnly: true,
+                    type: Object,
+                    value: null
+                },
+
+                /**
                  * If set to true, converts `\n` into `<br>`.
                  *
                  * @attribute breaks
@@ -217,6 +225,7 @@ This element is used to parse and display a markdown formatted text.
                  *
                  * @attribute empty-source
                  * @type boolean
+                 * @default true
                  * @notifies
                  * @readonly
                  */
@@ -224,7 +233,8 @@ This element is used to parse and display a markdown formatted text.
                     computed: '_computeEmptySource(source)',
                     notify: true,
                     reflectToAttribute: true,
-                    type: Boolean
+                    type: Boolean,
+                    value: true
                 },
 
                 /**

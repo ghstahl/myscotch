@@ -1,7 +1,7 @@
 {
   "name": "mat-dialog",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-dialog.html",
   "description": "A custom element used to display a Material Design dialog",
   "homepage": "http://expandjs.com/elements/mat-dialog",
@@ -22,27 +22,26 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "mat-divider": "ExpandJS/mat-divider#0.9.9",
-    "mat-paper": "ExpandJS/mat-paper#0.9.9",
-    "xp-adapter-behavior": "ExpandJS/xp-adapter-behavior#0.9.9",
-    "xp-array-behavior": "ExpandJS/xp-array-behavior#0.9.9",
-    "xp-dialog": "ExpandJS/xp-dialog#0.9.9",
-    "xp-referral-behavior": "ExpandJS/xp-referral-behavior#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "mat-divider": "ExpandJS/mat-divider#0.9.11",
+    "mat-paper": "ExpandJS/mat-paper#0.9.11",
+    "xp-array-behavior": "ExpandJS/xp-array-behavior#0.9.11",
+    "xp-dialog": "ExpandJS/xp-dialog#0.9.11",
+    "xp-referral-behavior": "ExpandJS/xp-referral-behavior#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   },
   "devDependencies": {
-    "mat-button": "ExpandJS/mat-button#0.9.9",
-    "mat-demo": "ExpandJS/mat-demo#0.9.9"
+    "mat-button": "ExpandJS/mat-button#0.9.11",
+    "mat-demo": "ExpandJS/mat-demo#0.9.11"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "47ea77aa0f7a9ef6b32924798a0ff8fc9589a4d5"
+    "tag": "v0.9.11",
+    "commit": "188c3e91753378ca85c6a1e4c66fa633aa6ac5c2"
   },
   "_source": "git://github.com/ExpandJS/mat-dialog.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/mat-dialog"
 }

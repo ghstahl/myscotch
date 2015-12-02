@@ -1,18 +1,20 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.XPRequest = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.XPRequest = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 
-},{}],2:[function(require,module,exports){
+},{}],2:[function(_dereq_,module,exports){
 arguments[4][1][0].apply(exports,arguments)
-},{"dup":1}],3:[function(require,module,exports){
+},{"dup":1}],3:[function(_dereq_,module,exports){
+(function (global){
 /*!
  * The buffer module from node.js, for the browser.
  *
  * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
  * @license  MIT
  */
+/* eslint-disable no-proto */
 
-var base64 = require('base64-js')
-var ieee754 = require('ieee754')
-var isArray = require('is-array')
+var base64 = _dereq_('base64-js')
+var ieee754 = _dereq_('ieee754')
+var isArray = _dereq_('is-array')
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -48,7 +50,11 @@ var rootParent = {}
  * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
  * get the Object implementation, which is slower but behaves correctly.
  */
-Buffer.TYPED_ARRAY_SUPPORT = (function () {
+Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined
+  ? global.TYPED_ARRAY_SUPPORT
+  : typedArraySupport()
+
+function typedArraySupport () {
   function Bar () {}
   try {
     var arr = new Uint8Array(1)
@@ -61,7 +67,7 @@ Buffer.TYPED_ARRAY_SUPPORT = (function () {
   } catch (e) {
     return false
   }
-})()
+}
 
 function kMaxLength () {
   return Buffer.TYPED_ARRAY_SUPPORT
@@ -217,10 +223,16 @@ function fromJsonObject (that, object) {
   return that
 }
 
+if (Buffer.TYPED_ARRAY_SUPPORT) {
+  Buffer.prototype.__proto__ = Uint8Array.prototype
+  Buffer.__proto__ = Uint8Array
+}
+
 function allocate (that, length) {
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Return an augmented `Uint8Array` instance, for best performance
     that = Buffer._augment(new Uint8Array(length))
+    that.__proto__ = Buffer.prototype
   } else {
     // Fallback: Return an object instance of the Buffer class
     that.length = length
@@ -1009,7 +1021,7 @@ Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
   if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
-  this[offset] = value
+  this[offset] = (value & 0xff)
   return offset + 1
 }
 
@@ -1026,7 +1038,7 @@ Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = value
+    this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
   } else {
     objectWriteUInt16(this, value, offset, true)
@@ -1040,7 +1052,7 @@ Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8)
-    this[offset + 1] = value
+    this[offset + 1] = (value & 0xff)
   } else {
     objectWriteUInt16(this, value, offset, false)
   }
@@ -1062,7 +1074,7 @@ Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert
     this[offset + 3] = (value >>> 24)
     this[offset + 2] = (value >>> 16)
     this[offset + 1] = (value >>> 8)
-    this[offset] = value
+    this[offset] = (value & 0xff)
   } else {
     objectWriteUInt32(this, value, offset, true)
   }
@@ -1077,7 +1089,7 @@ Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert
     this[offset] = (value >>> 24)
     this[offset + 1] = (value >>> 16)
     this[offset + 2] = (value >>> 8)
-    this[offset + 3] = value
+    this[offset + 3] = (value & 0xff)
   } else {
     objectWriteUInt32(this, value, offset, false)
   }
@@ -1130,7 +1142,7 @@ Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
   if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
   if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   if (value < 0) value = 0xff + value + 1
-  this[offset] = value
+  this[offset] = (value & 0xff)
   return offset + 1
 }
 
@@ -1139,7 +1151,7 @@ Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) 
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = value
+    this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
   } else {
     objectWriteUInt16(this, value, offset, true)
@@ -1153,7 +1165,7 @@ Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) 
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8)
-    this[offset + 1] = value
+    this[offset + 1] = (value & 0xff)
   } else {
     objectWriteUInt16(this, value, offset, false)
   }
@@ -1165,7 +1177,7 @@ Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) 
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = value
+    this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
     this[offset + 2] = (value >>> 16)
     this[offset + 3] = (value >>> 24)
@@ -1184,7 +1196,7 @@ Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) 
     this[offset] = (value >>> 24)
     this[offset + 1] = (value >>> 16)
     this[offset + 2] = (value >>> 8)
-    this[offset + 3] = value
+    this[offset + 3] = (value & 0xff)
   } else {
     objectWriteUInt32(this, value, offset, false)
   }
@@ -1537,7 +1549,8 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-},{"base64-js":4,"ieee754":5,"is-array":6}],4:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"base64-js":4,"ieee754":5,"is-array":6}],4:[function(_dereq_,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -1663,7 +1676,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],5:[function(require,module,exports){
+},{}],5:[function(_dereq_,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -1749,7 +1762,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],6:[function(require,module,exports){
+},{}],6:[function(_dereq_,module,exports){
 
 /**
  * isArray
@@ -1784,7 +1797,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],7:[function(require,module,exports){
+},{}],7:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2087,8 +2100,8 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],8:[function(require,module,exports){
-var http = require('http');
+},{}],8:[function(_dereq_,module,exports){
+var http = _dereq_('http');
 
 var https = module.exports;
 
@@ -2099,10 +2112,11 @@ for (var key in http) {
 https.request = function (params, cb) {
     if (!params) params = {};
     params.scheme = 'https';
+    params.protocol = 'https:';
     return http.request.call(this, params, cb);
 }
 
-},{"http":30}],9:[function(require,module,exports){
+},{"http":31}],9:[function(_dereq_,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2127,12 +2141,31 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],10:[function(require,module,exports){
+},{}],10:[function(_dereq_,module,exports){
+/**
+ * Determine if an object is Buffer
+ *
+ * Author:   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * License:  MIT
+ *
+ * `npm install is-buffer`
+ */
+
+module.exports = function (obj) {
+  return !!(obj != null &&
+    (obj._isBuffer || // For Safari 5-7 (missing Object.prototype.constructor)
+      (obj.constructor &&
+      typeof obj.constructor.isBuffer === 'function' &&
+      obj.constructor.isBuffer(obj))
+    ))
+}
+
+},{}],11:[function(_dereq_,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2165,7 +2198,9 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
         }
         queueIndex = -1;
         len = queue.length;
@@ -2217,14 +2252,13 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
-// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 process.umask = function() { return 0; };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.3.2 by @mathias */
 ;(function(root) {
@@ -2758,7 +2792,7 @@ process.umask = function() { return 0; };
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],13:[function(require,module,exports){
+},{}],14:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2844,7 +2878,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2931,16 +2965,16 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(_dereq_,module,exports){
 'use strict';
 
-exports.decode = exports.parse = require('./decode');
-exports.encode = exports.stringify = require('./encode');
+exports.decode = exports.parse = _dereq_('./decode');
+exports.encode = exports.stringify = _dereq_('./encode');
 
-},{"./decode":13,"./encode":14}],16:[function(require,module,exports){
-module.exports = require("./lib/_stream_duplex.js")
+},{"./decode":14,"./encode":15}],17:[function(_dereq_,module,exports){
+module.exports = _dereq_("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":17}],17:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":18}],18:[function(_dereq_,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -2960,18 +2994,18 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var processNextTick = require('process-nextick-args');
+var processNextTick = _dereq_('process-nextick-args');
 /*</replacement>*/
 
 
 
 /*<replacement>*/
-var util = require('core-util-is');
-util.inherits = require('inherits');
+var util = _dereq_('core-util-is');
+util.inherits = _dereq_('inherits');
 /*</replacement>*/
 
-var Readable = require('./_stream_readable');
-var Writable = require('./_stream_writable');
+var Readable = _dereq_('./_stream_readable');
+var Writable = _dereq_('./_stream_writable');
 
 util.inherits(Duplex, Readable);
 
@@ -3024,7 +3058,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":19,"./_stream_writable":21,"core-util-is":22,"inherits":9,"process-nextick-args":23}],18:[function(require,module,exports){
+},{"./_stream_readable":20,"./_stream_writable":22,"core-util-is":23,"inherits":9,"process-nextick-args":24}],19:[function(_dereq_,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -3033,11 +3067,11 @@ function forEach (xs, f) {
 
 module.exports = PassThrough;
 
-var Transform = require('./_stream_transform');
+var Transform = _dereq_('./_stream_transform');
 
 /*<replacement>*/
-var util = require('core-util-is');
-util.inherits = require('inherits');
+var util = _dereq_('core-util-is');
+util.inherits = _dereq_('inherits');
 /*</replacement>*/
 
 util.inherits(PassThrough, Transform);
@@ -3053,29 +3087,29 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":20,"core-util-is":22,"inherits":9}],19:[function(require,module,exports){
+},{"./_stream_transform":21,"core-util-is":23,"inherits":9}],20:[function(_dereq_,module,exports){
 (function (process){
 'use strict';
 
 module.exports = Readable;
 
 /*<replacement>*/
-var processNextTick = require('process-nextick-args');
+var processNextTick = _dereq_('process-nextick-args');
 /*</replacement>*/
 
 
 /*<replacement>*/
-var isArray = require('isarray');
+var isArray = _dereq_('isarray');
 /*</replacement>*/
 
 
 /*<replacement>*/
-var Buffer = require('buffer').Buffer;
+var Buffer = _dereq_('buffer').Buffer;
 /*</replacement>*/
 
 Readable.ReadableState = ReadableState;
 
-var EE = require('events').EventEmitter;
+var EE = _dereq_('events').EventEmitter;
 
 /*<replacement>*/
 if (!EE.listenerCount) EE.listenerCount = function(emitter, type) {
@@ -3088,24 +3122,24 @@ if (!EE.listenerCount) EE.listenerCount = function(emitter, type) {
 /*<replacement>*/
 var Stream;
 (function (){try{
-  Stream = require('st' + 'ream');
+  Stream = _dereq_('st' + 'ream');
 }catch(_){}finally{
   if (!Stream)
-    Stream = require('events').EventEmitter;
+    Stream = _dereq_('events').EventEmitter;
 }}())
 /*</replacement>*/
 
-var Buffer = require('buffer').Buffer;
+var Buffer = _dereq_('buffer').Buffer;
 
 /*<replacement>*/
-var util = require('core-util-is');
-util.inherits = require('inherits');
+var util = _dereq_('core-util-is');
+util.inherits = _dereq_('inherits');
 /*</replacement>*/
 
 
 
 /*<replacement>*/
-var debug = require('util');
+var debug = _dereq_('util');
 if (debug && debug.debuglog) {
   debug = debug.debuglog('stream');
 } else {
@@ -3118,7 +3152,7 @@ var StringDecoder;
 util.inherits(Readable, Stream);
 
 function ReadableState(options, stream) {
-  var Duplex = require('./_stream_duplex');
+  var Duplex = _dereq_('./_stream_duplex');
 
   options = options || {};
 
@@ -3178,14 +3212,14 @@ function ReadableState(options, stream) {
   this.encoding = null;
   if (options.encoding) {
     if (!StringDecoder)
-      StringDecoder = require('string_decoder/').StringDecoder;
+      StringDecoder = _dereq_('string_decoder/').StringDecoder;
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
 }
 
 function Readable(options) {
-  var Duplex = require('./_stream_duplex');
+  var Duplex = _dereq_('./_stream_duplex');
 
   if (!(this instanceof Readable))
     return new Readable(options);
@@ -3294,7 +3328,7 @@ function needMoreData(state) {
 // backwards compatibility.
 Readable.prototype.setEncoding = function(enc) {
   if (!StringDecoder)
-    StringDecoder = require('string_decoder/').StringDecoder;
+    StringDecoder = _dereq_('string_decoder/').StringDecoder;
   this._readableState.decoder = new StringDecoder(enc);
   this._readableState.encoding = enc;
   return this;
@@ -4015,8 +4049,8 @@ function indexOf (xs, x) {
   return -1;
 }
 
-}).call(this,require('_process'))
-},{"./_stream_duplex":17,"_process":11,"buffer":3,"core-util-is":22,"events":7,"inherits":9,"isarray":10,"process-nextick-args":23,"string_decoder/":39,"util":2}],20:[function(require,module,exports){
+}).call(this,_dereq_('_process'))
+},{"./_stream_duplex":18,"_process":12,"buffer":3,"core-util-is":23,"events":7,"inherits":9,"isarray":11,"process-nextick-args":24,"string_decoder/":36,"util":2}],21:[function(_dereq_,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -4063,11 +4097,11 @@ function indexOf (xs, x) {
 
 module.exports = Transform;
 
-var Duplex = require('./_stream_duplex');
+var Duplex = _dereq_('./_stream_duplex');
 
 /*<replacement>*/
-var util = require('core-util-is');
-util.inherits = require('inherits');
+var util = _dereq_('core-util-is');
+util.inherits = _dereq_('inherits');
 /*</replacement>*/
 
 util.inherits(Transform, Duplex);
@@ -4215,7 +4249,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":17,"core-util-is":22,"inherits":9}],21:[function(require,module,exports){
+},{"./_stream_duplex":18,"core-util-is":23,"inherits":9}],22:[function(_dereq_,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -4225,20 +4259,20 @@ function done(stream, er) {
 module.exports = Writable;
 
 /*<replacement>*/
-var processNextTick = require('process-nextick-args');
+var processNextTick = _dereq_('process-nextick-args');
 /*</replacement>*/
 
 
 /*<replacement>*/
-var Buffer = require('buffer').Buffer;
+var Buffer = _dereq_('buffer').Buffer;
 /*</replacement>*/
 
 Writable.WritableState = WritableState;
 
 
 /*<replacement>*/
-var util = require('core-util-is');
-util.inherits = require('inherits');
+var util = _dereq_('core-util-is');
+util.inherits = _dereq_('inherits');
 /*</replacement>*/
 
 
@@ -4246,14 +4280,14 @@ util.inherits = require('inherits');
 /*<replacement>*/
 var Stream;
 (function (){try{
-  Stream = require('st' + 'ream');
+  Stream = _dereq_('st' + 'ream');
 }catch(_){}finally{
   if (!Stream)
-    Stream = require('events').EventEmitter;
+    Stream = _dereq_('events').EventEmitter;
 }}())
 /*</replacement>*/
 
-var Buffer = require('buffer').Buffer;
+var Buffer = _dereq_('buffer').Buffer;
 
 util.inherits(Writable, Stream);
 
@@ -4267,7 +4301,7 @@ function WriteReq(chunk, encoding, cb) {
 }
 
 function WritableState(options, stream) {
-  var Duplex = require('./_stream_duplex');
+  var Duplex = _dereq_('./_stream_duplex');
 
   options = options || {};
 
@@ -4367,7 +4401,7 @@ WritableState.prototype.getBuffer = function writableStateGetBuffer() {
 
 (function (){try {
 Object.defineProperty(WritableState.prototype, 'buffer', {
-  get: require('util-deprecate')(function() {
+  get: _dereq_('util-deprecate')(function() {
     return this.getBuffer();
   }, '_writableState.buffer is deprecated. Use ' +
       '_writableState.getBuffer() instead.')
@@ -4376,7 +4410,7 @@ Object.defineProperty(WritableState.prototype, 'buffer', {
 
 
 function Writable(options) {
-  var Duplex = require('./_stream_duplex');
+  var Duplex = _dereq_('./_stream_duplex');
 
   // Writable ctor is applied to Duplexes, though they're not
   // instanceof Writable, they're instanceof Readable.
@@ -4737,7 +4771,7 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":17,"buffer":3,"core-util-is":22,"events":7,"inherits":9,"process-nextick-args":23,"util-deprecate":24}],22:[function(require,module,exports){
+},{"./_stream_duplex":18,"buffer":3,"core-util-is":23,"events":7,"inherits":9,"process-nextick-args":24,"util-deprecate":25}],23:[function(_dereq_,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -4846,8 +4880,8 @@ exports.isBuffer = isBuffer;
 function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
-}).call(this,require("buffer").Buffer)
-},{"buffer":3}],23:[function(require,module,exports){
+}).call(this,{"isBuffer":_dereq_("/home/giuliano/Scrivania/digital_domain/node_modules/browserify/node_modules/insert-module-globals/node_modules/is-buffer/index.js")})
+},{"/home/giuliano/Scrivania/digital_domain/node_modules/browserify/node_modules/insert-module-globals/node_modules/is-buffer/index.js":10}],24:[function(_dereq_,module,exports){
 (function (process){
 'use strict';
 module.exports = nextTick;
@@ -4855,7 +4889,7 @@ module.exports = nextTick;
 function nextTick(fn) {
   var args = new Array(arguments.length - 1);
   var i = 0;
-  while (i < arguments.length) {
+  while (i < args.length) {
     args[i++] = arguments[i];
   }
   process.nextTick(function afterTick() {
@@ -4863,8 +4897,8 @@ function nextTick(fn) {
   });
 }
 
-}).call(this,require('_process'))
-},{"_process":11}],24:[function(require,module,exports){
+}).call(this,_dereq_('_process'))
+},{"_process":12}],25:[function(_dereq_,module,exports){
 (function (global){
 
 /**
@@ -4923,37 +4957,42 @@ function deprecate (fn, msg) {
  */
 
 function config (name) {
-  if (!global.localStorage) return false;
+  // accessing global.localStorage can trigger a DOMException in sandboxed iframes
+  try {
+    if (!global.localStorage) return false;
+  } catch (_) {
+    return false;
+  }
   var val = global.localStorage[name];
   if (null == val) return false;
   return String(val).toLowerCase() === 'true';
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],25:[function(require,module,exports){
-module.exports = require("./lib/_stream_passthrough.js")
+},{}],26:[function(_dereq_,module,exports){
+module.exports = _dereq_("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":18}],26:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":19}],27:[function(_dereq_,module,exports){
 var Stream = (function (){
   try {
-    return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
+    return _dereq_('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
   } catch(_){}
 }());
-exports = module.exports = require('./lib/_stream_readable.js');
+exports = module.exports = _dereq_('./lib/_stream_readable.js');
 exports.Stream = Stream || exports;
 exports.Readable = exports;
-exports.Writable = require('./lib/_stream_writable.js');
-exports.Duplex = require('./lib/_stream_duplex.js');
-exports.Transform = require('./lib/_stream_transform.js');
-exports.PassThrough = require('./lib/_stream_passthrough.js');
+exports.Writable = _dereq_('./lib/_stream_writable.js');
+exports.Duplex = _dereq_('./lib/_stream_duplex.js');
+exports.Transform = _dereq_('./lib/_stream_transform.js');
+exports.PassThrough = _dereq_('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":17,"./lib/_stream_passthrough.js":18,"./lib/_stream_readable.js":19,"./lib/_stream_transform.js":20,"./lib/_stream_writable.js":21}],27:[function(require,module,exports){
-module.exports = require("./lib/_stream_transform.js")
+},{"./lib/_stream_duplex.js":18,"./lib/_stream_passthrough.js":19,"./lib/_stream_readable.js":20,"./lib/_stream_transform.js":21,"./lib/_stream_writable.js":22}],28:[function(_dereq_,module,exports){
+module.exports = _dereq_("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":20}],28:[function(require,module,exports){
-module.exports = require("./lib/_stream_writable.js")
+},{"./lib/_stream_transform.js":21}],29:[function(_dereq_,module,exports){
+module.exports = _dereq_("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":21}],29:[function(require,module,exports){
+},{"./lib/_stream_writable.js":22}],30:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4977,15 +5016,15 @@ module.exports = require("./lib/_stream_writable.js")
 
 module.exports = Stream;
 
-var EE = require('events').EventEmitter;
-var inherits = require('inherits');
+var EE = _dereq_('events').EventEmitter;
+var inherits = _dereq_('inherits');
 
 inherits(Stream, EE);
-Stream.Readable = require('readable-stream/readable.js');
-Stream.Writable = require('readable-stream/writable.js');
-Stream.Duplex = require('readable-stream/duplex.js');
-Stream.Transform = require('readable-stream/transform.js');
-Stream.PassThrough = require('readable-stream/passthrough.js');
+Stream.Readable = _dereq_('readable-stream/readable.js');
+Stream.Writable = _dereq_('readable-stream/writable.js');
+Stream.Duplex = _dereq_('readable-stream/duplex.js');
+Stream.Transform = _dereq_('readable-stream/transform.js');
+Stream.PassThrough = _dereq_('readable-stream/passthrough.js');
 
 // Backwards-compat with node 0.4.x
 Stream.Stream = Stream;
@@ -5082,11 +5121,11 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":7,"inherits":9,"readable-stream/duplex.js":16,"readable-stream/passthrough.js":25,"readable-stream/readable.js":26,"readable-stream/transform.js":27,"readable-stream/writable.js":28}],30:[function(require,module,exports){
-var ClientRequest = require('./lib/request')
-var extend = require('xtend')
-var statusCodes = require('builtin-status-codes')
-var url = require('url')
+},{"events":7,"inherits":9,"readable-stream/duplex.js":17,"readable-stream/passthrough.js":26,"readable-stream/readable.js":27,"readable-stream/transform.js":28,"readable-stream/writable.js":29}],31:[function(_dereq_,module,exports){
+var ClientRequest = _dereq_('./lib/request')
+var extend = _dereq_('xtend')
+var statusCodes = _dereq_('builtin-status-codes')
+var url = _dereq_('url')
 
 var http = exports
 
@@ -5096,19 +5135,19 @@ http.request = function (opts, cb) {
 	else
 		opts = extend(opts)
 
-	// Split opts.host into its components
-	var hostHostname = opts.host ? opts.host.split(':')[0] : null
-	var hostPort = opts.host ? parseInt(opts.host.split(':')[1], 10) : null
+	var protocol = opts.protocol || ''
+	var host = opts.hostname || opts.host
+	var port = opts.port
+	var path = opts.path || '/'
 
-	opts.method = opts.method || 'GET'
+	// Necessary for IPv6 addresses
+	if (host && host.indexOf(':') !== -1)
+		host = '[' + host + ']'
+
+	// This may be a relative url. The browser should always be able to interpret it correctly.
+	opts.url = (host ? (protocol + '//' + host) : '') + (port ? ':' + port : '') + path
+	opts.method = (opts.method || 'GET').toUpperCase()
 	opts.headers = opts.headers || {}
-	opts.path = opts.path || '/'
-	opts.protocol = opts.protocol || window.location.protocol
-	// If the hostname is provided, use the default port for the protocol. If
-	// the url is instead relative, use window.location.port
-	var defaultPort = (opts.hostname || hostHostname) ? (opts.protocol === 'https:' ? 443 : 80) : window.location.port
-	opts.hostname = opts.hostname || hostHostname || window.location.hostname
-	opts.port = opts.port || hostPort || defaultPort
 
 	// Also valid opts.auth, opts.mode
 
@@ -5157,8 +5196,9 @@ http.METHODS = [
 	'UNLOCK',
 	'UNSUBSCRIBE'
 ]
-},{"./lib/request":32,"builtin-status-codes":34,"url":40,"xtend":41}],31:[function(require,module,exports){
-exports.fetch = isFunction(window.fetch) && isFunction(window.ReadableByteStream)
+},{"./lib/request":33,"builtin-status-codes":35,"url":37,"xtend":38}],32:[function(_dereq_,module,exports){
+(function (global){
+exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableByteStream)
 
 exports.blobConstructor = false
 try {
@@ -5166,8 +5206,10 @@ try {
 	exports.blobConstructor = true
 } catch (e) {}
 
-var xhr = new window.XMLHttpRequest()
-xhr.open('GET', '/')
+var xhr = new global.XMLHttpRequest()
+// If location.host is empty, e.g. if this page/worker was loaded
+// from a Blob, then use example.com to avoid an error
+xhr.open('GET', global.location.host ? '/' : 'https://example.com')
 
 function checkTypeSupport (type) {
 	try {
@@ -5177,10 +5219,10 @@ function checkTypeSupport (type) {
 	return false
 }
 
-// For some strange reason, Safari 7.0 reports typeof window.ArrayBuffer === 'object'.
+// For some strange reason, Safari 7.0 reports typeof global.ArrayBuffer === 'object'.
 // Safari 7.1 appears to have fixed this bug.
-var haveArrayBuffer = typeof window.ArrayBuffer !== 'undefined'
-var haveSlice = haveArrayBuffer && isFunction(window.ArrayBuffer.prototype.slice)
+var haveArrayBuffer = typeof global.ArrayBuffer !== 'undefined'
+var haveSlice = haveArrayBuffer && isFunction(global.ArrayBuffer.prototype.slice)
 
 exports.arraybuffer = haveArrayBuffer && checkTypeSupport('arraybuffer')
 // These next two tests unavoidably show warnings in Chrome. Since fetch will always
@@ -5189,7 +5231,7 @@ exports.msstream = !exports.fetch && haveSlice && checkTypeSupport('ms-stream')
 exports.mozchunkedarraybuffer = !exports.fetch && haveArrayBuffer &&
 	checkTypeSupport('moz-chunked-arraybuffer')
 exports.overrideMimeType = isFunction(xhr.overrideMimeType)
-exports.vbArray = isFunction(window.VBArray)
+exports.vbArray = isFunction(global.VBArray)
 
 function isFunction (value) {
   return typeof value === 'function'
@@ -5197,16 +5239,14 @@ function isFunction (value) {
 
 xhr = null // Help gc
 
-},{}],32:[function(require,module,exports){
-(function (process,Buffer){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],33:[function(_dereq_,module,exports){
+(function (process,global,Buffer){
 // var Base64 = require('Base64')
-var capability = require('./capability')
-var foreach = require('foreach')
-var indexOf = require('indexof')
-var inherits = require('inherits')
-var keys = require('object-keys')
-var response = require('./response')
-var stream = require('stream')
+var capability = _dereq_('./capability')
+var inherits = _dereq_('inherits')
+var response = _dereq_('./response')
+var stream = _dereq_('stream')
 
 var IncomingMessage = response.IncomingMessage
 var rStates = response.readyStates
@@ -5232,12 +5272,11 @@ var ClientRequest = module.exports = function (opts) {
 	stream.Writable.call(self)
 
 	self._opts = opts
-	self._url = opts.protocol + '//' + opts.hostname + ':' + opts.port + opts.path
 	self._body = []
 	self._headers = {}
 	if (opts.auth)
 		self.setHeader('Authorization', 'Basic ' + new Buffer(opts.auth).toString('base64'))
-	foreach(keys(opts.headers), function (name) {
+	Object.keys(opts.headers).forEach(function (name) {
 		self.setHeader(name, opts.headers[name])
 	})
 
@@ -5270,7 +5309,7 @@ ClientRequest.prototype.setHeader = function (name, value) {
 	// This check is not necessary, but it prevents warnings from browsers about setting unsafe
 	// headers. To be honest I'm not entirely sure hiding these warnings is a good thing, but
 	// http-browserify did it, so I will too.
-	if (indexOf(unsafeHeaders, lowerName) !== -1)
+	if (unsafeHeaders.indexOf(lowerName) !== -1)
 		return
 
 	self._headers[lowerName] = {
@@ -5298,9 +5337,9 @@ ClientRequest.prototype._onFinish = function () {
 
 	var headersObj = self._headers
 	var body
-	if (opts.method === 'POST' || opts.method === 'PUT') {
+	if (opts.method === 'POST' || opts.method === 'PUT' || opts.method === 'PATCH') {
 		if (capability.blobConstructor) {
-			body = new window.Blob(self._body.map(function (buffer) {
+			body = new global.Blob(self._body.map(function (buffer) {
 				return buffer.toArrayBuffer()
 			}), {
 				type: (headersObj['content-type'] || {}).value || ''
@@ -5312,11 +5351,11 @@ ClientRequest.prototype._onFinish = function () {
 	}
 
 	if (self._mode === 'fetch') {
-		var headers = keys(headersObj).map(function (name) {
+		var headers = Object.keys(headersObj).map(function (name) {
 			return [headersObj[name].name, headersObj[name].value]
 		})
 
-		window.fetch(self._url, {
+		global.fetch(self._opts.url, {
 			method: self._opts.method,
 			headers: headers,
 			body: body,
@@ -5325,13 +5364,13 @@ ClientRequest.prototype._onFinish = function () {
 		}).then(function (response) {
 			self._fetchResponse = response
 			self._connect()
-		}).then(undefined, function (reason) {
+		}, function (reason) {
 			self.emit('error', reason)
 		})
 	} else {
-		var xhr = self._xhr = new window.XMLHttpRequest()
+		var xhr = self._xhr = new global.XMLHttpRequest()
 		try {
-			xhr.open(self._opts.method, self._url, true)
+			xhr.open(self._opts.method, self._opts.url, true)
 		} catch (err) {
 			process.nextTick(function () {
 				self.emit('error', err)
@@ -5349,7 +5388,7 @@ ClientRequest.prototype._onFinish = function () {
 		if (self._mode === 'text' && 'overrideMimeType' in xhr)
 			xhr.overrideMimeType('text/plain; charset=x-user-defined')
 
-		foreach(keys(headersObj), function (name) {
+		Object.keys(headersObj).forEach(function (name) {
 			xhr.setRequestHeader(headersObj[name].name, headersObj[name].value)
 		})
 
@@ -5479,13 +5518,12 @@ var unsafeHeaders = [
 	'via'
 ]
 
-}).call(this,require('_process'),require("buffer").Buffer)
-},{"./capability":31,"./response":33,"_process":11,"buffer":3,"foreach":35,"indexof":36,"inherits":9,"object-keys":37,"stream":29}],33:[function(require,module,exports){
-(function (process,Buffer){
-var capability = require('./capability')
-var foreach = require('foreach')
-var inherits = require('inherits')
-var stream = require('stream')
+}).call(this,_dereq_('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer)
+},{"./capability":32,"./response":34,"_process":12,"buffer":3,"inherits":9,"stream":30}],34:[function(_dereq_,module,exports){
+(function (process,global,Buffer){
+var capability = _dereq_('./capability')
+var inherits = _dereq_('inherits')
+var stream = _dereq_('stream')
 
 var rStates = exports.readyStates = {
 	UNSENT: 0,
@@ -5548,7 +5586,7 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode) {
 		self.statusCode = xhr.status
 		self.statusMessage = xhr.statusText
 		var headers = xhr.getAllResponseHeaders().split(/\r?\n/)
-		foreach(headers, function (header) {
+		headers.forEach(function (header) {
 			var matches = header.match(/^([^:]+):\s*(.*)/)
 			if (matches) {
 				var key = matches[1].toLowerCase()
@@ -5591,7 +5629,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 				break
 			try {
 				// This fails in IE8
-				response = new window.VBArray(xhr.responseBody).toArray()
+				response = new global.VBArray(xhr.responseBody).toArray()
 			} catch (e) {}
 			if (response !== null) {
 				self.push(new Buffer(response))
@@ -5635,7 +5673,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 			response = xhr.response
 			if (xhr.readyState !== rStates.LOADING)
 				break
-			var reader = new window.MSStreamReader()
+			var reader = new global.MSStreamReader()
 			reader.onprogress = function () {
 				if (reader.result.byteLength > self._pos) {
 					self.push(new Buffer(new Uint8Array(reader.result.slice(self._pos))))
@@ -5656,8 +5694,8 @@ IncomingMessage.prototype._onXHRProgress = function () {
 	}
 }
 
-}).call(this,require('_process'),require("buffer").Buffer)
-},{"./capability":31,"_process":11,"buffer":3,"foreach":35,"inherits":9,"stream":29}],34:[function(require,module,exports){
+}).call(this,_dereq_('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer)
+},{"./capability":32,"_process":12,"buffer":3,"inherits":9,"stream":30}],35:[function(_dereq_,module,exports){
 module.exports = {
   "100": "Continue",
   "101": "Switching Protocols",
@@ -5718,148 +5756,7 @@ module.exports = {
   "511": "Network Authentication Required"
 }
 
-},{}],35:[function(require,module,exports){
-
-var hasOwn = Object.prototype.hasOwnProperty;
-var toString = Object.prototype.toString;
-
-module.exports = function forEach (obj, fn, ctx) {
-    if (toString.call(fn) !== '[object Function]') {
-        throw new TypeError('iterator must be a function');
-    }
-    var l = obj.length;
-    if (l === +l) {
-        for (var i = 0; i < l; i++) {
-            fn.call(ctx, obj[i], i, obj);
-        }
-    } else {
-        for (var k in obj) {
-            if (hasOwn.call(obj, k)) {
-                fn.call(ctx, obj[k], k, obj);
-            }
-        }
-    }
-};
-
-
-},{}],36:[function(require,module,exports){
-
-var indexOf = [].indexOf;
-
-module.exports = function(arr, obj){
-  if (indexOf) return arr.indexOf(obj);
-  for (var i = 0; i < arr.length; ++i) {
-    if (arr[i] === obj) return i;
-  }
-  return -1;
-};
-},{}],37:[function(require,module,exports){
-'use strict';
-
-// modified from https://github.com/es-shims/es5-shim
-var has = Object.prototype.hasOwnProperty;
-var toStr = Object.prototype.toString;
-var slice = Array.prototype.slice;
-var isArgs = require('./isArguments');
-var hasDontEnumBug = !({ 'toString': null }).propertyIsEnumerable('toString');
-var hasProtoEnumBug = function () {}.propertyIsEnumerable('prototype');
-var dontEnums = [
-	'toString',
-	'toLocaleString',
-	'valueOf',
-	'hasOwnProperty',
-	'isPrototypeOf',
-	'propertyIsEnumerable',
-	'constructor'
-];
-
-var keysShim = function keys(object) {
-	var isObject = object !== null && typeof object === 'object';
-	var isFunction = toStr.call(object) === '[object Function]';
-	var isArguments = isArgs(object);
-	var isString = isObject && toStr.call(object) === '[object String]';
-	var theKeys = [];
-
-	if (!isObject && !isFunction && !isArguments) {
-		throw new TypeError('Object.keys called on a non-object');
-	}
-
-	var skipProto = hasProtoEnumBug && isFunction;
-	if (isString && object.length > 0 && !has.call(object, 0)) {
-		for (var i = 0; i < object.length; ++i) {
-			theKeys.push(String(i));
-		}
-	}
-
-	if (isArguments && object.length > 0) {
-		for (var j = 0; j < object.length; ++j) {
-			theKeys.push(String(j));
-		}
-	} else {
-		for (var name in object) {
-			if (!(skipProto && name === 'prototype') && has.call(object, name)) {
-				theKeys.push(String(name));
-			}
-		}
-	}
-
-	if (hasDontEnumBug) {
-		var ctor = object.constructor;
-		var skipConstructor = ctor && ctor.prototype === object;
-
-		for (var k = 0; k < dontEnums.length; ++k) {
-			if (!(skipConstructor && dontEnums[k] === 'constructor') && has.call(object, dontEnums[k])) {
-				theKeys.push(dontEnums[k]);
-			}
-		}
-	}
-	return theKeys;
-};
-
-keysShim.shim = function shimObjectKeys() {
-	if (!Object.keys) {
-		Object.keys = keysShim;
-	} else {
-		var keysWorksWithArguments = (function () {
-			// Safari 5.0 bug
-			return (Object.keys(arguments) || '').length === 2;
-		}(1, 2));
-		if (!keysWorksWithArguments) {
-			var originalKeys = Object.keys;
-			Object.keys = function keys(object) {
-				if (isArgs(object)) {
-					return originalKeys(slice.call(object));
-				} else {
-					return originalKeys(object);
-				}
-			};
-		}
-	}
-	return Object.keys || keysShim;
-};
-
-module.exports = keysShim;
-
-},{"./isArguments":38}],38:[function(require,module,exports){
-'use strict';
-
-var toStr = Object.prototype.toString;
-
-module.exports = function isArguments(value) {
-	var str = toStr.call(value);
-	var isArgs = str === '[object Arguments]';
-	if (!isArgs) {
-		isArgs = str !== '[object Array]' &&
-			value !== null &&
-			typeof value === 'object' &&
-			typeof value.length === 'number' &&
-			value.length >= 0 &&
-			toStr.call(value.callee) === '[object Function]';
-	}
-	return isArgs;
-};
-
-},{}],39:[function(require,module,exports){
+},{}],36:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5881,7 +5778,7 @@ module.exports = function isArguments(value) {
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-var Buffer = require('buffer').Buffer;
+var Buffer = _dereq_('buffer').Buffer;
 
 var isBufferEncoding = Buffer.isEncoding
   || function(encoding) {
@@ -6082,7 +5979,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":3}],40:[function(require,module,exports){
+},{"buffer":3}],37:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6104,7 +6001,7 @@ function base64DetectIncompleteChar(buffer) {
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-var punycode = require('punycode');
+var punycode = _dereq_('punycode');
 
 exports.parse = urlParse;
 exports.resolve = urlResolve;
@@ -6176,7 +6073,7 @@ var protocolPattern = /^([a-z0-9.+-]+:)/i,
       'gopher:': true,
       'file:': true
     },
-    querystring = require('querystring');
+    querystring = _dereq_('querystring');
 
 function urlParse(url, parseQueryString, slashesDenoteHost) {
   if (url && isObject(url) && url instanceof Url) return url;
@@ -6791,7 +6688,7 @@ function isNullOrUndefined(arg) {
   return  arg == null;
 }
 
-},{"punycode":12,"querystring":15}],41:[function(require,module,exports){
+},{"punycode":13,"querystring":16}],38:[function(_dereq_,module,exports){
 module.exports = extend
 
 function extend() {
@@ -6810,12 +6707,12 @@ function extend() {
     return target
 }
 
-},{}],42:[function(require,module,exports){
+},{}],39:[function(_dereq_,module,exports){
 /*jslint browser: true, devel: true, node: true, ass: true, nomen: true, unparam: true, indent: 4 */
 
-module.exports = require('./lib');
-},{"./lib":43}],43:[function(require,module,exports){
-(function (global,Buffer){
+module.exports = _dereq_('./lib');
+},{"./lib":40}],40:[function(_dereq_,module,exports){
+(function (global){
 /*jslint browser: true, devel: true, node: true, ass: true, nomen: true, unparam: true, indent: 4 */
 
 /**
@@ -6829,10 +6726,12 @@ module.exports = require('./lib');
     "use strict";
 
     // Vars
-    var http      = require('http'),
-        https     = require('https'),
-        XP        = global.XP || require('expandjs'),
-        XPEmitter = global.XPEmitter || require('xp-emitter');
+    var http      = _dereq_('http'),
+        https     = _dereq_('https'),
+        adapters  = {'https': https, 'https:': https},
+        location  = global.location || {},
+        XP        = global.XP || _dereq_('expandjs'),
+        XPEmitter = global.XPEmitter || _dereq_('xp-emitter');
 
     /*********************************************************************/
 
@@ -6843,7 +6742,7 @@ module.exports = require('./lib');
      * @description This class is used to perform XHR requests
      * @extends XPEmitter
      */
-    module.exports = new XP.Class('XPRequest', {
+    module.exports = global.XPRequest = new XP.Class('XPRequest', {
 
         // EXTENDS
         extends: XPEmitter,
@@ -6862,12 +6761,12 @@ module.exports = require('./lib');
          * Emitted when the entire data is received.
          *
          * @event data
-         * @param {Buffer | string} data
+         * @param {*} data
          * @param {Object} emitter
          */
 
         /**
-         * Emitted when an error is received.
+         * Emitted when the entire error is received.
          *
          * @event error
          * @param {string} error
@@ -6878,7 +6777,7 @@ module.exports = require('./lib');
          * Emitted when a response is received.
          *
          * @event response
-         * @param {Object} response
+         * @param {string} url
          * @param {Object} emitter
          */
 
@@ -6890,56 +6789,83 @@ module.exports = require('./lib');
          * @param {Object} emitter
          */
 
+        /**
+         * Emitted when the request is submitted.
+         *
+         * @event submit
+         * @param {Buffer | string} data
+         * @param {Object} emitter
+         */
+
         /*********************************************************************/
 
         /**
          * @constructs
          * @param {Object | string} options The request url or options.
-         *   @param {string} [options.contentType = "auto"] A shortcut for the "Content-Type" header.
-         *   @param {string} [options.dataType = "auto"] The type of data expected back from the server.
+         *   @param {string} [options.contentType] A shortcut for the "Content-Type" header.
+         *   @param {string} [options.dataType] The type of data expected back from the server.
+         *   @param {string} [options.encoding] The response encoding.
          *   @param {Object} [options.headers] An object containing request headers.
+         *   @param {string} [options.hostname] The request hostname, usable in alternative to url.
          *   @param {number} [options.keepAlive = 0] How often to submit TCP KeepAlive packets over sockets being kept alive.
          *   @param {string} [options.method = "GET"] A string specifying the HTTP request method.
-         *   @param {string} [options.path = ""] The request path, useful for relative requests.
-         *   @param {number} [options.port] The request port, useful for relative requests.
-         *   @param {string} [options.url = ""] The request url.
+         *   @param {string} [options.path] The request path, usable in alternative to url.
+         *   @param {number} [options.port] The request port, usable in alternative to url.
+         *   @param {number} [options.protocol = "http:"] The request protocol, usable in alternative to url.
+         *   @param {string} [options.url] The request url.
          */
         initialize: {
             promise: true,
             value: function (options, resolver) {
 
-                // Asserting
-                XP.assertArgument(XP.isObject(options) || XP.isString(options, true), 1, 'Object or string');
-
                 // Vars
-                var self     = this,
-                    location = global.location || {};
+                var self    = this,
+                    adaptee = null;
 
                 // Super
                 XPEmitter.call(self);
 
+                // Overriding
+                if (!XP.isObject(options)) { options = {url: options}; }
+                if (!XP.isFalsy(options.url)) { XP.assign(options, XP.pick(XP.parseURL(options.url), ['hostname', 'path', 'port', 'protocol'])); }
+
                 // Setting
-                self.options     = (XP.isString(options) && {}) || options;
-                self.contentType = self.options.contentType || 'auto';
-                self.dataType    = self.options.dataType || 'auto';
+                self.chunks      = [];
+                self.state       = 'idle';
+                self.options     = options;
+                self.contentType = self.options.contentType || null;
+                self.dataType    = self.options.dataType || null;
                 self.encoding    = self.options.encoding || null;
                 self.headers     = self.options.headers || {};
+                self.hostname    = self.options.hostname || location.hostname || null;
                 self.keepAlive   = self.options.keepAlive || 0;
                 self.method      = self.options.method || 'GET';
-                self.url         = self.options.url || '';
-                self.path        = self.options.path || '';
-                self.port        = self.options.port || null;
-                self.secure      = (self.parsed.protocol || location.protocol) === 'https:';
-                self.resolver    = resolver;
-                self.state       = 'idle';
-                self._chunks     = [];
+                self.path        = self.options.path || null;
+                self.port        = self.options.port || (!self.options.hostname && XP.toNumber(location.port)) || null;
+                self.protocol    = self.options.protocol || (!self.options.hostname && location.protocol) || 'http:';
+                self.url         = XP.toURL({protocol: self.protocol, hostname: self.hostname, port: self.port, pathname: self.pathname, search: self.search});
 
                 // Adapting
-                self._adapt();
+                adaptee = (adapters[self.protocol] || http).request({
+                    headers: self.headers,
+                    hostname: self.hostname,
+                    keepAlive: self.keepAlive > 0,
+                    keepAliveMsecs: self.keepAlive,
+                    method: self.method,
+                    path: self.path,
+                    port: self.port,
+                    protocol: self.protocol,
+                    withCredentials: false
+                });
 
                 // Listening
-                self._adaptee.on('error', self._handleError.bind(self));
-                self._adaptee.on('response', self._handleResponse.bind(self));
+                adaptee.on('error', self._handleError.bind(self, resolver));
+                adaptee.on('response', self._handleResponse.bind(self, resolver));
+
+                // Overriding
+                self.abort  = self.abort.bind(self, adaptee);
+                self.header = self.header.bind(self, adaptee);
+                self.submit = self.submit.bind(self, adaptee);
             }
         },
 
@@ -6951,7 +6877,7 @@ module.exports = require('./lib');
          * @method abort
          * @returns {Object}
          */
-        abort: function () {
+        abort: function (adaptee) {
 
             // Vars
             var self = this;
@@ -6960,7 +6886,7 @@ module.exports = require('./lib');
             if (self.tsAbort) { return self; }
 
             // Aborting
-            self._adaptee.abort();
+            adaptee.abort();
 
             // Setting
             self.state   = 'aborted';
@@ -6970,91 +6896,88 @@ module.exports = require('./lib');
         },
 
         /**
-         * Submits the request, using data for the request body.
+         * Get or set a header.
          *
-         * @method submit
-         * @param {Buffer | Object | string} [data]
-         * @returns {Object}
+         * @method header
+         * @param {string} name
+         * @param {number | string} [value]
+         * @returns {number | string}
          */
-        submit: function (data) {
+        header: function (adaptee, name, value) {
 
             // Asserting
-            XP.assertArgument(XP.isVoid(data) || XP.isObject(data) || XP.isString(data, true), 1, 'Buffer, Object or string');
+            XP.assertArgument(XP.isString(name, true), 1, 'string');
+            XP.assertArgument(XP.isVoid(value) || XP.isFalse(value) || XP.isInput(value, true), 2, 'string');
 
             // Vars
             var self = this;
 
-            // Checking
-            if (self.tsSubmit) { return self; }
-
-            // Serializing
-            if (self.method !== 'GET' && !XP.isString(data) && !Buffer.isBuffer(data)) { data = JSON.stringify(data); }
-
-            // Ending
-            self._adaptee.end(self.method !== 'GET' ? data : undefined);
+            // Getting
+            if (!XP.isDefined(value) || self.state !== 'idle') { return self.headers[name]; }
 
             // Setting
-            self.state    = 'pending';
-            self.tsSubmit = Date.now();
+            if (value) { adaptee.setHeader(name, self.headers[name] = value); return value; }
 
-            return self;
+            // Removing
+            adaptee.removeHeader(name);
+
+            // Deleting
+            delete self.headers[name];
         },
 
-        /*********************************************************************/
-
         /**
-         * Creates the adpatee
+         * Submits the request, using data for the request body.
          *
-         * @method _adapt
-         * @returns {Object}
-         * @private
+         * @method submit
+         * @param {*} [data]
+         * @param {Function} [resolver]
+         * @returns {Promise}
          */
-        _adapt: {
-            enumerable: false,
-            value: function () {
+        submit: {
+            promise: true,
+            value: function (adaptee, data, resolver) {
+
+                // Asserting
+                XP.assertArgument(XP.isVoid(resolver) || XP.isFunction(resolver), 2, 'Function');
 
                 // Vars
-                var self     = this,
-                    location = global.location || {},
-                    port     = self.secure ? 443 : 80,
-                    protocol = self.secure ? https : http;
-
-                // Adapting
-                self._adaptee = protocol.request({
-                    auth: self.parsed.auth,
-                    headers: self.headers,
-                    hostname: self.parsed.hostname || location.hostname,
-                    keepAlive: self.keepAlive > 0,
-                    keepAliveMsecs: Math.max(self.keepAlive, 0),
-                    method: self.method,
-                    path: self.path || self.parsed.path + (self.parsed.hash || ''),
-                    protocol: self.secure ? 'https:' : 'http:',
-                    port: self.port || self.parsed.port || (self.parsed.hostname && port) || location.port,
-                    withCredentials: false
-                });
-
-                return self;
-            }
-        },
-
-        /**
-         * Parses the data
-         *
-         * @method _parse
-         * @param {Buffer | string} data
-         * @returns {*}
-         * @private
-         */
-        _parse: {
-            enumerable: true,
-            value: function (data) {
                 var self = this;
-                if (self.dataType === 'json') { return JSON.parse(data); }
-                return data;
+
+                // Checking
+                if (self.tsSubmit) { return self; }
+
+                // Serializing
+                if (self.method === 'GET') { data = undefined; }
+                if (self.method !== 'GET') { data = (XP.isInput(data, true) || XP.isBuffer(data) ? data : (XP.isCollection(data) ? XP.toJSON(data) : undefined)); }
+
+                // Listening
+                self.resolved(function (data) { resolver(null, data); });
+                self.rejected(function (error) { resolver(error, null); });
+
+                // Ending
+                adaptee.end(data);
+
+                // Setting
+                self.state    = 'pending';
+                self.tsSubmit = Date.now();
+
+                // Emitting
+                self.emit('submit', data, self);
             }
         },
 
         /*********************************************************************/
+
+        /**
+         * TODO DOC
+         *
+         * @property chunks
+         * @type Array
+         */
+        chunks: {
+            set: function (val) { return this.chunks || val; },
+            validate: function (val) { return !XP.isArray(val) && 'Array'; }
+        },
 
         /**
          * TODO DOC
@@ -7063,19 +6986,19 @@ module.exports = require('./lib');
          * @type string
          */
         contentType: {
-            set: function (val) { return this.contentType || val; },
-            validate: function (val) { return XP.isString(val, true); }
+            set: function (val) { return XP.isDefined(this.contentType) ? this.contentType : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
         },
 
         /**
          * TODO DOC
          *
          * @property data
-         * @type Buffer | string
+         * @type *
          * @readonly
          */
         data: {
-            validate: function (val) { return XP.isString(val) || Buffer.isBuffer(val); }
+            set: function (val) { return XP.isDefined(this.data) ? this.data : val; }
         },
 
         /**
@@ -7085,8 +7008,8 @@ module.exports = require('./lib');
          * @type string
          */
         dataType: {
-            set: function (val) { return this.dataType || val; },
-            validate: function (val) { return val === 'auto' || XP.includes(this.dataTypes, val); }
+            set: function (val) { return XP.isDefined(this.dataType) ? this.dataType : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.includes(this.dataTypes, val) && 'string'; }
         },
 
         /**
@@ -7111,19 +7034,42 @@ module.exports = require('./lib');
          */
         encoding: {
             set: function (val) { return XP.isDefined(this.encoding) ? this.encoding : val; },
-            validate: function (val) { return XP.isVoid(val) || XP.isString(val, true); }
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
         },
 
         /**
          * TODO DOC
          *
-         * @property header
+         * @property error
+         * @type string
+         * @readonly
+         */
+        error: {
+            set: function (val) { return XP.isDefined(this.error) ? this.error : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val) && 'string'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property headers
          * @type Object
          */
         headers: {
             set: function (val) { return this.headers || (XP.isObject(val) && XP.cloneDeep(val)); },
-            then: function () { if (this.contentType !== 'auto') { this.headers['Content-Type'] = this.contentType; } },
-            validate: function (val) { return XP.isObject(val); }
+            then: function () { if (this.contentType) { this.headers['content-type'] = this.contentType; } },
+            validate: function (val) { return !XP.isObject(val) && 'Object'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property hostname
+         * @type string
+         */
+        hostname: {
+            set: function (val) { return this.hostname || val; },
+            validate: function (val) { return !XP.isString(val, true) && 'string'; }
         },
 
         /**
@@ -7134,8 +7080,8 @@ module.exports = require('./lib');
          * @default 0
          */
         keepAlive: {
-            set: function (val) { return this.keepAlive >= 0 ? this.keepAlive : val; },
-            validate: function (val) { return XP.isInt(val, true); }
+            set: function (val) { return XP.isDefined(this.keepAlive) ? this.keepAlive : val; },
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -7147,18 +7093,7 @@ module.exports = require('./lib');
          */
         method: {
             set: function (val) { return this.method || XP.upperCase(val); },
-            validate: function (val) { return XP.isString(val, true); }
-        },
-
-        /**
-         * TODO DOC
-         *
-         * @property parsed
-         * @type Object
-         */
-        parsed: {
-            set: function (val) { return this.parsed || val; },
-            validate: function (val) { return XP.isObject(val); }
+            validate: function (val) { return !XP.isString(val, true) && 'string'; }
         },
 
         /**
@@ -7168,8 +7103,20 @@ module.exports = require('./lib');
          * @type string
          */
         path: {
-            set: function (val) { return XP.isDefined(this.path) ? this.path : (!this.url && val) || ''; },
-            validate: function (val) { return XP.isString(val); }
+            set: function (val) { return XP.isDefined(this.path) ? this.path : val; },
+            then: function (post) { var parts = XP.split(post, '?', true); this.pathname = parts[0] || null; this.search = parts[1] ? '?' + parts[1] : null; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property pathname
+         * @type string
+         */
+        pathname: {
+            set: function (val) { return XP.isDefined(this.path) ? this.path : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
         },
 
         /**
@@ -7179,30 +7126,30 @@ module.exports = require('./lib');
          * @type number
          */
         port: {
-            set: function (val) { return XP.isDefined(this.port) ? this.port : (!this.url && val) || null; },
-            validate: function (val) { return XP.isVoid(val) || XP.isFinite(val, true); }
-        },
-
-        /**
-         * TODO DOC
-         * @property response
-         * @type Object
-         * @readonly
-         */
-        response: {
-            set: function (val) { return this.response || val; },
-            validate: function (val) { return XP.isObject(val); }
+            set: function (val) { return XP.isDefined(this.port) ? this.port : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isInt(val, true) && 'number'; }
         },
 
         /**
          * TODO DOC
          *
-         * @property secure
-         * @type boolean
-         * @readonly
+         * @property protocol
+         * @type string
          */
-        secure: {
-            set: function (val) { return XP.isDefined(this.secure) ? this.secure : !!val; }
+        protocol: {
+            set: function (val) { return this.protocol || val; },
+            validate: function (val) { return !XP.isString(val, true) && 'string'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property pathname
+         * @type string
+         */
+        search: {
+            set: function (val) { return XP.isDefined(this.search) ? this.search : val; },
+            validate: function (val) { return !XP.isVoid(val) && !XP.isString(val, true) && 'string'; }
         },
 
         /**
@@ -7214,7 +7161,7 @@ module.exports = require('./lib');
          */
         state: {
             then: function (post) { this.emit('state', post, this); },
-            validate: function (val) { return XP.includes(this.states, val); }
+            validate: function (val) { return !XP.includes(this.states, val) && 'string'; }
         },
 
         /**
@@ -7222,13 +7169,37 @@ module.exports = require('./lib');
          *
          * @property states
          * @type Array
-         * @default ["aborted", "failed", "idle", "pending", "received", "receiving"]
+         * @default ["aborted", "idle", "pending", "received", "receiving"]
          * @readonly
          */
         states: {
             frozen: true,
             writable: false,
-            value: ['aborted', 'failed', 'idle', 'pending', 'received', 'receiving']
+            value: ['aborted', 'idle', 'pending', 'received', 'receiving']
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property statusCode
+         * @type number
+         * @readonly
+         */
+        statusCode: {
+            set: function (val) { return this.statusCode || val; },
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property statusMessage
+         * @type string
+         * @readonly
+         */
+        statusMessage: {
+            set: function (val) { return this.statusMessage || val; },
+            validate: function (val) { return !XP.isString(val) && 'string'; }
         },
 
         /**
@@ -7240,7 +7211,7 @@ module.exports = require('./lib');
          */
         tsAbort: {
             set: function (val) { return this.tsAbort || val; },
-            validate: function (val) { return XP.isFinite(val, true); }
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -7252,7 +7223,7 @@ module.exports = require('./lib');
          */
         tsData: {
             set: function (val) { return this.tsData || val; },
-            validate: function (val) { return XP.isFinite(val, true); }
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -7264,7 +7235,7 @@ module.exports = require('./lib');
          */
         tsResponse: {
             set: function (val) { return this.tsResponse || val; },
-            validate: function (val) { return XP.isFinite(val, true); }
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -7276,7 +7247,7 @@ module.exports = require('./lib');
          */
         tsSubmit: {
             set: function (val) { return this.tsSubmit || val; },
-            validate: function (val) { return XP.isFinite(val, true); }
+            validate: function (val) { return !XP.isInt(val, true) && 'number'; }
         },
 
         /**
@@ -7286,37 +7257,8 @@ module.exports = require('./lib');
          * @type string
          */
         url: {
-            set: function (val) { return XP.isDefined(this.url) ? this.url : val; },
-            then: function (post) { this.parsed = XP.parseURL(post) || {}; },
-            validate: function (val) { return XP.isString(val); }
-        },
-
-        /*********************************************************************/
-
-        /**
-         * TODO DOC
-         *
-         * @property _adaptee
-         * @type Object
-         * @private
-         */
-        _adaptee: {
-            enumerable: false,
-            set: function (val) { return this.request || val; },
-            validate: function (val) { return XP.isObject(val); }
-        },
-
-        /**
-         * TODO DOC
-         *
-         * @property _chunks
-         * @type Array
-         * @readonly
-         * @private
-         */
-        _chunks: {
-            set: function (val) { return this._chunks || val; },
-            validate: function (val) { return XP.isArray(val); }
+            set: function (val) { return this.url || val; },
+            validate: function (val) { return !XP.isString(val, true) && 'string'; }
         },
 
         /*********************************************************************/
@@ -7328,82 +7270,81 @@ module.exports = require('./lib');
             var self = this;
 
             // Setting
-            self._chunks.push(chunk);
+            self.chunks.push(chunk);
 
             // Emitting
             self.emit('chunk', chunk, self);
         },
 
         // HANDLER
-        _handleEnd: function () {
+        _handleEnd: function (resolver) {
 
             // Vars
-            var self = this;
+            var self     = this,
+                failed   = self.statusCode >= 400,
+                data     = failed ? null : XP.join(self.chunks),
+                dataType = failed ? 'error' : self.dataType,
+                error    = failed ? XP.join(self.chunks).toString() || self.statusMessage : null,
+                state    = failed ? 'failed' : 'received';
 
-            // Trying
-            try {
+            // Parsing
+            if (dataType === 'json') { data = XP.parseJSON(data.toString()); }
 
-                // Setting
-                self.data   = self._parse(Buffer.isBuffer(self._chunks[0]) ? Buffer.concat(self._chunks) : self._chunks.join(''));
-                self.state  = 'received';
-                self.tsData = Date.now();
-
-            } catch (exc) {
-
-                // Handling
-                return self._handleError(exc.message);
-            }
+            // Setting
+            self.data   = data;
+            self.error  = error;
+            self.state  = state;
+            self.tsData = Date.now();
 
             // Resolving
-            self.resolver(null, self.data);
+            resolver(self.error, self.data);
 
             // Emitting
-            self.emit('data', self.data, self);
+            self.emit(failed ? 'error' : 'data', failed ? self.error : self.data, self);
         },
 
         // HANDLER
-        _handleError: function (error) {
+        _handleError: function (resolver, error) {
 
             // Vars
             var self = this;
 
             // Setting
-            self.state      = 'failed';
-            self.tsResponse = Date.now();
-            self.tsData     = self.tsResponse;
+            self.error = error.message || 'Unknown';
+            self.state = 'failed';
 
-            // Rejecting
-            self.resolver(error);
+            // Resolving
+            resolver(self.error, null);
 
             // Emitting
-            self.emit('response', null, self);
-            self.emit('error', error, self);
+            self.emit('error', self.error, self);
         },
 
         // HANDLER
-        _handleResponse: function (response) {
+        _handleResponse: function (resolver, response) {
 
             // Vars
             var self = this;
 
-            // Setting
-            self.response   = response;
-            self.state      = 'receiving';
-            self.tsResponse = Date.now();
-
-            // Setting
+            // Encoding
             if (self.encoding) { response.setEncoding(self.encoding); }
+
+            // Setting
+            self.state         = 'receiving';
+            self.statusCode    = response.statusCode;
+            self.statusMessage = response.statusMessage || http.STATUS_CODES[self.statusCode] || 'Unknown';
+            self.tsResponse    = Date.now();
 
             // Listening
             response.on('data', self._handleData.bind(self));
-            response.on('end', self._handleEnd.bind(self));
+            response.on('end', self._handleEnd.bind(self, resolver));
 
             // Emitting
-            self.emit('response', response, self);
+            self.emit('response', self.url, self);
         }
     });
 
 }(typeof window !== "undefined" ? window : global));
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"buffer":3,"expandjs":1,"http":30,"https":8,"xp-emitter":1}]},{},[42])(42)
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"expandjs":1,"http":31,"https":8,"xp-emitter":1}]},{},[39])(39)
 });

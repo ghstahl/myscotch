@@ -19,8 +19,8 @@ This behavior is used to add sharing capabilities on the context element.
 @behavior xp-object-behavior /bower_components/xp-object-behavior/xp-object-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-object-behavior ExpandJS/xp-object-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-object-behavior ExpandJS/xp-object-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -39,8 +39,19 @@ This behavior is used to add sharing capabilities on the context element.
          * @returns {*}
          */
         share: function (path, value) {
+
+            // Asserting
             XP.assertArgument(XP.isString(path, true), 1, 'string');
-            this.sharers.forEach(function (sharer) { sharer.enforce('shared.' + path, value); });
+
+            // Vars
+            var self = this;
+
+            // Enforcing
+            self.enforce('shared.' + path, value);
+            
+            // Cloning
+            self.sharers.forEach(function (sharer) { sharer.notifyPath('shared.' + path, value); });
+
             return value;
         },
 
@@ -61,7 +72,7 @@ This behavior is used to add sharing capabilities on the context element.
                 notify: true,
                 readOnly: true,
                 type: Object,
-                value: function () { return this.sharers[0] ? XP.clone(this.sharers[0].shared) : {}; }
+                value: function () { return (this.sharers[0] && this.sharers[0].shared) || {}; }
             }
         },
 

@@ -1,7 +1,7 @@
 {
   "name": "mat-snackbar",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-snackbar.html",
   "description": "A custom element used to display a Material Design snackbar",
   "homepage": "http://expandjs.com/elements/mat-snackbar",
@@ -22,21 +22,22 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "mat-typography": "ExpandJS/mat-typography#0.9.9",
-    "xp-toast-behavior": "ExpandJS/xp-toast-behavior#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "mat-typography": "ExpandJS/mat-typography#0.9.11",
+    "xp-refirer-behavior": "ExpandJS/xp-refirer-behavior#0.9.11",
+    "xp-toast-behavior": "ExpandJS/xp-toast-behavior#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   },
   "devDependencies": {
-    "mat-demo": "ExpandJS/mat-demo#0.9.9"
+    "mat-demo": "ExpandJS/mat-demo#0.9.11"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "f1baea0f879248473d6996bbbe3f8d5ea2833b0d"
+    "tag": "v0.9.11",
+    "commit": "87449213166ff59fedafb3e147fbaf8901de9bf7"
   },
   "_source": "git://github.com/ExpandJS/mat-snackbar.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/mat-snackbar"
 }

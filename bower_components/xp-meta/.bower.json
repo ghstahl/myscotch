@@ -1,7 +1,7 @@
 {
   "name": "xp-meta",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-meta.html",
   "description": "A custom element used to create sharable data structures on the fly",
   "homepage": "http://expandjs.com/elements/xp-meta",
@@ -20,17 +20,17 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "xp-shared-behavior": "ExpandJS/xp-shared-behavior#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "xp-shared-behavior": "ExpandJS/xp-shared-behavior#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "2a76334db2de5e91a3f60a7d0874535cedcd0c2a"
+    "tag": "v0.9.11",
+    "commit": "0224ef4c9d60f95b3ba1b031c630e42135cc98fc"
   },
   "_source": "git://github.com/ExpandJS/xp-meta.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/xp-meta"
 }

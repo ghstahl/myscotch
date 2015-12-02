@@ -1,7 +1,7 @@
 {
   "name": "mat-progress",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-progress.html",
   "description": "A custom element used to display a Material Design progress bar",
   "homepage": "http://expandjs.com/elements/mat-progress",
@@ -22,21 +22,21 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "mat-ripple": "ExpandJS/mat-ripple#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "mat-ripple": "ExpandJS/mat-ripple#0.9.11",
     "polymer": "Polymer/polymer#^1.0.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   },
   "devDependencies": {
-    "mat-demo": "ExpandJS/mat-demo#0.9.9"
+    "mat-demo": "ExpandJS/mat-demo#0.9.11"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "6472d8ac74fa8fc0fb3879b7a3b9021421bd8169"
+    "tag": "v0.9.11",
+    "commit": "60024a0e9fa1acea0be8892e3959ce8f82598e34"
   },
   "_source": "git://github.com/ExpandJS/mat-progress.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/mat-progress"
 }

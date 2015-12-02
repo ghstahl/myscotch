@@ -27,9 +27,9 @@ It will reveal itself either on hovering or on tap.
 @behavior xp-referral-behavior /bower_components/xp-referral-behavior/xp-referral-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-overlay ExpandJS/xp-overlay#0.9.9
-@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-overlay ExpandJS/xp-overlay#0.9.11
+@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -49,6 +49,10 @@ It will reveal itself either on hovering or on tap.
 
             :host([empty]) #xpTooltipOverlay {
                 display: none !important;
+            }
+
+            :host #xpTooltipOverlay {
+                pointer-events: none;
             }
 
             :host #xpTooltipOverlay::shadow #xpOverlayWrapper {
@@ -145,7 +149,7 @@ It will reveal itself either on hovering or on tap.
                  *
                  * @attribute empty
                  * @type boolean
-                 * @default false
+                 * @default true
                  * @notifies
                  * @readonly
                  */
@@ -153,7 +157,8 @@ It will reveal itself either on hovering or on tap.
                     computed: '_computeEmpty(tip)',
                     notify: true,
                     reflectToAttribute: true,
-                    type: Boolean
+                    type: Boolean,
+                    value: true
                 },
 
                 /**

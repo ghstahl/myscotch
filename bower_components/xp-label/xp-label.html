@@ -35,7 +35,7 @@ It also finds nested tags inside shadowDOM
 @extends label
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -88,7 +88,7 @@ It also finds nested tags inside shadowDOM
 
             // LISTENERS
             listeners: {
-                click: '_handleClick'
+                'tap': '_handleTap'
             },
 
             // PROPERTIES
@@ -123,9 +123,14 @@ It also finds nested tags inside shadowDOM
             /*********************************************************************/
 
             // HANDLER
-            _handleClick: function (event) {
-                var self = this, input = self.findInput();
-                if (input && !event.button) { input.focus(); input.click(); }
+            _handleTap: function (event) {
+
+                // Vars
+                var self  = this,
+                    input = self.findInput();
+
+                // Focusing
+                if (input && !event.detail.sourceEvent.button) { input.focus(); input.click(); }
             }
         });
     </script>

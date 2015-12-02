@@ -1,7 +1,7 @@
 {
   "name": "xp-slave-behavior",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-slave-behavior.html",
   "description": "A behavior used to add slave capabilities on the context element for a master-slave pattern",
   "homepage": "http://expandjs.com/elements/xp-slave-behavior",
@@ -20,16 +20,16 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "180a4e2c4307bc769a45ee59ac049ae142fdac03"
+    "tag": "v0.9.11",
+    "commit": "8118693bea718d369d3c313c08e7a8549f5c1e7f"
   },
   "_source": "git://github.com/ExpandJS/xp-slave-behavior.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/xp-slave-behavior"
 }

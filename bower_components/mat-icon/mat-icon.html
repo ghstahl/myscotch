@@ -50,22 +50,19 @@ The icon's color can be changed accordingly to the
 @demo http://expandjs.com/demo/mat-icon
 
 @adapts xp-icon /bower_components/xp-icon/xp-icon.html
-@behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency mat-ink ExpandJS/mat-ink#0.9.9
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.9
-@dependency xp-icon ExpandJS/xp-icon#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency mat-ink ExpandJS/mat-ink#0.9.11
+@dependency xp-icon ExpandJS/xp-icon#0.9.11
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.9
-@devDependency mat-icons ExpandJS/mat-icons#0.9.9
+@devDependency mat-demo ExpandJS/mat-demo#0.9.11
+@devDependency mat-icons ExpandJS/mat-icons#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
 <link rel="import" href="../mat-ink/mat-ink.html">
-<link rel="import" href="../xp-adapter-behavior/xp-adapter-behavior.html">
 <link rel="import" href="../xp-icon/xp-icon.html">
 
 <dom-module id="mat-icon">
@@ -105,15 +102,25 @@ The icon's color can be changed accordingly to the
             // ELEMENT
             is: 'mat-icon',
 
-            // BEHAVIORS
-            behaviors: [
-                Polymer.XPAdapterBehavior
-            ],
-
             /*********************************************************************/
 
             // PROPERTIES
             properties: {
+
+                /**
+                 * The adapted element.
+                 *
+                 * @attribute adaptee
+                 * @type Element
+                 * @notifies
+                 * @readonly
+                 */
+                adaptee: {
+                    notify: true,
+                    readOnly: true,
+                    type: Object,
+                    value: null
+                },
 
                 /**
                  * The ink's color.
@@ -215,7 +222,7 @@ The icon's color can be changed accordingly to the
 
             // LISTENER
             ready: function () {
-                this._adapt(this.$.matIconAdaptee);
+                this._setAdaptee(this.$.matIconAdaptee);
             }
         });
     </script>

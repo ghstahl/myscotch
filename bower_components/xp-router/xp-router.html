@@ -22,17 +22,17 @@ It can be used in conjunction with xp-pages.
 
 @behavior xp-selected-behavior /bower_components/xp-selected-behavior/xp-selected-behavior.html
 
-@dependency director Flatiron/director#^1.0.0
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-selected-behavior ExpandJS/xp-selected-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-selected-behavior ExpandJS/xp-selected-behavior#0.9.11
 -->
 
-<script src="../director/build/director.min.js"></script>
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
 <link rel="import" href="../xp-selected-behavior/xp-selected-behavior.html">
 <link rel="import" href="xp-route.html">
+
+<script src="dist/xp-router.min.js"></script>
 
 <dom-module id="xp-router">
 
@@ -61,34 +61,28 @@ It can be used in conjunction with xp-pages.
 
             /*********************************************************************/
 
-            /**
-             * Updates the view's data.
-             *
-             * @method _update
-             * @returns {Element}
-             * @private
-             */
-            _update: function () {
-                var self = this;
-                if (self.view) { self.view.data = self.data; }
-                return self;
-            },
-
-            /*********************************************************************/
-
             // LISTENERS
             listeners: {
-                'items-changed': '_handleItems',
-                'selection-changed': '_handleSelection'
+                'items-changed': '_handleItems'
             },
-
-            // OBSERVERS
-            observers: [
-                '_update(data.*, view)'
-            ],
 
             // PROPERTIES
             properties: {
+
+                /**
+                 * The adapted object.
+                 *
+                 * @attribute adaptee
+                 * @type Object
+                 * @notifies
+                 * @readonly
+                 */
+                adaptee: {
+                    notify: true,
+                    readOnly: true,
+                    type: Object,
+                    value: null
+                },
 
                 /**
                  * The active route's data.
@@ -100,9 +94,10 @@ It can be used in conjunction with xp-pages.
                  */
                 data: {
                     notify: true,
+                    observer: '_handleView',
                     readOnly: true,
                     type: Object,
-                    value: function () { return {}; }
+                    value: null
                 },
 
                 /**
@@ -119,18 +114,20 @@ It can be used in conjunction with xp-pages.
                 },
 
                 /**
-                 * The physical router.
+                 * If set to true, the router is running.
                  *
-                 * @attribute router
-                 * @type Object
+                 * @attribute running
+                 * @type boolean
+                 * @default false
                  * @notifies
                  * @readonly
                  */
-                router: {
+                running: {
                     notify: true,
                     readOnly: true,
-                    type: Object,
-                    value: function () { return new Router(); }
+                    reflectToAttribute: true,
+                    type: Boolean,
+                    value: false
                 },
 
                 /**
@@ -142,8 +139,17 @@ It can be used in conjunction with xp-pages.
                  */
                 view: {
                     notify: true,
+                    observer: '_handleView',
+                    type: Object,
                     value: null
                 }
+            },
+
+            /*********************************************************************/
+
+            // LISTENER
+            ready: function () {
+                this._setAdaptee(new XPRouter());
             },
 
             /*********************************************************************/
@@ -155,33 +161,36 @@ It can be used in conjunction with xp-pages.
                 var self = this;
 
                 // Checking
-                if (self.router._invoked || !self.items.length) { return; }
+                if (self.running || !self.items.length) { return; }
 
                 // Routing
-                self.items.forEach(function (item) {
-                    self.router.on((item.regex && XP.toRegExp(item.path)) || item.path, function () {
-                        return item.redirect ? XP.redirect(item.redirect, true) : self.select(item);
-                    });
-                });
+                self.items.forEach(function (route) { self.adaptee.on(route.path, self._handleRoute.bind(self, route)); });
 
-                // Initializing
-                self.router.init('/');
+                // Running
+                self._setRunning(!!self.adaptee.run());
             },
 
             // HANDLER
-            _handleSelection: function () {
+            _handleRoute: function (route, data) {
 
                 // Vars
-                var self   = this,
-                    data   = {},
-                    keys   = (self.selection && XP.trimLeft(self.selection.path, '/').split('/')) || [],
-                    values = (self.router && self.router.getRoute()) || null;
+                var self = this;
 
-                // Parsing
-                if (values) { keys.forEach(function (key, i) { if (key[0] === ':') { data[key.slice(1)] = values[i]; } }); }
+                // Redirecting
+                if (route.redirect) { return XP.redirect(route.redirect, true); }
+
+                // Selecting
+                XP.delay(function () { self._setData(XP.assign(data, route.data)); self.select(route, true); });
+            },
+
+            // HANDLER
+            _handleView: function () {
+
+                // Vars
+                var self = this;
 
                 // Setting
-                self._setData(XP.assign(data, self.selection && self.selection.data));
+                if (self.view) { self.view.data = self.data; }
             }
         });
     </script>

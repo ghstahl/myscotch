@@ -27,10 +27,10 @@ It only applies the style on the input. All the logic must be done by the develo
 @repository https://github.com/ExpandJS/mat-input-decorator
 
 @dependency polymer Polymer/polymer#^1.0.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-divider ExpandJS/mat-divider#0.9.9
-@dependency mat-ink ExpandJS/mat-ink#0.9.9
+@dependency mat-divider ExpandJS/mat-divider#0.9.11
+@dependency mat-ink ExpandJS/mat-ink#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -364,6 +364,7 @@ It only applies the style on the input. All the logic must be done by the develo
                  *
                  * @attribute empty-label
                  * @type boolean
+                 * @default true
                  * @notifies
                  * @readonly
                  */
@@ -371,7 +372,8 @@ It only applies the style on the input. All the logic must be done by the develo
                     computed: '_computeEmptyLabel(label)',
                     notify: true,
                     reflectToAttribute: true,
-                    type: Boolean
+                    type: Boolean,
+                    value: true
                 },
 
                 /**
@@ -390,6 +392,7 @@ It only applies the style on the input. All the logic must be done by the develo
                  *
                  * @attribute floated
                  * @type boolean
+                 * @default false
                  * @notifies
                  * @readonly
                  */
@@ -397,7 +400,8 @@ It only applies the style on the input. All the logic must be done by the develo
                     computed: '_computeFloated(label, floatingLabel, fullWidth, focused, empty)',
                     notify: true,
                     reflectToAttribute: true,
-                    type: Boolean
+                    type: Boolean,
+                    value: false
                 },
 
                 /**
@@ -460,6 +464,7 @@ It only applies the style on the input. All the logic must be done by the develo
                  */
                 input: {
                     observer: '_inputChanged',
+                    type: Object,
                     value: null
                 },
 

@@ -18,7 +18,7 @@ button, or it can be any other DOM element that acts as an anchor for the overla
 positioning (`<body>` in case of dialogs and pickers).
 
 ```html
-<mat-icon-button id="myButton" icon="navigation:more-vert" target="myOverlay" toggles-target></mat-icon-button>
+<mat-icon-button id="myButton" behavior="toggle" icon="navigation:more-vert" target="myOverlay"></mat-icon-button>
 <mat-overlay id="myOverlay" target="myButton">Lorem ipsum...</mat-overlay>
 ```
 
@@ -28,7 +28,7 @@ It can also be vertically/horizontally aligned using `auto-center`.
 The following snippet will horizontally center the overlay underneath the target.
 
 ```html
-<mat-icon-button id="myButton" icon="navigation:more-vert" target="myOverlay" toggles-target></mat-icon-button>
+<mat-icon-button id="myButton" behavior="toggle" icon="navigation:more-vert" target="myOverlay"></mat-icon-button>
 <mat-overlay id="myOverlay" target="myButton" position="baseline" auto-center>Lorem ipsum...</mat-overlay>
 ```
 
@@ -40,22 +40,19 @@ The following snippet will horizontally center the overlay underneath the target
 @repository https://github.com/ExpandJS/mat-overlay
 
 @adapts xp-overlay /bower_components/xp-overlay/xp-overlay.html
-@behavior xp-adapter-behavior /bower_components/xp-adapter-behavior/xp-adapter-behavior.html
 @behavior xp-targeter-behavior /bower_components/xp-targeter-behavior/xp-targeter-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency mat-paper ExpandJS/mat-paper#0.9.9
-@dependency xp-overlay ExpandJS/xp-overlay#0.9.9
-@dependency xp-adapter-behavior ExpandJS/xp-adapter-behavior#0.9.9
-@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency mat-paper ExpandJS/mat-paper#0.9.11
+@dependency xp-overlay ExpandJS/xp-overlay#0.9.11
+@dependency xp-targeter-behavior ExpandJS/xp-targeter-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../expandjs/expandjs.html">
 <link rel="import" href="../mat-paper/mat-paper.html">
 <link rel="import" href="../xp-overlay/xp-overlay.html">
-<link rel="import" href="../xp-adapter-behavior/xp-adapter-behavior.html">
 <link rel="import" href="../xp-targeter-behavior/xp-targeter-behavior.html">
 
 <dom-module id="mat-overlay">
@@ -101,7 +98,6 @@ The following snippet will horizontally center the overlay underneath the target
 
             // BEHAVIORS
             behaviors: [
-                Polymer.XPAdapterBehavior,
                 Polymer.XPTargeterBehavior
             ],
 
@@ -115,7 +111,7 @@ The following snippet will horizontally center the overlay underneath the target
              */
             hide: function () {
                 var self = this;
-                self.$.matOverlayAdaptee.hide();
+                self.adaptee.hide();
                 return self;
             },
 
@@ -129,7 +125,7 @@ The following snippet will horizontally center the overlay underneath the target
              */
             show: function (target, data) {
                 var self = this;
-                self.$.matOverlayAdaptee.show(target, data);
+                self.adaptee.show(target, data);
                 return self;
             },
 
@@ -143,7 +139,7 @@ The following snippet will horizontally center the overlay underneath the target
              */
             toggle: function (target, data) {
                 var self = this;
-                self.$.matOverlayAdaptee.toggle(target, data);
+                self.adaptee.toggle(target, data);
                 return self;
             },
 
@@ -151,6 +147,21 @@ The following snippet will horizontally center the overlay underneath the target
 
             // PROPERTIES
             properties: {
+
+                /**
+                 * The adapted element.
+                 *
+                 * @attribute adaptee
+                 * @type Element
+                 * @notifies
+                 * @readonly
+                 */
+                adaptee: {
+                    notify: true,
+                    readOnly: true,
+                    type: Object,
+                    value: null
+                },
 
                 /**
                  * If set to true, the overlay is center aligned.
@@ -197,6 +208,7 @@ The following snippet will horizontally center the overlay underneath the target
                  * @type Element
                  */
                 context: {
+                    type: Object,
                     value: null
                 },
 
@@ -271,7 +283,7 @@ The following snippet will horizontally center the overlay underneath the target
 
             // LISTENER
             ready: function () {
-                this._adapt(this.$.matOverlayAdaptee);
+                this._setAdaptee(this.$.matOverlayAdaptee);
             }
         });
     </script>

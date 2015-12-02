@@ -1,7 +1,7 @@
 {
   "name": "xp-collapse",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-collapse.html",
   "description": "A custom element used to create a collapsible element",
   "homepage": "http://expandjs.com/elements/xp-collapse",
@@ -20,16 +20,16 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "dd096c489d176786c1f67a6563cf2b1ce93199d2"
+    "tag": "v0.9.11",
+    "commit": "add08568b84193b40761bb95df9ccc27168f6ae3"
   },
   "_source": "git://github.com/ExpandJS/xp-collapse.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/xp-collapse"
 }

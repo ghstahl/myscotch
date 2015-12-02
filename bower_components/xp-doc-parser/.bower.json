@@ -1,7 +1,7 @@
 {
   "name": "xp-doc-parser",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-doc-parser.html",
   "description": "A custom element able to parse an html or javascript file, extracting it's documentation",
   "homepage": "http://expandjs.com/elements/xp-doc-parser",
@@ -21,17 +21,17 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "xp-request": "ExpandJS/xp-request#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "xp-request": "ExpandJS/xp-request#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "fa986dd96a5d6ad4bc0560a9305b4ea85561115d"
+    "tag": "v0.9.11",
+    "commit": "ceb29d3e057fdcf8244751153c8f61f1766a0e8b"
   },
   "_source": "git://github.com/ExpandJS/xp-doc-parser.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/xp-doc-parser"
 }

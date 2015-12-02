@@ -21,8 +21,8 @@ It can be used in conjunction with xp-icon.
 @behavior xp-array-behavior /bower_components/xp-array-behavior/xp-array-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-array-behavior ExpandJS/xp-array-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-array-behavior ExpandJS/xp-array-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -107,7 +107,9 @@ It can be used in conjunction with xp-icon.
                  */
                 instance: {
                     computed: '_computeInstance(name, refers)',
-                    notify: true
+                    notify: true,
+                    type: Object,
+                    value: null
                 },
 
                 /**

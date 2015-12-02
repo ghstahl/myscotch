@@ -20,8 +20,8 @@ It's particularly useful to perform a JSONP request.
 @behavior xp-shared-behavior /bower_components/xp-shared-behavior/xp-shared-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -153,6 +153,23 @@ It's particularly useful to perform a JSONP request.
             },
 
             /**
+             * If set to true, the script is loaded.
+             *
+             * @attribute loaded
+             * @type boolean
+             * @default false
+             * @notifies
+             * @readonly
+             */
+            loaded: {
+                computed: '_computeLoaded(state)',
+                notify: true,
+                reflectToAttribute: true,
+                type: Boolean,
+                value: false
+            },
+
+            /**
              * The script's src.
              *
              * @attribute src
@@ -193,6 +210,13 @@ It's particularly useful to perform a JSONP request.
          * @readonly
          */
         promises: {},
+
+        /*********************************************************************/
+
+        // COMPUTER
+        _computeLoaded: function (state) {
+            return state === 'loaded';
+        },
 
         /*********************************************************************/
 

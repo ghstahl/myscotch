@@ -19,8 +19,8 @@ It can be used in conjunction with xp-iconset.
 @repository https://github.com/ExpandJS/xp-icon
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency xp-iconset ExpandJS/xp-iconset#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency xp-iconset ExpandJS/xp-iconset#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -134,6 +134,7 @@ It can be used in conjunction with xp-iconset.
                  */
                 finder: {
                     readOnly: true,
+                    type: Object,
                     value: function () { return XP.createElement('xp-iconset'); }
                 },
 
@@ -146,6 +147,7 @@ It can be used in conjunction with xp-iconset.
                  */
                 iconElement: {
                     readOnly: true,
+                    type: Object,
                     value: null
                 },
 
@@ -175,6 +177,7 @@ It can be used in conjunction with xp-iconset.
                 iconSet: {
                     notify: true,
                     readOnly: true,
+                    type: Object,
                     value: null
                 },
 

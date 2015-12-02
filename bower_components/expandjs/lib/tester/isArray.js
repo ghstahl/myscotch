@@ -10,9 +10,9 @@
 (function () {
     "use strict";
 
-    var lodash    = require('lodash'),
-        isVoid    = require('../tester/isVoid'),
-        xnor      = require('../operator/xnor');
+    var _      = require('lodash'),
+        isVoid = require('../tester/isVoid'),
+        xnor   = require('../operator/xnor');
 
     /**
      * Checks if `value` is instance of `Array`.
@@ -34,7 +34,7 @@
      * @returns {boolean} Returns `true` or `false` accordingly to the check.
      */
     module.exports = function isArray(value, notEmpty) {
-        return lodash.isArray(value) && (isVoid(notEmpty) || xnor(value.length, notEmpty));
+        return _.isArray(value) && (isVoid(notEmpty) || xnor(value.length, notEmpty));
     };
 
 }());

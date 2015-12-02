@@ -1,7 +1,7 @@
 {
   "name": "expandjs",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "expandjs.html",
   "description": "This module is used to import the ExpandJS utilities",
   "homepage": "http://expandjs.com/utilities",
@@ -20,13 +20,13 @@
   "ignore": [
     "**/.*"
   ],
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "5d3669a86d9ac1634ca34ff436eb42d744553808"
+    "tag": "v0.9.11",
+    "commit": "11e29dfb9bf79b69425d7fa80678686b6042d321"
   },
-  "_source": "git://github.com/expandjs/ExpandJS.git",
-  "_target": "~0.9.9",
-  "_originalSource": "expandjs/ExpandJS"
+  "_source": "git://github.com/expandjs/expandjs.git",
+  "_target": "0.9.11",
+  "_originalSource": "ExpandJS/expandjs"
 }

@@ -1,7 +1,7 @@
 {
   "name": "mat-input-decorator",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-input-decorator.html",
   "description": "A custom element used to decorate various inputs with the Material Design style",
   "homepage": "http://expandjs.com/elements/mat-input-decorator",
@@ -21,9 +21,9 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "mat-divider": "ExpandJS/mat-divider#0.9.9",
-    "mat-ink": "ExpandJS/mat-ink#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "mat-divider": "ExpandJS/mat-divider#0.9.11",
+    "mat-ink": "ExpandJS/mat-ink#0.9.11",
     "polymer": "Polymer/polymer#^1.0.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   }

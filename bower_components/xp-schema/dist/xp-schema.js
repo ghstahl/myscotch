@@ -1,10 +1,10 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.XPSchema = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.XPSchema = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 
-},{}],2:[function(require,module,exports){
+},{}],2:[function(_dereq_,module,exports){
 /*jslint browser: true, devel: true, node: true, ass: true, nomen: true, unparam: true, indent: 4 */
 
-module.exports = require('./lib');
-},{"./lib":4}],3:[function(require,module,exports){
+module.exports = _dereq_('./lib');
+},{"./lib":3}],3:[function(_dereq_,module,exports){
 (function (global){
 /*jslint browser: true, devel: true, node: true, ass: true, nomen: true, unparam: true, indent: 4 */
 
@@ -19,50 +19,11 @@ module.exports = require('./lib');
     "use strict";
 
     // Vars
-    var XP = global.XP || require('expandjs');
+    var XP         = global.XP || _dereq_('expandjs'),
+        XPEmitter  = global.XPEmitter || _dereq_('xp-emitter'),
 
-    /*********************************************************************/
-
-    /**
-     * Filters the target
-     *
-     * @param {Object} target
-     * @param {Object} fields
-     * @returns {Object}
-     */
-    module.exports = function (target, fields) {
-
-        // Filtering
-        XP.forOwn(target, function (val, key) {
-            if (XP.has(fields, key) && fields[key].immutable) { delete target[key]; }
-        });
-
-        return target;
-    };
-
-}(typeof window !== "undefined" ? window : global));
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"expandjs":1}],4:[function(require,module,exports){
-(function (global){
-/*jslint browser: true, devel: true, node: true, ass: true, nomen: true, unparam: true, indent: 4 */
-
-/**
- * @license
- * Copyright (c) 2015 The ExpandJS authors. All rights reserved.
- * This code may only be used under the BSD style license found at https://expandjs.github.io/LICENSE.txt
- * The complete set of authors may be found at https://expandjs.github.io/AUTHORS.txt
- * The complete set of contributors may be found at https://expandjs.github.io/CONTRIBUTORS.txt
- */
-(function (global) {
-    "use strict";
-
-    // Vars
-    var XP         = global.XP || require('expandjs'),
-        XPEmitter  = global.XPEmitter || require('xp-emitter'),
-
-        filter     = require('./filter'),
-        sanitize   = require('./sanitize'),
-        validate   = require('./validate'),
+        sanitize   = _dereq_('./sanitize'),
+        validate   = _dereq_('./validate'),
 
         filterer   = function (item) { return XP.has(item, 'input') || XP.has(item, 'options'); },
         mapper     = function (item, handle) { item = XP.assign({handle: handle}, item); XP.withdraw(item, 'method'); return item; },
@@ -74,13 +35,13 @@ module.exports = require('./lib');
     /*********************************************************************/
 
     /**
-     * This class is used to provide scheming functionalities, including sanitization and validation.
+     * This class is used to provide scheming functionalities.
      *
      * @class XPSchema
-     * @description This class is used to provide scheming functionalities, including sanitization and validation
+     * @description This class is used to provide scheming functionalities
      * @extends XPEmitter
      */
-    module.exports = new XP.Class('XPSchema', {
+    module.exports = global.XPSchema = new XP.Class('XPSchema', {
 
         // EXTENDS
         extends: XPEmitter,
@@ -91,7 +52,7 @@ module.exports = require('./lib');
          * @constructs
          * @param {Object} options
          *   @param {Object} [options.fields]
-         *   @param {boolean} [options.loose = false]
+         *   @param {boolean} [options.strict = false]
          *   @param {boolean} [options.useful = false]
          */
         initialize: function (options) {
@@ -105,65 +66,111 @@ module.exports = require('./lib');
             // Setting
             self.options = options;
             self.fields  = self.options.fields || {};
-            self.loose   = self.options.loose || false;
+            self.strict  = self.options.strict || false;
             self.useful  = self.options.useful || false;
         },
 
         /*********************************************************************/
 
         /**
-         * Filters the target.
+         * TODO DOC
          *
          * @method filter
-         * @param {Object} target
+         * @param {Object} data
          * @param {Function} [resolver]
          * @returns {Promise}
          */
         filter: {
             promise: true,
-            value: function (target, resolver) {
+            value: function (data, resolver) {
                 var self = this;
                 XP.waterfall([
-                    function (next) { next((!XP.isObject(target) && new XP.ValidationError('target', 'Object')) || null); },
-                    function (next) { XP.attempt(function (next) { next(null, filter(target, self.fields, self.options)); }, next); }
+                    function (next) { self._assert({data: data}, next); }, // asserting
+                    function (next) { next(null, XP.forOwn(self.fields, function (field, key) { if (field.reserved) { delete data[key]; } })); }, // filtering
+                    function (next) { next(null, data); } // resolving
                 ], resolver);
             }
         },
 
         /**
-         * Sanitizes the target.
+         * TODO DOC
+         *
+         * @method merge
+         * @param {Object} data
+         * @param {Object} [item]
+         * @param {boolean} [reservedOnly = false]
+         * @param {Function} [resolver]
+         * @returns {Promise}
+         */
+        merge: {
+            promise: true,
+            value: function (data, item, reservedOnly, resolver) {
+                var self = this;
+                XP.waterfall([
+                    function (next) { self._assert({data: data, item: item}, next); }, // asserting
+                    function (next) { next(null, XP.forOwn(item || {}, function (value, key) { if (!XP.isDefined(data[key]) && (!reservedOnly || (self.fields[key] && self.fields[key].reserved))) { data[key] = item[key]; } })); }, // merging
+                    function (next) { next(null, data); } // resolving
+                ], resolver);
+            }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @method prepare
+         * @param {Object} data
+         * @param {Function} [resolver]
+         * @returns {Promise}
+         */
+        prepare: {
+            promise: true,
+            value: function (data, resolver) {
+                var self = this;
+                XP.waterfall([
+                    function (next) { self._assert({data: data}, next); }, // asserting
+                    function (next) { next(null, XP.forOwn(self.fields, function (field, key) { if (XP.isDefined(field.value) && XP.isVoid(data[key])) { data[key] = XP.isFunction(field.value) ? field.value() : field.value; } })); }, // preparing
+                    function (next) { next(null, data); } // resolving
+                ], resolver);
+            }
+        },
+
+        /**
+         * TODO DOC
          *
          * @method sanitize
-         * @param {Object} target
+         * @param {Object} data
          * @param {Function} [resolver]
          * @returns {Promise}
          */
         sanitize: {
             promise: true,
-            value: function (target, resolver) {
+            value: function (data, resolver) {
                 var self = this;
                 XP.waterfall([
-                    function (next) { next((!XP.isObject(target) && new XP.ValidationError('target', 'Object')) || null); },
-                    function (next) { XP.attempt(function (next) { next(null, sanitize(target, self.fields, self.options)); }, next); }
+                    function (next) { self._assert({data: data}, next); }, // asserting
+                    function (next) { next(null, sanitize(data, self.fields, self.options)); }, // sanitizing
+                    function (next) { next(null, data); } // resolving
                 ], resolver);
             }
         },
 
         /**
-         * Validates the target.
+         * TODO DOC
          *
          * @method validate
-         * @param {Object} target
+         * @param {Object} data
+         * @param {Object} [item]
          * @param {Function} [resolver]
          * @returns {Promise}
          */
         validate: {
             promise: true,
-            value: function (target, resolver) {
+            value: function (data, item, resolver) {
                 var self = this;
                 XP.waterfall([
-                    function (next) { next((!XP.isObject(target) && new XP.ValidationError('target', 'Object')) || null); },
-                    function (next) { XP.attempt(function (next) { next(null, validate(target, self.fields, self.options)); }, next); }
+                    function (next) { self._assert({data: data, item: item}, next); }, // asserting
+                    function (next) { next(validate(data, self.fields, item), null); }, // validating
+                    function (next) { next(null, data); } // resolving
                 ], resolver);
             }
         },
@@ -177,17 +184,7 @@ module.exports = require('./lib');
          * @type Object
          */
         fields: {
-            validate: function (val) { return XP.isObject(val); }
-        },
-
-        /**
-         * TODO DOC
-         *
-         * @property loose
-         * @type boolean
-         */
-        loose: {
-            set: function (val) { return !!val; }
+            validate: function (val) { return !XP.isObject(val) && 'Object'; }
         },
 
         /**
@@ -201,6 +198,17 @@ module.exports = require('./lib');
         sanitizers: {
             'static': true,
             get: function () { return sanitizers; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property strict
+         * @type boolean
+         * @default false
+         */
+        strict: {
+            set: function (val) { return !!val; }
         },
 
         /**
@@ -221,6 +229,7 @@ module.exports = require('./lib');
          *
          * @property useful
          * @type boolean
+         * @default false
          */
         useful: {
             set: function (val) { return !!val; }
@@ -237,12 +246,18 @@ module.exports = require('./lib');
         validators: {
             'static': true,
             get: function () { return validators; }
-        }
+        },
+
+        /*********************************************************************/
+
+        // ASSERTS
+        _assertData: {enumerable: false, value: function (val) { return !XP.isObject(val) && new XP.ValidationError('data', 'Object', 400); }},
+        _assertItem: {enumerable: false, value: function (val) { return !XP.isVoid(val) && !XP.isObject(val) && new XP.ValidationError('item', 'Object', 500); }}
     });
 
 }(typeof window !== "undefined" ? window : global));
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./filter":3,"./sanitize":5,"./validate":6,"expandjs":1,"xp-emitter":1}],5:[function(require,module,exports){
+},{"./sanitize":4,"./validate":5,"expandjs":1,"xp-emitter":1}],4:[function(_dereq_,module,exports){
 (function (global){
 /*jslint browser: true, devel: true, node: true, ass: true, nomen: true, unparam: true, indent: 4 */
 
@@ -258,97 +273,98 @@ module.exports = require('./lib');
 
     // Vars
     var exp = module.exports,
-        XP  = global.XP || require('expandjs');
+        XP  = global.XP || _dereq_('expandjs');
 
     /*********************************************************************/
 
     /**
-     * Sanitize the target
+     * Sanitize the data
      *
-     * @param {Object} target
+     * @param {Object} data
      * @param {Object} fields
      * @param {Object} [options]
-     * @param {string} [name]
      * @returns {Object}
      */
-    exp = module.exports = function (target, fields, options, name) {
+    exp = module.exports = function (data, fields, options) {
 
         // Restricting
-        XP.forOwn(target, function (val, key) {
-            if (!options.loose && !fields[key]) { delete target[key]; }
+        XP.forOwn(data, function (val, key) {
+            if (options.strict && !fields[key]) { delete data[key]; }
         });
 
         // Sanitizing
         XP.forOwn(fields, function (field, key) {
-            target[key] = exp.sanitizeStep(target[key], field, fields, options, (name ? name + '.' : '') + key);
-            if (options.useful && XP.isVoid(target[key])) { delete target[key]; }
+            data[key] = sanitizeStep(data[key], fields, options, key);
+            if (options.useful && XP.isVoid(data[key])) { delete data[key]; }
         });
 
-        return target;
+        return data;
     };
 
     /**
      * Sanitizes the step
      *
      * @param {*} step
-     * @param {Object} [field]
      * @param {Object} [fields]
      * @param {Object} [options]
-     * @param {string} [name]
+     * @param {string} [key]
      * @returns {*}
      */
-    exp.sanitizeStep = function (step, field, fields, options, name) {
+    function sanitizeStep(step, fields, options, key) {
 
         // Setting
         step = XP.isDefined(step) ? step : null;
 
         // Checking
-        if (!XP.isObject(field)) { return step; }
+        if (!XP.isObject(fields[key]) && !XP.isString(fields[key], true)) { return step; }
 
         // Sanitizing (step)
-        step = exp.sanitizeValue(step, field, null, name);
+        step = sanitizeValue(step, fields, options, key);
 
         // Sanitizing (values)
-        if (field.map || field.multi) {
-            XP[field.map ? 'forOwn' : 'forEach'](step, function (value, index) {
-                step[index] = exp.sanitizeValue(value, field, index, name + '[' + index + ']');
-                if (XP.isObject(step[index]) && (field.fields || field.type === 'recursive')) {
-                    step[index] = exp(step[index], field.fields || fields, XP.assign({}, options, {loose: field.loose}), name + '[' + index + ']');
+        if (fields[key].map || fields[key].multi) {
+            XP[fields[key].map ? 'forOwn' : 'forEach'](step, function (value, index) {
+                step[index] = sanitizeValue(step[index], fields, key, index);
+                if (XP.isObject(step[index]) && (fields[key].fields || fields[key].type === 'recursive')) {
+                    step[index] = exp(step[index], fields[key].fields || fields, options);
                 }
             });
-        } else if (XP.isObject(step) && (field.fields || field.type === 'recursive')) {
-            step = exp(step, field.fields || fields, XP.assign({}, options, {loose: field.loose}), name);
+        } else if (XP.isObject(step) && (fields[key].fields || fields[key].type === 'recursive')) {
+            step = exp(step, fields[key].fields || fields, options);
         }
 
         return step;
-    };
+    }
 
     /**
      * Sanitizes the value
      *
      * @param {*} value
-     * @param {Object} [field]
+     * @param {Object} [fields]
+     * @param {Object} [options]
+     * @param {string} [key]
      * @param {number | string} [index]
-     * @param {string} [name]
      * @returns {*}
      */
-    exp.sanitizeValue = function (value, field, index, name) {
+    function sanitizeValue(value, fields, options, key, index) {
 
         // Setting
         value = XP.isDefined(value) ? value : null;
 
         // Vars
-        var key = (XP.isVoid(index) && ((field.map && 'map') || (field.multi && 'multi'))) || 'type',
-            val = exp.sanitizers[key].method(value, field[key], name);
+        var field     = (XP.isString(fields[key]) && {type: fields[key]}) || fields[key],
+            sanitizer = (XP.isVoid(index) && ((field.map && 'map') || (field.multi && 'multi'))) || 'type',
+            result    = exp.sanitizers[sanitizer].method(value, field[sanitizer]);
 
         // Sanitizing
-        XP.forOwn(field, function (sub, key) {
-            if (!exp.sanitizers[key] || key === 'map' || key === 'multi' || key === 'type') { return; }
-            val = exp.sanitizers[key].method(val, sub, name);
+        XP.forOwn(field, function (match, sanitizer) {
+            if (exp.sanitizers[sanitizer] && sanitizer !== 'map' && sanitizer !== 'multi' && sanitizer !== 'type') {
+                result = exp.sanitizers[sanitizer].method(result, match);
+            }
         });
 
-        return val;
-    };
+        return result;
+    }
 
     /*********************************************************************/
 
@@ -361,42 +377,42 @@ module.exports = require('./lib');
     exp.sanitizers = {
 
         /**
-         * Returns map representation of target (based on bool)
+         * Returns map representation of value (based on bool)
          *
-         * @param {*} target
+         * @param {*} value
          * @param {boolean} bool
          * @returns {*}
          */
-        map: {method: function (target, bool) {
-            return XP.isVoid(target) && bool ? {} : target;
+        map: {method: function (value, bool) {
+            return XP.isVoid(value) && bool ? {} : value;
         }},
 
         /**
-         * Returns array representation of target (based on bool)
+         * Returns array representation of value (based on bool)
          *
-         * @param {*} target
+         * @param {*} value
          * @param {boolean} bool
          * @returns {*}
          */
-        multi: {method: function (target, bool) {
-            return XP.isVoid(target) && bool ? [] : target;
+        multi: {method: function (value, bool) {
+            return XP.isVoid(value) && bool ? [] : value;
         }},
 
         /**
-         * Returns typed representation of target
+         * Returns typed representation of value
          *
-         * @param {*} target
+         * @param {*} value
          * @param {string} type
          * @returns {*}
          */
-        type: {method: function (target, type) {
-            return XP.isVoid(target) && type === 'boolean' ? false : target;
+        type: {method: function (value, type) {
+            return XP.isVoid(value) && type === 'boolean' ? false : value;
         }}
     };
 
 }(typeof window !== "undefined" ? window : global));
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"expandjs":1}],6:[function(require,module,exports){
+},{"expandjs":1}],5:[function(_dereq_,module,exports){
 (function (global){
 /*jslint browser: true, devel: true, node: true, ass: true, nomen: true, unparam: true, indent: 4 */
 
@@ -412,94 +428,101 @@ module.exports = require('./lib');
 
     // Vars
     var exp = module.exports,
-        XP  = global.XP || require('expandjs');
+        XP  = global.XP || _dereq_('expandjs');
 
     /*********************************************************************/
 
     /**
-     * Validates the target.
+     * Validates the data.
      *
-     * @param {Object} target
+     * @param {Object} data
      * @param {Object} fields
-     * @param {Object} [options]
+     * @param {Object} [item]
      * @param {string} [name]
      * @returns {Object}
      */
-    exp = module.exports = function (target, fields, options, name) {
+    exp = module.exports = function (data, fields, item, name) {
 
-        // Validating
-        XP.forOwn(fields, function (field, key) {
-            exp.validateStep(target[key], field, fields, options, (name ? name + '.' : '') + key);
-        });
+        // Trying
+        try {
 
-        return target;
+            // Validating
+            XP.forOwn(fields, function (field, key) {
+                validateStep(data[key], fields, item, (name ? name + '.' : '') + key, key);
+            });
+
+            return null;
+        }
+
+        // Catching
+        catch (error) { return error; }
     };
 
     /**
      * Validates the step.
      *
      * @param {*} step
-     * @param {Object} [field]
      * @param {Object} [fields]
-     * @param {Object} [options]
+     * @param {Object} [item]
      * @param {string} [name]
-     * @returns {*}
+     * @param {string} [key]
+     * @throws Error
      */
-    exp.validateStep = function (step, field, fields, options, name) {
+    function validateStep(step, fields, item, name, key) {
 
         // Setting
         step = XP.isDefined(step) ? step : null;
 
         // Checking
-        if (!XP.isObject(field)) { return step; }
+        if (!XP.isObject(fields[key]) && !XP.isString(fields[key], true)) { return; }
 
         // Validating (step)
-        exp.validateValue(step, field, null, name);
+        validateValue(step, fields, item, name, key);
 
         // Validating (values)
-        if (field.map || field.multi) {
-            XP[field.map ? 'forOwn' : 'forEach'](step, function (value, index) {
-                exp.validateValue(value, field, index, name + '[' + index + ']');
-                if (XP.isObject(value) && (field.fields || field.type === 'recursive')) {
-                    exp(value, field.fields || fields, XP.assign({}, options, {strict: field.strict}), name + '[' + index + ']');
+        if (fields[key].map || fields[key].multi) {
+            XP[fields[key].map ? 'forOwn' : 'forEach'](step, function (value, index) {
+                validateValue(value, fields, name + '[' + index + ']', key, index);
+                if (XP.isObject(value) && (fields[key].fields || fields[key].type === 'recursive')) {
+                    exp(value, fields[key].fields || fields, item, name + '[' + index + ']');
                 }
             });
-        } else if (XP.isObject(step) && (field.fields || field.type === 'recursive')) {
-            exp(step, field.fields || fields, XP.assign({}, options, {strict: field.strict}), name);
+        } else if (XP.isObject(step) && (fields[key].fields || fields[key].type === 'recursive')) {
+            exp(step, fields[key].fields || fields, item, name);
         }
-
-        return step;
-    };
+    }
 
     /**
      * Validates the value.
      *
      * @param {*} value
-     * @param {Object} [field]
-     * @param {number | string} [index]
+     * @param {Object} [fields]
+     * @param {Object} [item]
      * @param {string} [name]
-     * @returns {*}
+     * @param {string} [key]
+     * @param {number | string} [index]
+     * @throws Error
      */
-    exp.validateValue = function (value, field, index, name) {
+    function validateValue(value, fields, item, name, key, index) {
 
         // Setting
         value = XP.isDefined(value) ? value : null;
 
         // Vars
-        var key = (XP.isVoid(index) && ((field.map && 'map') || (field.multi && 'multi'))) || 'type',
-            err = exp.validators[key].method(value, field[key], name);
+        var field     = (XP.isString(fields[key]) && {type: fields[key]}) || fields[key],
+            validator = (XP.isVoid(index) && ((field.map && 'map') || (field.multi && 'multi'))) || 'type',
+            error     = exp.validators[validator].method(value, field[validator], name);
 
         // Throwing
-        if (err) { throw err; }
+        if (error) { throw error; }
 
         // Validating
-        XP.forOwn(field, function (sub, key) {
-            if (!exp.validators[key] || key === 'map' || key === 'multi' || key === 'type') { return; }
-            if (err = exp.validators[key].method(value, sub, name)) { throw err; }
+        XP.forOwn(field, function (match, validator) {
+            if (exp.validators[validator] && validator !== 'map' && validator !== 'multi' && validator !== 'type' && (validator !== 'immutable' || item)) {
+                if (error = exp.validators[validator].method(value, match, name, item && item[key])) { throw error; }
+            }
         });
-
-        return value;
-    };
+    }
 
     /*********************************************************************/
 
@@ -529,7 +552,6 @@ module.exports = require('./lib');
      * @type Object
      */
     exp.types = {
-        any: XP.isAny,
         boolean: XP.isBoolean,
         input: XP.isInput,
         number: XP.isFinite,
@@ -547,185 +569,197 @@ module.exports = require('./lib');
     exp.validators = {
 
         /**
-         * Returns error if target is gte than max
+         * Returns error if value is gte than max.
          *
-         * @param {number} target
+         * @param {number} value
          * @param {number} max
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        exclusiveMaximum: {input: 'number', type: 'number', method: function (target, max, name) {
-            return !XP.isFinite(target) || !XP.isFinite(max) ? false : (target >= max ? new XP.ValidationError(name || 'target', 'less than ' + max) : null);
+        exclusiveMaximum: {input: 'number', type: 'number', method: function (value, max, name) {
+            return !XP.isFinite(value) || !XP.isFinite(max) ? false : (value >= max ? new XP.ValidationError(name || 'data', 'less than ' + max, 400) : null);
         }},
 
         /**
-         * Returns error if target is lte than min
+         * Returns error if value is lte than min.
          *
-         * @param {number} target
+         * @param {number} value
          * @param {number} min
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        exclusiveMinimum: {input: 'number', type: 'number', method: function (target, min, name) {
-            return !XP.isFinite(target) || !XP.isFinite(min) ? false : (target <= min ? new XP.ValidationError(name || 'target', 'greater than ' + min) : null);
+        exclusiveMinimum: {input: 'number', type: 'number', method: function (value, min, name) {
+            return !XP.isFinite(value) || !XP.isFinite(min) ? false : (value <= min ? new XP.ValidationError(name || 'data', 'greater than ' + min, 400) : null);
         }},
 
         /**
-         * Returns error if target is not an map (based on bool)
+         * Returns error if value is not equivalent to current (based on bool).
          *
-         * @param {*} target
+         * @param {*} value
+         * @param {boolean} bool
+         * @param {string} [name]
+         * @param {*} [current]
+         */
+        immutable: {input: 'checkbox', method: function (value, bool, name, current) {
+            return bool && !XP.isEquivalent(value, current) ? new XP.ImmutableError(name || 'data', 409) : null;
+        }},
+
+        /**
+         * Returns error if value is not an map (based on bool).
+         *
+         * @param {*} value
          * @param {boolean} bool
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        map: {input: 'checkbox', multi: true, method: function (target, bool, name) {
-            return XP.xor(bool, XP.isObject(target)) ? new XP.ValidationError(name || 'target', 'a map') : null;
+        map: {input: 'checkbox', multi: true, method: function (value, bool, name) {
+            return XP.xor(bool, XP.isObject(value)) ? new XP.ValidationError(name || 'data', 'a map', 400) : null;
         }},
 
         /**
-         * Returns error if target is gt than max
+         * Returns error if value is gt than max.
          *
-         * @param {number} target
+         * @param {number} value
          * @param {number} max
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        maximum: {input: 'number', type: 'number', method: function (target, max, name) {
-            return !XP.isFinite(target) || !XP.isFinite(max) ? false : (target > max ? new XP.ValidationError(name || 'target', 'a maximum of ' + max) : null);
+        maximum: {input: 'number', type: 'number', method: function (value, max, name) {
+            return !XP.isFinite(value) || !XP.isFinite(max) ? false : (value > max ? new XP.ValidationError(name || 'data', 'a maximum of ' + max, 400) : null);
         }},
 
         /**
-         * Returns error if target length is gt than max
+         * Returns error if value length is gt than max.
          *
-         * @param {Array} target
+         * @param {Array} value
          * @param {number} max
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        maxItems: {attributes: {min: 1}, input: 'number', multi: true, method: function (target, max, name) {
-            return !XP.isArray(target) || !XP.isFinite(max) || max < 1 ? false : (target.length > max ? new XP.ValidationError(name || 'target', 'a maximum of ' + max + ' items') : null);
+        maxItems: {attributes: {min: 1}, input: 'number', multi: true, method: function (value, max, name) {
+            return !XP.isArray(value) || !XP.isFinite(max) || max < 1 ? false : (value.length > max ? new XP.ValidationError(name || 'data', 'a maximum of ' + max + ' items', 400) : null);
         }},
 
         /**
-         * Returns error if target length is gt than max
+         * Returns error if value length is gt than max.
          *
-         * @param {string} target
+         * @param {string} value
          * @param {number} max
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        maxLength: {attributes: {min: 1}, input: 'number', type: 'string', method: function (target, max, name) {
-            return !XP.isString(target) || !XP.isFinite(max) || max < 1 ? false : (target.length > max ? new XP.ValidationError(name || 'target', 'a maximum of ' + max + ' chars') : null);
+        maxLength: {attributes: {min: 1}, input: 'number', type: 'string', method: function (value, max, name) {
+            return !XP.isString(value) || !XP.isFinite(max) || max < 1 ? false : (value.length > max ? new XP.ValidationError(name || 'data', 'a maximum of ' + max + ' chars', 400) : null);
         }},
 
         /**
-         * Returns error if target is lt than min
+         * Returns error if value is lt than min.
          *
-         * @param {number} target
+         * @param {number} value
          * @param {number} min
          * @param {string} [name]
          * @returns {boolean | Error|null}
          */
-        minimum: {input: 'number', type: 'number', method: function (target, min, name) {
-            return !XP.isFinite(target) || !XP.isFinite(min) ? false : (target < min ? new XP.ValidationError(name || 'target', 'a minimum of ' + min) : null);
+        minimum: {input: 'number', type: 'number', method: function (value, min, name) {
+            return !XP.isFinite(value) || !XP.isFinite(min) ? false : (value < min ? new XP.ValidationError(name || 'data', 'a minimum of ' + min, 400) : null);
         }},
 
         /**
-         * Returns error if target length is lt than min
+         * Returns error if value length is lt than min.
          *
-         * @param {Array} target
+         * @param {Array} value
          * @param {number} min
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        minItems: {attributes: {min: 1}, input: 'number', multi: true, method: function (target, min, name) {
-            return !XP.isArray(target) || !XP.isFinite(min) ? false : (target.length < min ? new XP.ValidationError(name || 'target', 'a minimum of ' + min + ' items') : null);
+        minItems: {attributes: {min: 1}, input: 'number', multi: true, method: function (value, min, name) {
+            return !XP.isArray(value) || !XP.isFinite(min) ? false : (value.length < min ? new XP.ValidationError(name || 'data', 'a minimum of ' + min + ' items', 400) : null);
         }},
 
         /**
-         * Returns error if target length is lt than min
+         * Returns error if value length is lt than min.
          *
-         * @param {string} target
+         * @param {string} value
          * @param {number} min
          * @param {string} [name]
          * @returns {boolean | Error|null}
          */
-        minLength: {attributes: {min: 1}, input: 'number', type: 'string', method: function (target, min, name) {
-            return !XP.isString(target) || !XP.isFinite(min) ? false : (target.length < min ? new XP.ValidationError(name || 'target', 'a minimum of ' + min + ' chars') : null);
+        minLength: {attributes: {min: 1}, input: 'number', type: 'string', method: function (value, min, name) {
+            return !XP.isString(value) || !XP.isFinite(min) ? false : (value.length < min ? new XP.ValidationError(name || 'data', 'a minimum of ' + min + ' chars', 400) : null);
         }},
 
         /**
-         * Returns error if target is not array (based on bool)
+         * Returns error if value is not array (based on bool).
          *
-         * @param {*} target
+         * @param {*} value
          * @param {boolean} bool
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        multi: {input: 'checkbox', method: function (target, bool, name) {
-            return XP.xor(bool, XP.isArray(target)) ? new XP.ValidationError(name || 'target', 'multi') : null;
+        multi: {input: 'checkbox', method: function (value, bool, name) {
+            return XP.xor(bool, XP.isArray(value)) ? new XP.ValidationError(name || 'data', 'multi', 400) : null;
         }},
 
         /**
-         * Returns error if target is not multiple of val
+         * Returns error if value is not multiple of val.
          *
-         * @param {number} target
+         * @param {number} value
          * @param {number} val
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        multipleOf: {input: 'number', type: 'number', method: function (target, val, name) {
-            return !XP.isFinite(target) || !XP.isFinite(val) ? false : (target % val !== 0 ? new XP.ValidationError(name || 'target', 'divisible by ' + val) : null);
+        multipleOf: {input: 'number', type: 'number', method: function (value, val, name) {
+            return !XP.isFinite(value) || !XP.isFinite(val) ? false : (value % val !== 0 ? new XP.ValidationError(name || 'data', 'divisible by ' + val, 400) : null);
         }},
 
         /**
-         * Returns error if target matches pattern
+         * Returns error if value matches pattern.
          *
-         * @param {string} target
+         * @param {string} value
          * @param {string} pattern
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        pattern: {input: 'text', options: XP.keys(exp.patterns), type: 'string', method: function (target, pattern, name) {
-            var reg = XP.isString(target) && XP.isString(pattern, true) && (exp.patterns[pattern] || pattern);
+        pattern: {input: 'text', options: XP.keys(exp.patterns), type: 'string', method: function (value, pattern, name) {
+            var reg = XP.isString(value) && XP.isString(pattern, true) && (exp.patterns[pattern] || pattern);
             if (XP.isString(reg) && XP.isRegExp(reg = XP.toRegExp(pattern))) { exp.patterns[pattern] = reg; }
-            return !reg ? false : (!reg.test(target) ? new XP.InvalidError(name || 'target') : null);
+            return !reg ? false : (!reg.test(value) ? new XP.InvalidError(name || 'data', 400) : null);
         }},
 
         /**
-         * Returns error if target is empty (based on bool)
+         * Returns error if value is empty (based on bool).
          *
-         * @param {*} target
+         * @param {*} value
          * @param {boolean} bool
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        required: {input: 'checkbox', method: function (target, bool, name) {
-            return bool && XP.isEmpty(target) ? new XP.RequiredError(name || 'target') : null;
+        required: {input: 'checkbox', method: function (value, bool, name) {
+            return bool && XP.isEmpty(value) ? new XP.RequiredError(name || 'data', 400) : null;
         }},
 
         /**
-         * Returns error if target type is not correct
+         * Returns error if value type is not correct.
          *
-         * @param {*} target
+         * @param {*} value
          * @param {string} type
          * @param {string} [name]
          * @returns {boolean | Error|null}
          */
-        type: {attributes: {required: true}, options: XP.keys(exp.types), method: function (target, type, name) {
-            return XP.has(exp.types, type || 'any') && !exp.types[type || 'any'](target) && !XP.isNull(target) ? new XP.ValidationError(name || 'target', type || 'any') : null;
+        type: {attributes: {required: true}, options: XP.keys(exp.types), method: function (value, type, name) {
+            return exp.types[type] && !exp.types[type](value) && !XP.isVoid(value) ? new XP.ValidationError(name || 'data', type || 'any', 400) : null;
         }},
 
         /**
-         * Returns error if target includes duplicates (based on bool)
+         * Returns error if value includes duplicates (based on bool).
          *
-         * @param {Array} target
+         * @param {Array} value
          * @param {boolean} bool
          * @param {string} [name]
          * @returns {boolean | Error | null}
          */
-        uniqueItems: {input: 'checkbox', multi: true, method: function (target, bool, name) {
-            return !XP.isArray(target) ? false : (bool && !XP.isUniq(target) ? new XP.ValidationError(name || 'target', 'should not have duplicates') : null);
+        uniqueItems: {input: 'checkbox', multi: true, method: function (value, bool, name) {
+            return !XP.isArray(value) ? false : (bool && !XP.isUniq(value) ? new XP.ValidationError(name || 'data', 'should not have duplicates', 400) : null);
         }}
     };
 

@@ -1,7 +1,7 @@
 {
   "name": "mat-settings",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-settings.html",
   "description": "A custom element used to overwrite the default material design settings, for example `theme`.",
   "homepage": "http://expandjs.com/elements/mat-settings",
@@ -22,17 +22,17 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "xp-shared-behavior": "ExpandJS/xp-shared-behavior#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "xp-shared-behavior": "ExpandJS/xp-shared-behavior#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "3ef073efed38ac891e9b14c33ac9e6c8044ca2b4"
+    "tag": "v0.9.11",
+    "commit": "b9641dbf4237f837e2ea9d3c2750b6377d642761"
   },
   "_source": "git://github.com/ExpandJS/mat-settings.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/mat-settings"
 }

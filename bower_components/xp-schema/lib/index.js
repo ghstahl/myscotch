@@ -14,7 +14,6 @@
     var XP         = global.XP || require('expandjs'),
         XPEmitter  = global.XPEmitter || require('xp-emitter'),
 
-        filter     = require('./filter'),
         sanitize   = require('./sanitize'),
         validate   = require('./validate'),
 
@@ -28,13 +27,13 @@
     /*********************************************************************/
 
     /**
-     * This class is used to provide scheming functionalities, including sanitization and validation.
+     * This class is used to provide scheming functionalities.
      *
      * @class XPSchema
-     * @description This class is used to provide scheming functionalities, including sanitization and validation
+     * @description This class is used to provide scheming functionalities
      * @extends XPEmitter
      */
-    module.exports = new XP.Class('XPSchema', {
+    module.exports = global.XPSchema = new XP.Class('XPSchema', {
 
         // EXTENDS
         extends: XPEmitter,
@@ -45,7 +44,7 @@
          * @constructs
          * @param {Object} options
          *   @param {Object} [options.fields]
-         *   @param {boolean} [options.loose = false]
+         *   @param {boolean} [options.strict = false]
          *   @param {boolean} [options.useful = false]
          */
         initialize: function (options) {
@@ -59,65 +58,111 @@
             // Setting
             self.options = options;
             self.fields  = self.options.fields || {};
-            self.loose   = self.options.loose || false;
+            self.strict  = self.options.strict || false;
             self.useful  = self.options.useful || false;
         },
 
         /*********************************************************************/
 
         /**
-         * Filters the target.
+         * TODO DOC
          *
          * @method filter
-         * @param {Object} target
+         * @param {Object} data
          * @param {Function} [resolver]
          * @returns {Promise}
          */
         filter: {
             promise: true,
-            value: function (target, resolver) {
+            value: function (data, resolver) {
                 var self = this;
                 XP.waterfall([
-                    function (next) { next((!XP.isObject(target) && new XP.ValidationError('target', 'Object')) || null); },
-                    function (next) { XP.attempt(function (next) { next(null, filter(target, self.fields, self.options)); }, next); }
+                    function (next) { self._assert({data: data}, next); }, // asserting
+                    function (next) { next(null, XP.forOwn(self.fields, function (field, key) { if (field.reserved) { delete data[key]; } })); }, // filtering
+                    function (next) { next(null, data); } // resolving
                 ], resolver);
             }
         },
 
         /**
-         * Sanitizes the target.
+         * TODO DOC
+         *
+         * @method merge
+         * @param {Object} data
+         * @param {Object} [item]
+         * @param {boolean} [reservedOnly = false]
+         * @param {Function} [resolver]
+         * @returns {Promise}
+         */
+        merge: {
+            promise: true,
+            value: function (data, item, reservedOnly, resolver) {
+                var self = this;
+                XP.waterfall([
+                    function (next) { self._assert({data: data, item: item}, next); }, // asserting
+                    function (next) { next(null, XP.forOwn(item || {}, function (value, key) { if (!XP.isDefined(data[key]) && (!reservedOnly || (self.fields[key] && self.fields[key].reserved))) { data[key] = item[key]; } })); }, // merging
+                    function (next) { next(null, data); } // resolving
+                ], resolver);
+            }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @method prepare
+         * @param {Object} data
+         * @param {Function} [resolver]
+         * @returns {Promise}
+         */
+        prepare: {
+            promise: true,
+            value: function (data, resolver) {
+                var self = this;
+                XP.waterfall([
+                    function (next) { self._assert({data: data}, next); }, // asserting
+                    function (next) { next(null, XP.forOwn(self.fields, function (field, key) { if (XP.isDefined(field.value) && XP.isVoid(data[key])) { data[key] = XP.isFunction(field.value) ? field.value() : field.value; } })); }, // preparing
+                    function (next) { next(null, data); } // resolving
+                ], resolver);
+            }
+        },
+
+        /**
+         * TODO DOC
          *
          * @method sanitize
-         * @param {Object} target
+         * @param {Object} data
          * @param {Function} [resolver]
          * @returns {Promise}
          */
         sanitize: {
             promise: true,
-            value: function (target, resolver) {
+            value: function (data, resolver) {
                 var self = this;
                 XP.waterfall([
-                    function (next) { next((!XP.isObject(target) && new XP.ValidationError('target', 'Object')) || null); },
-                    function (next) { XP.attempt(function (next) { next(null, sanitize(target, self.fields, self.options)); }, next); }
+                    function (next) { self._assert({data: data}, next); }, // asserting
+                    function (next) { next(null, sanitize(data, self.fields, self.options)); }, // sanitizing
+                    function (next) { next(null, data); } // resolving
                 ], resolver);
             }
         },
 
         /**
-         * Validates the target.
+         * TODO DOC
          *
          * @method validate
-         * @param {Object} target
+         * @param {Object} data
+         * @param {Object} [item]
          * @param {Function} [resolver]
          * @returns {Promise}
          */
         validate: {
             promise: true,
-            value: function (target, resolver) {
+            value: function (data, item, resolver) {
                 var self = this;
                 XP.waterfall([
-                    function (next) { next((!XP.isObject(target) && new XP.ValidationError('target', 'Object')) || null); },
-                    function (next) { XP.attempt(function (next) { next(null, validate(target, self.fields, self.options)); }, next); }
+                    function (next) { self._assert({data: data, item: item}, next); }, // asserting
+                    function (next) { next(validate(data, self.fields, item), null); }, // validating
+                    function (next) { next(null, data); } // resolving
                 ], resolver);
             }
         },
@@ -131,17 +176,7 @@
          * @type Object
          */
         fields: {
-            validate: function (val) { return XP.isObject(val); }
-        },
-
-        /**
-         * TODO DOC
-         *
-         * @property loose
-         * @type boolean
-         */
-        loose: {
-            set: function (val) { return !!val; }
+            validate: function (val) { return !XP.isObject(val) && 'Object'; }
         },
 
         /**
@@ -155,6 +190,17 @@
         sanitizers: {
             'static': true,
             get: function () { return sanitizers; }
+        },
+
+        /**
+         * TODO DOC
+         *
+         * @property strict
+         * @type boolean
+         * @default false
+         */
+        strict: {
+            set: function (val) { return !!val; }
         },
 
         /**
@@ -175,6 +221,7 @@
          *
          * @property useful
          * @type boolean
+         * @default false
          */
         useful: {
             set: function (val) { return !!val; }
@@ -191,7 +238,13 @@
         validators: {
             'static': true,
             get: function () { return validators; }
-        }
+        },
+
+        /*********************************************************************/
+
+        // ASSERTS
+        _assertData: {enumerable: false, value: function (val) { return !XP.isObject(val) && new XP.ValidationError('data', 'Object', 400); }},
+        _assertItem: {enumerable: false, value: function (val) { return !XP.isVoid(val) && !XP.isObject(val) && new XP.ValidationError('item', 'Object', 500); }}
     });
 
 }(typeof window !== "undefined" ? window : global));

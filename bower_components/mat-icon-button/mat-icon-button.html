@@ -25,7 +25,7 @@ Otherwise you can use `icon-src` to set a custom icon.
 The button can be used to toggle other elements...
 
 ```html
-<mat-icon-button icon="nagivation:more-vert" target="myMenu" toggles-target></mat-icon-button>
+<mat-icon-button behavior="toggle" icon="nagivation:more-vert" target="myMenu"></mat-icon-button>
 <mat-menu id="myMenu">...</mat-menu>
 ```
 
@@ -86,16 +86,16 @@ If you want the button to be semi-transparent whenever it's inactive, you can ad
 @behavior xp-referral-behavior /bower_components/xp-referral-behavior/xp-referral-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
 @dependency iron-flex-layout PolymerElements/iron-flex-layout#^1.0.0
-@dependency mat-icon ExpandJS/mat-icon#0.9.9
-@dependency mat-ripple ExpandJS/mat-ripple#0.9.9
-@dependency xp-anchor-behavior ExpandJS/xp-anchor-behavior#0.9.9
-@dependency xp-pressed-behavior ExpandJS/xp-pressed-behavior#0.9.9
-@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.9
+@dependency mat-icon ExpandJS/mat-icon#0.9.11
+@dependency mat-ripple ExpandJS/mat-ripple#0.9.11
+@dependency xp-anchor-behavior ExpandJS/xp-anchor-behavior#0.9.11
+@dependency xp-pressed-behavior ExpandJS/xp-pressed-behavior#0.9.11
+@dependency xp-referral-behavior ExpandJS/xp-referral-behavior#0.9.11
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.9
-@devDependency mat-icons ExpandJS/mat-icons#0.9.9
+@devDependency mat-demo ExpandJS/mat-demo#0.9.11
+@devDependency mat-icons ExpandJS/mat-icons#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -282,8 +282,9 @@ If you want the button to be semi-transparent whenever it's inactive, you can ad
                 /**
                  * If set to true, both icon and active icon are set.
                  *
-                 * @attribute active-icon
-                 * @type string
+                 * @attribute animated
+                 * @type boolean
+                 * @default false
                  * @notifies
                  * @readonly
                  */
@@ -291,7 +292,8 @@ If you want the button to be semi-transparent whenever it's inactive, you can ad
                     computed: '_computeAnimated(activeIcon, activeIconSrc)',
                     notify: true,
                     reflectToAttribute: true,
-                    type: Boolean
+                    type: Boolean,
+                    value: false
                 },
 
                 /**
@@ -336,6 +338,7 @@ If you want the button to be semi-transparent whenever it's inactive, you can ad
                  *
                  * @attribute empty
                  * @type boolean
+                 * @default true
                  * @notifies
                  * @readonly
                  */
@@ -343,7 +346,8 @@ If you want the button to be semi-transparent whenever it's inactive, you can ad
                     computed: '_computeEmpty(animated, active, icon, iconSrc)',
                     notify: true,
                     reflectToAttribute: true,
-                    type: Boolean
+                    type: Boolean,
+                    value: true
                 },
 
                 /**

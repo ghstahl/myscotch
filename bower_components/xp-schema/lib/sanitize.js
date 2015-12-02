@@ -17,92 +17,93 @@
     /*********************************************************************/
 
     /**
-     * Sanitize the target
+     * Sanitize the data
      *
-     * @param {Object} target
+     * @param {Object} data
      * @param {Object} fields
      * @param {Object} [options]
-     * @param {string} [name]
      * @returns {Object}
      */
-    exp = module.exports = function (target, fields, options, name) {
+    exp = module.exports = function (data, fields, options) {
 
         // Restricting
-        XP.forOwn(target, function (val, key) {
-            if (!options.loose && !fields[key]) { delete target[key]; }
+        XP.forOwn(data, function (val, key) {
+            if (options.strict && !fields[key]) { delete data[key]; }
         });
 
         // Sanitizing
         XP.forOwn(fields, function (field, key) {
-            target[key] = exp.sanitizeStep(target[key], field, fields, options, (name ? name + '.' : '') + key);
-            if (options.useful && XP.isVoid(target[key])) { delete target[key]; }
+            data[key] = sanitizeStep(data[key], fields, options, key);
+            if (options.useful && XP.isVoid(data[key])) { delete data[key]; }
         });
 
-        return target;
+        return data;
     };
 
     /**
      * Sanitizes the step
      *
      * @param {*} step
-     * @param {Object} [field]
      * @param {Object} [fields]
      * @param {Object} [options]
-     * @param {string} [name]
+     * @param {string} [key]
      * @returns {*}
      */
-    exp.sanitizeStep = function (step, field, fields, options, name) {
+    function sanitizeStep(step, fields, options, key) {
 
         // Setting
         step = XP.isDefined(step) ? step : null;
 
         // Checking
-        if (!XP.isObject(field)) { return step; }
+        if (!XP.isObject(fields[key]) && !XP.isString(fields[key], true)) { return step; }
 
         // Sanitizing (step)
-        step = exp.sanitizeValue(step, field, null, name);
+        step = sanitizeValue(step, fields, options, key);
 
         // Sanitizing (values)
-        if (field.map || field.multi) {
-            XP[field.map ? 'forOwn' : 'forEach'](step, function (value, index) {
-                step[index] = exp.sanitizeValue(value, field, index, name + '[' + index + ']');
-                if (XP.isObject(step[index]) && (field.fields || field.type === 'recursive')) {
-                    step[index] = exp(step[index], field.fields || fields, XP.assign({}, options, {loose: field.loose}), name + '[' + index + ']');
+        if (fields[key].map || fields[key].multi) {
+            XP[fields[key].map ? 'forOwn' : 'forEach'](step, function (value, index) {
+                step[index] = sanitizeValue(step[index], fields, key, index);
+                if (XP.isObject(step[index]) && (fields[key].fields || fields[key].type === 'recursive')) {
+                    step[index] = exp(step[index], fields[key].fields || fields, options);
                 }
             });
-        } else if (XP.isObject(step) && (field.fields || field.type === 'recursive')) {
-            step = exp(step, field.fields || fields, XP.assign({}, options, {loose: field.loose}), name);
+        } else if (XP.isObject(step) && (fields[key].fields || fields[key].type === 'recursive')) {
+            step = exp(step, fields[key].fields || fields, options);
         }
 
         return step;
-    };
+    }
 
     /**
      * Sanitizes the value
      *
      * @param {*} value
-     * @param {Object} [field]
+     * @param {Object} [fields]
+     * @param {Object} [options]
+     * @param {string} [key]
      * @param {number | string} [index]
-     * @param {string} [name]
      * @returns {*}
      */
-    exp.sanitizeValue = function (value, field, index, name) {
+    function sanitizeValue(value, fields, options, key, index) {
 
         // Setting
         value = XP.isDefined(value) ? value : null;
 
         // Vars
-        var key = (XP.isVoid(index) && ((field.map && 'map') || (field.multi && 'multi'))) || 'type',
-            val = exp.sanitizers[key].method(value, field[key], name);
+        var field     = (XP.isString(fields[key]) && {type: fields[key]}) || fields[key],
+            sanitizer = (XP.isVoid(index) && ((field.map && 'map') || (field.multi && 'multi'))) || 'type',
+            result    = exp.sanitizers[sanitizer].method(value, field[sanitizer]);
 
         // Sanitizing
-        XP.forOwn(field, function (sub, key) {
-            if (!exp.sanitizers[key] || key === 'map' || key === 'multi' || key === 'type') { return; }
-            val = exp.sanitizers[key].method(val, sub, name);
+        XP.forOwn(field, function (match, sanitizer) {
+            if (exp.sanitizers[sanitizer] && sanitizer !== 'map' && sanitizer !== 'multi' && sanitizer !== 'type') {
+                result = exp.sanitizers[sanitizer].method(result, match);
+            }
         });
 
-        return val;
-    };
+        return result;
+    }
 
     /*********************************************************************/
 
@@ -115,36 +116,36 @@
     exp.sanitizers = {
 
         /**
-         * Returns map representation of target (based on bool)
+         * Returns map representation of value (based on bool)
          *
-         * @param {*} target
+         * @param {*} value
          * @param {boolean} bool
          * @returns {*}
          */
-        map: {method: function (target, bool) {
-            return XP.isVoid(target) && bool ? {} : target;
+        map: {method: function (value, bool) {
+            return XP.isVoid(value) && bool ? {} : value;
         }},
 
         /**
-         * Returns array representation of target (based on bool)
+         * Returns array representation of value (based on bool)
          *
-         * @param {*} target
+         * @param {*} value
          * @param {boolean} bool
          * @returns {*}
          */
-        multi: {method: function (target, bool) {
-            return XP.isVoid(target) && bool ? [] : target;
+        multi: {method: function (value, bool) {
+            return XP.isVoid(value) && bool ? [] : value;
         }},
 
         /**
-         * Returns typed representation of target
+         * Returns typed representation of value
          *
-         * @param {*} target
+         * @param {*} value
          * @param {string} type
          * @returns {*}
          */
-        type: {method: function (target, type) {
-            return XP.isVoid(target) && type === 'boolean' ? false : target;
+        type: {method: function (value, type) {
+            return XP.isVoid(value) && type === 'boolean' ? false : value;
         }}
     };
 

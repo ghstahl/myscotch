@@ -1,7 +1,7 @@
 {
   "name": "xp-emitter",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-emitter.html",
   "description": "This class is used to provide event emitting functionalities",
   "homepage": "http://expandjs.com/classes/xp-emitter",
@@ -21,15 +21,15 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9"
+    "expandjs": "ExpandJS/expandjs#0.9.11"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "7114ed3dcbafc6abaa4f03f67870eaba0aedcdf0"
+    "tag": "v0.9.11",
+    "commit": "a82274f0ee9fc495485fb05d98b1eed24e8ca18d"
   },
   "_source": "git://github.com/ExpandJS/xp-emitter.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/xp-emitter"
 }

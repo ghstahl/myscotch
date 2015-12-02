@@ -10,10 +10,10 @@
 (function () {
     "use strict";
 
-    var lodash         = require('lodash'),
+    var _              = require('lodash'),
         assertArgument = require('../assert/assertArgument'),
-        isVoid         = require('../tester/isVoid'),
         isIndex        = require('../tester/isIndex'),
+        isVoid         = require('../tester/isVoid'),
         toArray        = require('../caster/toArray');
 
     /**
@@ -36,7 +36,7 @@
     module.exports = function chunk(array, size) {
         assertArgument(array = toArray(array), 1, 'Arrayable');
         assertArgument(isVoid(size) || isIndex(size), 2, 'number');
-        return lodash.chunk(array, size);
+        return _.chunk(array, size);
     };
 
 }());

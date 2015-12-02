@@ -20,7 +20,7 @@
      * @returns {boolean} Returns `true` or `false` accordingly to the check.
      */
     module.exports = function isInvalid(value) {
-        return isElement(value) && !!value.name && !!value.willValidate && !!value.checkValidity && !value.disabled && !value.checkValidity();
+        return isElement(value) && !!value.willValidate && !!value.checkValidity && !value.disabled && !value.checkValidity();
     };
 
 }());

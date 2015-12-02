@@ -40,14 +40,16 @@ The actions's color can be changed accordingly to the
 @repository https://github.com/ExpandJS/mat-snackbar
 @demo http://expandjs.com/demo/mat-snackbar
 
+@behavior xp-refirer-behavior /bower_components/xp-refirer-behavior/xp-refirer-behavior.html
 @behavior xp-toast-behavior /bower_components/xp-toast-behavior/xp-toast-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency mat-typography ExpandJS/mat-typography#0.9.9
-@dependency xp-toast-behavior ExpandJS/xp-toast-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency mat-typography ExpandJS/mat-typography#0.9.11
+@dependency xp-refirer-behavior ExpandJS/xp-refirer-behavior#0.9.11
+@dependency xp-toast-behavior ExpandJS/xp-toast-behavior#0.9.11
 
-@devDependency mat-demo ExpandJS/mat-demo#0.9.9
+@devDependency mat-demo ExpandJS/mat-demo#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -55,6 +57,7 @@ The actions's color can be changed accordingly to the
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../mat-button/mat-button.html">
 <link rel="import" href="../mat-typography/mat-typography.html">
+<link rel="import" href="../xp-refirer-behavior/xp-refirer-behavior.html">
 <link rel="import" href="../xp-toast-behavior/xp-toast-behavior.html">
 
 <dom-module name="mat-snackbar">
@@ -126,7 +129,7 @@ The actions's color can be changed accordingly to the
 
         <div id="matSnackbarWrapper">
             <div id="matSnackbarLabel">{{label}}</div>
-            <template is="dom-if" if="[[actionLabel]]"><mat-button id="matSnackbarAction" color="[[_computeActionColor(actionColor)]]" data="[[data]]" label="[[actionLabel]]" target="[[target]]" on-xp-activate="_handleAction"></mat-button></template>
+            <template is="dom-if" if="[[actionLabel]]"><mat-button id="matSnackbarAction" color="[[_computeActionColor(actionColor)]]" data="[[data]]" label="[[actionLabel]]" target="[[target]]" on-xp-activate="_handleActivate"></mat-button></template>
         </div>
 
     </template>
@@ -139,6 +142,7 @@ The actions's color can be changed accordingly to the
 
             // BEHAVIORS
             behaviors: [
+                Polymer.XPRefirerBehavior,
                 Polymer.XPToastBehavior
             ],
 
@@ -209,13 +213,10 @@ The actions's color can be changed accordingly to the
             /*********************************************************************/
 
             // HANDLER
-            _handleAction: function (event) {
+            _handleActivate: function (event) {
 
-                // Stopping
-                event.stopPropagation();
-
-                // Overriding
-                if (this.fire(event.type, XP.assign(event.detail, {firer: this}), {cancelable: true}).defaultPrevented) { event.preventDefault(); } else { this.hide(); }
+                // Refiring
+                this.refire(event, {firer: this});
             }
         });
     </script>

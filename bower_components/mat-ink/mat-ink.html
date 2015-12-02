@@ -45,11 +45,11 @@ The ink's `color` can be changed accordingly to the
 @behavior xp-slave-behavior /bower_components/xp-slave-behavior/xp-slave-behavior.html
 
 @dependency polymer Polymer/polymer#^1.1.0
-@dependency expandjs ExpandJS/expandjs#0.9.9
-@dependency mat-palette ExpandJS/mat-palette#0.9.9
-@dependency mat-typography ExpandJS/mat-typography#0.9.9
-@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.9
-@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.9
+@dependency expandjs ExpandJS/expandjs#0.9.11
+@dependency mat-palette ExpandJS/mat-palette#0.9.11
+@dependency mat-typography ExpandJS/mat-typography#0.9.11
+@dependency xp-shared-behavior ExpandJS/xp-shared-behavior#0.9.11
+@dependency xp-slave-behavior ExpandJS/xp-slave-behavior#0.9.11
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -208,6 +208,7 @@ The ink's `color` can be changed accordingly to the
                     notify: true,
                     observer: '_layerChanged',
                     readOnly: true,
+                    type: Object,
                     value: null
                 },
 
@@ -245,7 +246,7 @@ The ink's `color` can be changed accordingly to the
 
             // LISTENER
             ready: function () {
-                this._setForeground(this._getForeground(this.shared && this.shared.theme));
+                this._setForeground(this._getForeground(this.get('shared.material.theme')));
             }
         });
     </script>

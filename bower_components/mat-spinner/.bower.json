@@ -1,7 +1,7 @@
 {
   "name": "mat-spinner",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "mat-spinner.html",
   "description": "A custom element used to display a Material Design spinner",
   "homepage": "http://expandjs.com/elements/mat-spinner",
@@ -22,21 +22,21 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "mat-palette": "ExpandJS/mat-palette#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "mat-palette": "ExpandJS/mat-palette#0.9.11",
     "polymer": "Polymer/polymer#^1.0.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0"
   },
   "devDependencies": {
-    "mat-demo": "ExpandJS/mat-demo#0.9.9"
+    "mat-demo": "ExpandJS/mat-demo#0.9.11"
   },
-  "_release": "0.9.9",
+  "_release": "0.9.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.9",
-    "commit": "bece32617568cb08114e31f4d45594be4346ca43"
+    "tag": "v0.9.11",
+    "commit": "538cd2c0aad1bf31e4ab5866d32dd847689edb6a"
   },
   "_source": "git://github.com/ExpandJS/mat-spinner.git",
-  "_target": "0.9.9",
+  "_target": "0.9.11",
   "_originalSource": "ExpandJS/mat-spinner"
 }

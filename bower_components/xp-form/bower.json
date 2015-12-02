@@ -1,7 +1,7 @@
 {
   "name": "xp-form",
   "license": "BSD-3-Clause",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "main": "xp-form.html",
   "description": "A custom element used to add XHR capabilities to the standard HTML form",
   "homepage": "http://expandjs.com/elements/xp-form",
@@ -20,8 +20,9 @@
     "**/.*"
   ],
   "dependencies": {
-    "expandjs": "ExpandJS/expandjs#0.9.9",
-    "xp-request": "ExpandJS/xp-request#0.9.9",
+    "expandjs": "ExpandJS/expandjs#0.9.11",
+    "xp-refirer-behavior": "ExpandJS/xp-refirer-behavior#0.9.11",
+    "xp-request": "ExpandJS/xp-request#0.9.11",
     "polymer": "Polymer/polymer#^1.1.0"
   }
 }
